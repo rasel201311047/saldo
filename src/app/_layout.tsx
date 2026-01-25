@@ -15,7 +15,7 @@ export default function RootLayout() {
 
   if (!fontsLoaded) return null;
   return (
-    <View style={{ flex: 1 }} className="bg-[#0C1234]">
+    <View style={{ flex: 1 }} className="bg-[#010101]">
       <StatusBar barStyle="light-content" />
       <Stack screenOptions={{ headerShown: false }} />
     </View>
