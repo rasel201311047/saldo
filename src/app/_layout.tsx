@@ -5,8 +5,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
 import "../../global.css";
 import GradientBackground from "../component/background/GradientBackground";
+import { store } from "../redux/store";
 export default function RootLayout() {
   const [fontsLoaded] = useFonts(Fonts);
   useEffect(() => {
@@ -17,14 +19,16 @@ export default function RootLayout() {
 
   if (!fontsLoaded) return null;
   return (
-    <GradientBackground>
-      <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" />
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="tabs/_layout" />
-          <Stack.Screen name="index" />
-        </Stack>
-      </SafeAreaView>
-    </GradientBackground>
+    <Provider store={store}>
+      <GradientBackground>
+        <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>
+          <StatusBar barStyle="light-content" />
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="tabs/_layout" />
+            <Stack.Screen name="index" />
+          </Stack>
+        </SafeAreaView>
+      </GradientBackground>
+    </Provider>
   );
 }
