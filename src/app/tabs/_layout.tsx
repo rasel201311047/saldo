@@ -1,14 +1,18 @@
-import { Stack } from "expo-router";
-import React from "react";
-import { StatusBar } from "react-native";
+import CustomTabBar from "@/src/component/tab/CustomTabBar";
+import { Tabs } from "expo-router";
 
-const _layout = () => {
+export default function TabLayout() {
   return (
-    <Stack>
-      <StatusBar barStyle="light-content" />
-      <Stack screenOptions={{ headerShown: false }} />
-    </Stack>
-  );
-};
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}
+      tabBar={(props) => <CustomTabBar {...props} />}
+    >
+      <Tabs.Screen name="goals" options={{ title: "Goals" }} />
+      <Tabs.Screen name="calendar" options={{ title: "Calendar" }} />
 
-export default _layout;
+      <Tabs.Screen name="balance" options={{ title: "Balance" }} />
+    </Tabs>
+  );
+}
