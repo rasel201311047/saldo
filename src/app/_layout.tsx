@@ -24,7 +24,8 @@ export default function RootLayout() {
         <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>
           <StatusBar barStyle="light-content" />
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="tabs/_layout" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(pages)" />
             <Stack.Screen name="index" />
           </Stack>
         </SafeAreaView>

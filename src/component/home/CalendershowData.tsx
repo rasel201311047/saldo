@@ -1,5 +1,6 @@
 import { MonthImg } from "@/assets/month/month";
 import { RootState } from "@/src/redux/store";
+import responsive from "@/src/utils/responsive";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -102,9 +103,16 @@ const CalendershowData = () => {
   const monthData = getMonthData(currentMonth, currentYear);
 
   return (
-    <View>
-      <View className="w-full">
-        <Image source={monthData.image} className="w-full" resizeMode="cover" />
+    <View className="">
+      <View
+        style={{ height: responsive.verticalScale(180) }}
+        className="w-full"
+      >
+        <Image
+          source={monthData.image}
+          className="w-full h-full"
+          resizeMode="cover"
+        />
         <View className="absolute w-full inset-0 items-center">
           <View className="bg-[#010101] mt-[3%] px-[4%] py-1 rounded-full">
             <Text className="font-Inter font-semibold text-lg text-[#fff]">
@@ -114,21 +122,21 @@ const CalendershowData = () => {
         </View>
       </View>
 
-      <View className="flex-col gap-2 justify-center items-center my-[3%]">
+      <View className="flex-col  justify-center items-center mt-[4%]">
         {monthData.weeks.map((week, index) => (
           <TouchableOpacity key={index}>
             {week.isCurrent ? (
               <LinearGradient
                 colors={["#FAD885", "#C49F59", "#8A622A"]}
                 style={{ borderRadius: 50 }}
-                className="w-[60%] py-2 px-3 rounded-lg"
+                className="w-[60%] py-2 px-3 rounded-lg mt-[3%]"
               >
                 <Text className="text-center font-Inter font-medium text-[#fff]">
                   {week.label}
                 </Text>
               </LinearGradient>
             ) : (
-              <View className="text-center font-Inter font-medium text-[#fff]">
+              <View className="text-center mt-[3%] font-Inter font-medium text-[#fff]">
                 <Text className="text-center font-Inter font-medium text-[#fff]">
                   {week.label}
                 </Text>
@@ -137,6 +145,7 @@ const CalendershowData = () => {
           </TouchableOpacity>
         ))}
       </View>
+      <View className="w-full h-[4%]" />
     </View>
   );
 };

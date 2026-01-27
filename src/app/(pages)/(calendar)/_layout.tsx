@@ -3,8 +3,8 @@ import React from "react";
 
 const _layout = () => {
   return (
-    <Stack>
-      <Stack.Screen name="balance" options={{ headerShown: false }} />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="analytics" />
     </Stack>
   );
 };

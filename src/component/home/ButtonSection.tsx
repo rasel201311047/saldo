@@ -1,13 +1,14 @@
 import { analyticsicon, budgeticon } from "@/assets/icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 const ButtonSection = () => {
   return (
-    <View className="px-[5%] flex-row  my-2 justify-between items-center">
-      <View>
+    <View className="px-[5%] flex-row  my-[4%] justify-between items-center">
+      <TouchableOpacity>
         <LinearGradient
           colors={["#b08b4a6c", "#2626a18a"]}
           start={{ x: 0, y: 0 }}
@@ -42,9 +43,9 @@ const ButtonSection = () => {
             </Text>
           </View>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
 
-      <View>
+      <TouchableOpacity onPress={() => router.push("/analytics")}>
         <LinearGradient
           colors={["#b08b4a6c", "#2626a18a"]}
           start={{ x: 0, y: 0 }}
@@ -79,7 +80,7 @@ const ButtonSection = () => {
             </Text>
           </View>
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
