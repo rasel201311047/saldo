@@ -1,21 +1,30 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome5";
+import BarGraph from "@/src/component/graph/BarGraph";
+import CircleGraph from "@/src/component/graph/CircleGraph";
+import LineGraph from "@/src/component/graph/LineGraph";
+import AnalyticsCard from "@/src/component/home/AnalyticsCard";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-const analytics = () => {
+
+const Analytics = () => {
+  const dataanalytics = [
+    { title: "Balance", value: "$900" },
+    { title: "Period balance", value: "$4000" },
+  ];
+
   return (
     <GradientBackground>
       <View className="flex-1">
-        <SafeAreaView className="flex-1">
-          {/* Header with back button and title */}
-          <View className="flex-row items-center gap-[3%]">
-            <TouchableOpacity className="  ">
+        <SafeAreaView edges={["top"]} className="flex-1">
+          {/* Header */}
+          <View className="flex-row items-center gap-[3%] px-[5%]">
+            <TouchableOpacity onPress={() => router.back()}>
               <LinearGradient
                 colors={["#b08b4a6c", "#2626a18a"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1.8, y: 1 }}
                 style={{
                   width: 35,
                   height: 35,
@@ -23,18 +32,38 @@ const analytics = () => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                className=" "
               >
-                <FontAwesome6 name="arrow-left" size={18} color="#fff" />
+                <FontAwesome5 name="arrow-left" size={18} color="#fff" />
               </LinearGradient>
             </TouchableOpacity>
-            <Text className="text-[#fff] text-xl font-Inter font-bold">
-              Analytics
-            </Text>
+
+            <Text className="text-white text-xl font-bold">Analytics</Text>
           </View>
 
-          <ScrollView className="flex-1">
-            <View className="px-[5%]"></View>
+          <ScrollView>
+            <View className="px-[5%] mt-5">
+              <View className="flex-row items-center justify-between">
+                {dataanalytics.map((item, index) => (
+                  <AnalyticsCard key={index} item={item} />
+                ))}
+              </View>
+              <Text className="text-white text-lg font-Inter font-bold pt-4">
+                Income vs Expenses
+              </Text>
+              <BarGraph />
+              <Text className="text-white text-lg font-bold pt-4">
+                Balance Trend
+              </Text>
+              <View className="h-[2%] w-full" />
+
+              <LineGraph />
+              <Text className="text-white text-lg font-bold py-4">
+                Spending by Category
+              </Text>
+
+              <CircleGraph />
+              <View className="h-40" />
+            </View>
           </ScrollView>
         </SafeAreaView>
       </View>
@@ -42,4 +71,4 @@ const analytics = () => {
   );
 };
 
-export default analytics;
+export default Analytics;
