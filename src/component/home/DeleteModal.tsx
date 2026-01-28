@@ -1,8 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
-type Period = "Weekly" | "Monthly" | "Yearly";
-
 interface SetupBudgetProps {
   opendelete: boolean;
   setOpendelete: (v: boolean) => void;

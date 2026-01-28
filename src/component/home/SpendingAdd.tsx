@@ -12,7 +12,6 @@ import SetupBudget from "./SetupBudget";
 
 interface AddCategoryProps {
   openModal: boolean;
-  routed: string;
   close: (v: boolean) => void;
 }
 
@@ -40,11 +39,12 @@ const dataOfCategory: CategoryType[] = [
   { title: "Other", image: BudgetImg.Other },
 ];
 
-const AddCategory: React.FC<AddCategoryProps> = ({
+const SpendingAdd: React.FC<AddCategoryProps> = ({
   openModal,
-  routed,
+
   close,
 }) => {
+  console.log(openModal);
   const [selected, setSelected] = useState<CategoryType | null>(null);
   const [openSetup, setOpenSetup] = useState(false);
 
@@ -103,4 +103,4 @@ const AddCategory: React.FC<AddCategoryProps> = ({
   );
 };
 
-export default AddCategory;
+export default SpendingAdd;

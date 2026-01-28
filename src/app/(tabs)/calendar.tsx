@@ -1,5 +1,6 @@
 import { earningicon, spendingicon } from "@/assets/icons";
 import Background1 from "@/src/component/background/Background1";
+import AddModalHome from "@/src/component/home/AddModalHome";
 import ButtonSection from "@/src/component/home/ButtonSection";
 import CalendershowData from "@/src/component/home/CalendershowData";
 import Nav from "@/src/component/home/Nav";
@@ -12,7 +13,7 @@ import { RootState } from "@/src/redux/store";
 import responsive from "@/src/utils/responsive";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,6 +34,7 @@ const monthNamesShort = [
 ];
 
 const Calendar = () => {
+  const [addPlus, setAddPlus] = useState(false);
   const dispatch = useDispatch();
   const { currentMonth, currentYear } = useSelector(
     (state: RootState) => state.calendar,
@@ -130,7 +132,10 @@ const Calendar = () => {
           </View>
           <View className="h-56" />
         </ScrollView>
-        <TouchableOpacity className=" absolute bottom-28 right-3">
+        <TouchableOpacity
+          onPress={() => setAddPlus(true)}
+          className=" absolute bottom-28 right-3"
+        >
           <LinearGradient
             colors={["#FAD885", "#C49F59", "#8A622A"]}
             style={{ borderRadius: 10, padding: 8 }}
@@ -139,6 +144,8 @@ const Calendar = () => {
             <Entypo name="plus" size={24} color="#fff" />
           </LinearGradient>
         </TouchableOpacity>
+
+        <AddModalHome open={addPlus} close={() => setAddPlus(false)} />
       </View>
     </Background1>
   );

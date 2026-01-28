@@ -209,6 +209,7 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
       </View>
       <AddCategory
         openModal={catagoryOpen}
+        routed="modalbudge"
         close={() => setCatagoryOpen(false)}
       />
     </Modal>

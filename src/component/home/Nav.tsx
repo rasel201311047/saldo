@@ -1,6 +1,7 @@
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -46,7 +47,10 @@ const Nav = () => {
               borderRadius: 50,
             }}
           >
-            <TouchableOpacity className="p-3">
+            <TouchableOpacity
+              onPress={() => router.push("/notification")}
+              className="p-3"
+            >
               <Ionicons name="notifications" size={20} color="#FFFFFF" />
             </TouchableOpacity>
           </LinearGradient>
