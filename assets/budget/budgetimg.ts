@@ -1,0 +1,18 @@
+export const BudgetImg = {
+  supermarket: require("./grocery-cart.png"),
+  clothing: require("./t-shirt.png"),
+  house: require("./house.png"),
+  entertainment: require("./cinema.png"),
+  Transport: require("./conversation.png"),
+  Gifts: require("./gift.png"),
+  Travel: require("./money.png"),
+  Education: require("./education.png"),
+  Food: require("./burger.png"),
+  Work: require("./suitcase.png"),
+  Electronics: require("./electronic-devices.png"),
+  Sport: require("./sports.png"),
+  Restaurant: require("./restauran.png"),
+  Health: require("./healthcare.png"),
+  Communications: require("./conversation.png"),
+  Other: require("./application.png"),
+};
