@@ -14,5 +14,9 @@ export const BudgetImg = {
   Restaurant: require("./restauran.png"),
   Health: require("./healthcare.png"),
   Communications: require("./conversation.png"),
+  dollar: require("./dollar.png"),
+  rank: require("./quality.png"),
+  business: require("./cooperation.png"),
+  investment: require("./earning.png"),
   Other: require("./application.png"),
 };

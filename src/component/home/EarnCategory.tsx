@@ -11,10 +11,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import SetupBudget from "./SetupBudget";
 
 interface AddCategoryProps {
   openModal: boolean;
-  closeModal: (v: boolean) => void;
+  close: (v: boolean) => void;
 }
 
 type CategoryType = {
@@ -23,30 +24,17 @@ type CategoryType = {
 };
 
 const dataOfCategory: CategoryType[] = [
-  { title: "Supermarket", image: BudgetImg.supermarket },
-  { title: "Clothing", image: BudgetImg.clothing },
-  { title: "House", image: BudgetImg.house },
-  { title: "Entertainment", image: BudgetImg.entertainment },
-  { title: "Transport", image: BudgetImg.Transport },
+  { title: "Salary", image: BudgetImg.dollar },
+  { title: "Investment", image: BudgetImg.investment },
+  { title: "Rewards", image: BudgetImg.rank },
   { title: "Gifts", image: BudgetImg.Gifts },
-  { title: "Travel", image: BudgetImg.Travel },
-  { title: "Education", image: BudgetImg.Education },
-  { title: "Food", image: BudgetImg.Food },
-  { title: "Work", image: BudgetImg.Work },
-  { title: "Electronics", image: BudgetImg.Electronics },
-  { title: "Sport", image: BudgetImg.Sport },
-  { title: "Restaurant", image: BudgetImg.Restaurant },
-  { title: "Health", image: BudgetImg.Health },
-  { title: "Communications", image: BudgetImg.Communications },
+  { title: "Business", image: BudgetImg.business },
   { title: "Other", image: BudgetImg.Other },
 ];
 
-const SpendingAdd: React.FC<AddCategoryProps> = ({
-  openModal,
-
-  closeModal,
-}) => {
+const EarnCategory: React.FC<AddCategoryProps> = ({ openModal, close }) => {
   const [selected, setSelected] = useState<CategoryType | null>(null);
+  const [openSetup, setOpenSetup] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleSelect = (item: CategoryType) => {
@@ -56,9 +44,9 @@ const SpendingAdd: React.FC<AddCategoryProps> = ({
         image: item.image,
       }),
     );
-    router.push("/addspending");
+    router.push("/addearning");
     setSelected(item);
-    closeModal(false);
+    setOpenSetup(false);
   };
 
   return (
@@ -66,11 +54,11 @@ const SpendingAdd: React.FC<AddCategoryProps> = ({
       <Modal transparent visible={openModal} animationType="slide">
         <TouchableOpacity
           activeOpacity={1}
-          onPress={() => closeModal(false)}
+          onPress={() => close(false)}
           className="absolute inset-0 bg-black/60"
         />
 
-        <View className="absolute bottom-0 w-full h-[85%] bg-[#1A1A24] rounded-t-3xl pt-6 px-5">
+        <View className="absolute bottom-0 w-full h-[55%] bg-[#1A1A24] rounded-t-3xl pt-6 px-5">
           <Text className="text-xl text-center font-bold text-white mb-4">
             Select Category
           </Text>
@@ -101,8 +89,13 @@ const SpendingAdd: React.FC<AddCategoryProps> = ({
           </ScrollView>
         </View>
       </Modal>
+      <SetupBudget
+        selected={selected}
+        open={openSetup}
+        setOpen={setOpenSetup}
+      />
     </>
   );
 };
 
-export default SpendingAdd;
+export default EarnCategory;

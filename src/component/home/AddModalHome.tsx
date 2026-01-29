@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
+import EarnCategory from "./EarnCategory";
 import SpendingAdd from "./SpendingAdd";
 interface SetupBudgetProps {
   open: boolean;
@@ -12,12 +13,9 @@ interface SetupBudgetProps {
 }
 
 const AddModalHome: React.FC<SetupBudgetProps> = ({ open, close }) => {
-  const [catagoryOpen, setCatagoryOpen] = useState(false);
+  const [spendingCatagoryOpen, setSpendingCatagoryOpen] = useState(false);
+  const [earnCatagoryOpen, setEarnCatagoryOpen] = useState(false);
 
-  const handleAdd = () => {
-    setCatagoryOpen(true);
-    close(false);
-  };
   return (
     <Modal visible={open} transparent animationType="fade">
       <View className="flex-1 bg-black/80 justify-center items-center">
@@ -27,7 +25,7 @@ const AddModalHome: React.FC<SetupBudgetProps> = ({ open, close }) => {
         <View className="flex-1 w-[100%] ">
           <View className=" absolute bottom-36 right-3 flex-col items-end gap-4">
             <TouchableOpacity
-              onPress={() => setCatagoryOpen(true)}
+              onPress={() => setSpendingCatagoryOpen(true)}
               className="flex-row items-center gap-4 bg-[#584C2F] py-2 px-3 rounded-full"
             >
               <View>
@@ -40,7 +38,10 @@ const AddModalHome: React.FC<SetupBudgetProps> = ({ open, close }) => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity className="flex-row items-center gap-4 border border-[#584C2F] py-2 px-3 rounded-full ">
+            <TouchableOpacity
+              onPress={() => setEarnCatagoryOpen(true)}
+              className="flex-row items-center gap-4 border border-[#584C2F] py-2 px-3 rounded-full "
+            >
               <View>
                 <SvgXml xml={earningicon} width={responsive.scale(20)} />
               </View>
@@ -73,8 +74,13 @@ const AddModalHome: React.FC<SetupBudgetProps> = ({ open, close }) => {
         </View>
       </View>
       <SpendingAdd
-        openModal={catagoryOpen}
-        close={() => setCatagoryOpen(false)}
+        openModal={spendingCatagoryOpen}
+        closeModal={() => setSpendingCatagoryOpen(false)}
+      />
+
+      <EarnCategory
+        openModal={earnCatagoryOpen}
+        close={() => setEarnCatagoryOpen(false)}
       />
     </Modal>
   );

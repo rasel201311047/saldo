@@ -37,7 +37,9 @@ const Analytics = () => {
               </LinearGradient>
             </TouchableOpacity>
 
-            <Text className="text-white text-xl font-bold">Analytics</Text>
+            <Text className="text-white font-Inter text-xl font-bold">
+              Analytics
+            </Text>
           </View>
 
           <ScrollView>
