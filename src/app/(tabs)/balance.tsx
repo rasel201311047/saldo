@@ -1,11 +1,17 @@
+import Background1 from "@/src/component/background/Background1";
+import NavBalance from "@/src/component/balance/NavBalance";
+import WithDataBH from "@/src/component/balance/WithDataBH";
 import React from "react";
-import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const balance = () => {
   return (
-    <View>
-      <Text>balance</Text>
-    </View>
+    <Background1>
+      <SafeAreaView edges={["top"]} className="flex-1">
+        <NavBalance />
+        <WithDataBH />
+      </SafeAreaView>
+    </Background1>
   );
 };
 
