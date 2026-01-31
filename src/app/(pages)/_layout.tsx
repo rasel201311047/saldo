@@ -4,7 +4,7 @@ import React from "react";
 const _layout = () => {
   return (
     <Stack>
-      <Stack.Screen name="balance" options={{ headerShown: false }} />
+      <Stack.Screen name="(balance)" options={{ headerShown: false }} />
       <Stack.Screen name="(calendar)" options={{ headerShown: false }} />
     </Stack>
   );

@@ -1,5 +1,6 @@
 import { FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
@@ -17,7 +18,10 @@ const NavBalance = () => {
           </Text>
         </View>
 
-        <TouchableOpacity activeOpacity={0.85}>
+        <TouchableOpacity
+          onPress={() => router.push("/accountbalanceadd")}
+          activeOpacity={0.85}
+        >
           <LinearGradient
             colors={["#b08b4a6c", "#2626a18a"]}
             start={{ x: 0, y: 0 }}

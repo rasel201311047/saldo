@@ -4,7 +4,7 @@ import React from "react";
 const _layout = () => {
   return (
     <Stack>
-      <Stack.Screen name="AccountTypeSwitch" options={{ headerShown: false }} />
+      <Stack.Screen name="accountbalanceadd" options={{ headerShown: false }} />
     </Stack>
   );
 };

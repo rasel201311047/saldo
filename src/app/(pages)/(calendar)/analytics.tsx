@@ -42,7 +42,7 @@ const Analytics = () => {
             </Text>
           </View>
 
-          <ScrollView>
+          <ScrollView className="flex-1">
             <View className="px-[5%] mt-5">
               <View className="flex-row items-center justify-between">
                 {dataanalytics.map((item, index) => (
