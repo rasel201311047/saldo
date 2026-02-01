@@ -7,6 +7,7 @@ export interface Category {
 
 interface UserState {
   category: Category | null;
+  buttonCatagory: string;
 
   // driver
   reduceDistance: number;
@@ -16,6 +17,8 @@ interface UserState {
 
 const initialState: UserState = {
   category: null,
+  // goals button
+  buttonCatagory: "Goals",
   reduceDistance: 1,
   point: 0,
   level: 1,
@@ -28,6 +31,10 @@ const userSlice = createSlice({
     setCategory(state, action: PayloadAction<Category | null>) {
       state.category = action.payload;
     },
+    setButtonCatagory(state, action: PayloadAction<string>) {
+      state.buttonCatagory = action.payload;
+    },
+
     setReduceDistance(state, action: PayloadAction<number>) {
       state.reduceDistance = action.payload;
     },
@@ -41,7 +48,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { setCategory, setReduceDistance, setPoint, setLevel, resetUser } =
-  userSlice.actions;
+export const {
+  setCategory,
+  setButtonCatagory,
+  setReduceDistance,
+  setPoint,
+  setLevel,
+  resetUser,
+} = userSlice.actions;
 
 export default userSlice.reducer;
