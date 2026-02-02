@@ -19,12 +19,15 @@ const Nav = () => {
     >
       <SafeAreaView edges={["top"]} className="">
         <View className="flex-row justify-between items-center px-[5%]">
-          <View className="">
+          <TouchableOpacity
+            onPress={() => router.push("/profile")}
+            className=""
+          >
             <Image
               source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
               className="w-16 h-16 rounded-full"
             />
-          </View>
+          </TouchableOpacity>
 
           <LinearGradient
             colors={["#b08b4a6c", "#2626a18a"]}

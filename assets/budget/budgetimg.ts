@@ -19,4 +19,5 @@ export const BudgetImg = {
   business: require("./cooperation.png"),
   investment: require("./earning.png"),
   Other: require("./application.png"),
+  goal: require("./target.png"),
 };
