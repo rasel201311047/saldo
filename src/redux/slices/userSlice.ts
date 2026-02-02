@@ -5,9 +5,22 @@ export interface Category {
   image?: any;
 }
 
+interface LoanRecord {
+  type: string;
+  icon: string;
+  name: string;
+  target: number;
+  accumulatedAmount: number;
+  targetunit: string;
+  category: Category | null;
+  date: string;
+  note: string;
+}
+
 interface UserState {
   category: Category | null;
   buttonCatagory: string;
+  loanRecord: LoanRecord | null;
 
   // driver
   reduceDistance: number;
@@ -17,6 +30,7 @@ interface UserState {
 
 const initialState: UserState = {
   category: null,
+  loanRecord: null,
   // goals button
   buttonCatagory: "Goals",
   reduceDistance: 1,
@@ -30,6 +44,9 @@ const userSlice = createSlice({
   reducers: {
     setCategory(state, action: PayloadAction<Category | null>) {
       state.category = action.payload;
+    },
+    setLoanRecord(state, action: PayloadAction<LoanRecord | null>) {
+      state.loanRecord = action.payload;
     },
     setButtonCatagory(state, action: PayloadAction<string>) {
       state.buttonCatagory = action.payload;
@@ -49,6 +66,7 @@ const userSlice = createSlice({
 });
 
 export const {
+  setLoanRecord,
   setCategory,
   setButtonCatagory,
   setReduceDistance,

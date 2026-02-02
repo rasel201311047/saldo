@@ -3,6 +3,7 @@ import GradientBackground from "@/src/component/background/GradientBackground";
 import CustomDatePicker from "@/src/component/custompicker/CustomDatePicker";
 import IconSelector from "@/src/component/goals/IconSelector";
 import { useAppDispatch, useAppSelector } from "@/src/redux/hooks";
+import { setLoanRecord } from "@/src/redux/slices/userSlice";
 import { RootState } from "@/src/redux/store";
 import { Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
 import Octicons from "@expo/vector-icons/Octicons";
@@ -49,6 +50,13 @@ const dataOfCategory: CategoryType[] = [
 const CreateForm = () => {
   const dispatch = useAppDispatch();
   const { selectedIcon } = useAppSelector((state) => state.icons);
+
+  // the catagory
+  const [name, setName] = useState("");
+  const [targetAmount, settargetAmount] = useState(0);
+  const [accumulatedAmount, setaccumulatedAmount] = useState(0);
+  const [noteD, setNote] = useState("");
+
   const [category, setCategory] = useState<CategoryType | null>(null);
   const [categoryModal, setCategoryModal] = useState(false);
   const [advanceModal, setAdvanceModal] = useState(false);
@@ -80,10 +88,11 @@ const CreateForm = () => {
   const [selectedIconStyle, setSelectedIconStyle] = useState<string>("solid");
   const [iconModal, setIconModal] = useState(false);
 
-  const handleIconSelect = (iconName: string, style: string) => {
+  const handleIconSelect = (iconName: string) => {
     setSelectedIconName(iconName);
-    setSelectedIconStyle(style);
   };
+
+  console.log("Icon Name ", selectedIconName);
 
   // Render selected icon preview
   const renderSelectedIcon = () => {
@@ -113,6 +122,22 @@ const CreateForm = () => {
           </Text>
         </View>
       </View>
+    );
+  };
+
+  const handleTheGoals = () => {
+    dispatch(
+      setLoanRecord({
+        type: buttoncategory,
+        icon: selectedIconName,
+        name: name,
+        target: targetAmount,
+        accumulatedAmount: accumulatedAmount,
+        targetunit: currency,
+        category: category,
+        date: formatDate(date),
+        note: noteD,
+      }),
     );
   };
 
@@ -151,6 +176,7 @@ const CreateForm = () => {
                 placeholder="Enter name"
                 placeholderTextColor="#aaa"
                 className="text-white"
+                onChangeText={(text) => setName(text)}
               />
             </View>
           </View>
@@ -167,6 +193,7 @@ const CreateForm = () => {
                   placeholderTextColor="#F1F1F2"
                   keyboardType="numeric"
                   className="text-white text-base"
+                  onChangeText={(text) => settargetAmount(Number(text))}
                 />
               </View>
 
@@ -231,7 +258,7 @@ const CreateForm = () => {
 
           <View>
             <Text className="text-[#FFFFFF] text-base font-Inter my-2">
-              Target Amount
+              Accumulated amount
             </Text>
             <View className="flex-row gap-[3%]">
               <View className="flex-1  bg-transparent  border border-[#C49F59] rounded-xl px-4 py-2">
@@ -240,6 +267,7 @@ const CreateForm = () => {
                   placeholderTextColor="#F1F1F2"
                   keyboardType="numeric"
                   className="text-white text-base"
+                  onChangeText={(text) => setaccumulatedAmount(Number(text))}
                 />
               </View>
 
@@ -300,7 +328,7 @@ const CreateForm = () => {
           </TouchableOpacity>
           {/* Buttons */}
           <View className="mt-[14%]">
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity onPress={handleTheGoals} activeOpacity={0.8}>
               <LinearGradient
                 colors={["#B08A4A", "#E0B66A"]}
                 style={{ borderRadius: 8 }}
@@ -368,8 +396,7 @@ const CreateForm = () => {
                   </Text>
                   <TouchableOpacity
                     onPress={() => {
-                      setAdvanceModal(false);
-                      setTimeout(() => setIconModal(true), 300);
+                      setIconModal(true);
                     }}
                     className="flex-row items-center justify-between border border-[#C49F59] rounded-xl px-4 py-4 bg-[#1F1E2C]/50"
                     activeOpacity={0.7}
@@ -390,18 +417,6 @@ const CreateForm = () => {
                       color={selectedIconName ? "#C49F59" : "#fff"}
                     />
                   </TouchableOpacity>
-
-                  {selectedIconName && (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setSelectedIconName(null);
-                        setSelectedIconStyle("solid");
-                      }}
-                      className="mt-2 self-start"
-                    >
-                      <Text className="text-red-400 text-sm">Remove icon</Text>
-                    </TouchableOpacity>
-                  )}
                 </View>
 
                 {/* Date */}
@@ -443,8 +458,27 @@ const CreateForm = () => {
                       numberOfLines={4}
                       textAlignVertical="top"
                       style={{ minHeight: 100 }}
+                      onChangeText={(text) => setNote(text)}
                     />
                   </View>
+                </View>
+                {/* Buttons */}
+                <View className="mt-[4%]">
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <LinearGradient
+                      colors={["#B08A4A", "#E0B66A"]}
+                      style={{ borderRadius: 8 }}
+                      className="  py-4 items-center"
+                    >
+                      <Text className="text-white font-semibold text-base">
+                        OK
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
+                    <Text className="text-white font-Inter font-bold">No</Text>
+                  </TouchableOpacity>
                 </View>
               </ScrollView>
             </View>
