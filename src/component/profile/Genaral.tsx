@@ -49,12 +49,12 @@ const Genaral = () => {
           {
             title: "Set month start date",
             icon: calender,
-            route: "/gptassistant",
+            route: "/startmonth",
           },
-          { title: "Change password", icon: lock, route: "/notification" },
-          { title: "About Us", icon: about, route: "/notification" },
-          { title: "Privacy Policy", icon: privacy, route: "/notification" },
-          { title: "Terms and Conditions", icon: term, route: "/notification" },
+          { title: "Change password", icon: lock, route: "/changepassword" },
+          { title: "About Us", icon: about, route: "/about" },
+          { title: "Privacy Policy", icon: privacy, route: "/policy" },
+          { title: "Terms and Conditions", icon: term, route: "/terms" },
         ].map((item, i) => (
           <TouchableOpacity
             onPress={() => item.route && router.push(item.route)}

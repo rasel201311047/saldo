@@ -11,6 +11,11 @@ const _layout = () => {
         name="detailsweeklyreport"
         options={{ headerShown: false }}
       />
+      <Stack.Screen name="startmonth" options={{ headerShown: false }} />
+      <Stack.Screen name="changepassword" options={{ headerShown: false }} />
+      <Stack.Screen name="about" options={{ headerShown: false }} />
+      <Stack.Screen name="policy" options={{ headerShown: false }} />
+      <Stack.Screen name="terms" options={{ headerShown: false }} />
     </Stack>
   );
 };
