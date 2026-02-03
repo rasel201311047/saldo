@@ -8,6 +8,7 @@ const _layout = () => {
       <Stack.Screen name="(calendar)" options={{ headerShown: false }} />
       <Stack.Screen name="(goals)" options={{ headerShown: false }} />
       <Stack.Screen name="(profile)" options={{ headerShown: false }} />
+      <Stack.Screen name="falsepage" options={{ headerShown: false }} />
     </Stack>
   );
 };

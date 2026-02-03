@@ -26,6 +26,7 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="(pages)" />
+            <Stack.Screen name="(auth)" />
             <Stack.Screen name="index" />
           </Stack>
         </SafeAreaView>
