@@ -2,9 +2,12 @@ import { MonthImg } from "@/assets/month/month";
 import { RootState } from "@/src/redux/store";
 import responsive from "@/src/utils/responsive";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
+import WeekPastdateModal from "./WeekPastdateModal";
+
+/* ---------------- CONSTANTS ---------------- */
 
 const monthNames = [
   "January",
@@ -36,33 +39,24 @@ const monthImages = [
   MonthImg.december,
 ];
 
-// Function to generate week ranges for any month/year
-const getWeekRanges = (month: number, year: number) => {
-  const ranges = [];
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const totalDays = lastDay.getDate();
+/* ---------------- HELPERS ---------------- */
 
-  let start = 1;
-
-  while (start <= totalDays) {
-    let end = Math.min(start + 6, totalDays);
-    const endDate = new Date(year, month, end);
-    const dayOfWeek = endDate.getDay();
-    if (dayOfWeek !== 0 && end < totalDays) {
-      end = Math.min(end + (6 - dayOfWeek), totalDays);
-    }
-
-    ranges.push({
-      start,
-      end,
-      isCurrentWeek: isCurrentWeek(month, year, start, end),
+const getWeekDays = (
+  year: number,
+  month: number,
+  start: number,
+  end: number,
+) => {
+  const days = [];
+  for (let d = start; d <= end; d++) {
+    const date = new Date(year, month, d);
+    days.push({
+      day: date.toLocaleDateString("en-US", { weekday: "short" }),
+      date: d,
+      isToday: date.toDateString() === new Date().toDateString(),
     });
-
-    start = end + 1;
   }
-
-  return ranges;
+  return days;
 };
 
 const isCurrentWeek = (
@@ -72,80 +66,106 @@ const isCurrentWeek = (
   end: number,
 ) => {
   const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth();
-  const currentDate = today.getDate();
+  return (
+    today.getFullYear() === year &&
+    today.getMonth() === month &&
+    today.getDate() >= start &&
+    today.getDate() <= end
+  );
+};
 
-  if (year === currentYear && month === currentMonth) {
-    return currentDate >= start && currentDate <= end;
+const getWeekRanges = (month: number, year: number) => {
+  const ranges = [];
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  let start = 1;
+
+  while (start <= totalDays) {
+    const end = Math.min(start + 6, totalDays);
+    ranges.push({
+      start,
+      end,
+      isCurrent: isCurrentWeek(month, year, start, end),
+      days: getWeekDays(year, month, start, end),
+    });
+    start = end + 1;
   }
-  return false;
+
+  return ranges;
 };
 
-const getMonthData = (month: number, year: number) => {
-  const weekRanges = getWeekRanges(month, year);
+const getMonthData = (month: number, year: number) => ({
+  name: monthNames[month],
+  year,
+  image: monthImages[month],
+  weeks: getWeekRanges(month, year).map((w) => ({
+    label: `${monthNames[month]} ${w.start}-${w.end}`,
+    ...w,
+  })),
+});
 
-  return {
-    name: monthNames[month],
-    year,
-    image: monthImages[month],
-    weeks: weekRanges.map((range) => ({
-      label: `${monthNames[month]} ${range.start}-${range.end}`,
-      isCurrent: range.isCurrentWeek,
-    })),
-  };
-};
+/* ---------------- COMPONENT ---------------- */
 
 const CalendershowData = () => {
   const { currentMonth, currentYear } = useSelector(
     (state: RootState) => state.calendar,
   );
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState<any>(null);
+
   const monthData = getMonthData(currentMonth, currentYear);
 
   return (
-    <View className="">
-      <View
-        style={{ height: responsive.verticalScale(180) }}
-        className="w-full"
-      >
-        <Image
-          source={monthData.image}
-          className="w-full h-full"
-          resizeMode="cover"
-        />
-        <View className="absolute w-full inset-0 items-center">
-          <View className="bg-[#010101] mt-[3%] px-[4%] py-1 rounded-full">
-            <Text className="font-Inter font-semibold text-lg text-[#fff]">
+    <View>
+      {/* Header */}
+      <View style={{ height: responsive.verticalScale(180) }}>
+        <Image source={monthData.image} className="w-full h-full" />
+        <View className="absolute inset-0 items-center">
+          <View className="bg-black mt-4 px-5 py-1 rounded-full">
+            <Text className="text-white text-lg font-Inter font-semibold">
               {monthData.name} {monthData.year}
             </Text>
           </View>
         </View>
       </View>
 
-      <View className="flex-col  justify-center items-center mt-[4%]">
+      {/* Weeks */}
+      <View className="items-center mt-6">
         {monthData.weeks.map((week, index) => (
-          <TouchableOpacity key={index}>
+          <TouchableOpacity
+            key={index}
+            disabled={!week.isCurrent}
+            onPress={() => {
+              setSelectedWeek(week);
+              setModalVisible(true);
+            }}
+          >
             {week.isCurrent ? (
               <LinearGradient
                 colors={["#FAD885", "#C49F59", "#8A622A"]}
                 style={{ borderRadius: 50 }}
-                className="w-[60%] py-2 px-3 rounded-lg mt-[3%]"
+                className="py-2 px-3 rounded-full mt-3"
               >
-                <Text className="text-center font-Inter font-medium text-[#fff]">
+                <Text className="text-center text-white font-medium">
                   {week.label}
                 </Text>
               </LinearGradient>
             ) : (
-              <View className="text-center mt-[3%] font-Inter font-medium text-[#fff]">
-                <Text className="text-center font-Inter font-medium text-[#fff]">
-                  {week.label}
-                </Text>
-              </View>
+              <Text className="text-white mt-3 opacity-40">{week.label}</Text>
             )}
           </TouchableOpacity>
         ))}
       </View>
-      <View className="w-full h-[4%]" />
+
+      {/* Modal */}
+      {selectedWeek && (
+        <WeekPastdateModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          weekLabel={selectedWeek.label}
+          days={selectedWeek.days}
+        />
+      )}
     </View>
   );
 };

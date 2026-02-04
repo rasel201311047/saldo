@@ -1,4 +1,7 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import LanguagePickerModal from "@/src/component/profile/LanguagePickerModal";
+import { useGetLanguagesQuery } from "@/src/redux/language/languageApi";
+import { useGetAllCountriesQuery } from "@/src/redux/phonenumber/countriesApi";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -17,6 +20,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const SetupProfile = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
+
+  const { data: languagesdata = [], isLoading } = useGetLanguagesQuery();
+  const { data: countryname = [] } = useGetAllCountriesQuery();
+
   // State management
   const [country, setCountry] = useState("");
   const [currency, setCurrency] = useState("");
@@ -177,13 +186,13 @@ const SetupProfile = () => {
               <Text className="text-white  font-Inter mb-3">🌐 Language</Text>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => setShowLanguageModal(true)}
+                onPress={() => setModalVisible(true)}
                 className="flex-row items-center justify-between px-4 py-4 rounded-lg border border-[#D6AA63]/40"
               >
                 <Text
-                  className={`${language ? "text-white" : "text-white/70"}`}
+                  className={`${selectedLanguage ? "text-white" : "text-white/70"}`}
                 >
-                  {language || "Select language"}
+                  {selectedLanguage?.name || "Select language"}
                 </Text>
                 <Ionicons name="chevron-down" size={20} color="#D6AA63" />
               </TouchableOpacity>
@@ -212,6 +221,15 @@ const SetupProfile = () => {
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
+        <LanguagePickerModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          languages={languagesdata}
+          onSelect={(lang) => {
+            setSelectedLanguage(lang);
+            setModalVisible(false);
+          }}
+        />
       </SafeAreaView>
 
       {/* Country Selection Modal */}

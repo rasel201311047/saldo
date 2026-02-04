@@ -18,16 +18,16 @@ export type PickerCountry = {
   flag: string;
 };
 
-type PhoneCodeModalProps = {
+type CountryModalProps = {
   visible: boolean;
   onClose: () => void;
   countries: PickerCountry[];
   searchText: string;
   onSearchChange: (text: string) => void;
-  onSelect: (country: PickerCountry) => void;
+  onSelect: (countryName: string) => void; // only country name
 };
 
-const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
+const CountryModal: React.FC<CountryModalProps> = ({
   visible,
   onClose,
   countries,
@@ -43,7 +43,7 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
       onRequestClose={onClose}
     >
       <View className="flex-1 bg-black/40 justify-end">
-        <View className="  rounded-t-3xl h-[75%] overflow-hidden">
+        <View className="rounded-t-3xl h-[75%] overflow-hidden">
           <GradientBackground>
             {/* Drag Indicator */}
             <View className="items-center py-2">
@@ -51,7 +51,7 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
             </View>
 
             {/* Header */}
-            <View className="px-5 pb-3 flex-row items-center justify-between ">
+            <View className="px-5 pb-3 flex-row items-center justify-between">
               <Text className="text-lg font-semibold text-[#fff]">
                 Select Country
               </Text>
@@ -65,8 +65,8 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
             </View>
 
             {/* Search */}
-            <View className="px-5 py-3 ">
-              <View className="flex-row items-center bg-transparent  border border-[#C49F59]   rounded-xl px-3">
+            <View className="px-5 py-3">
+              <View className="flex-row items-center bg-transparent border border-[#C49F59] rounded-xl px-3">
                 <Ionicons name="search" size={18} color="#fff" />
                 <TextInput
                   placeholder="Search country"
@@ -84,8 +84,8 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
                 <TouchableOpacity
                   key={c.cca2}
                   activeOpacity={0.7}
-                  onPress={() => onSelect(c)}
-                  className="flex-row items-center px-5 py-4 border-b border-[#C49F59] "
+                  onPress={() => onSelect(c.name)} // only send country name
+                  className="flex-row items-center px-5 py-4 border-b border-[#C49F59]"
                 >
                   <Image
                     source={{ uri: c.flag }}
@@ -99,7 +99,7 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
                   </View>
 
                   <Text className="text-sm font-semibold text-[#fff]">
-                    {c.phoneCode}
+                    {c.phoneCode} {/* still visible, but not selectable */}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -111,4 +111,4 @@ const PhoneCodeModal: React.FC<PhoneCodeModalProps> = ({
   );
 };
 
-export default PhoneCodeModal;
+export default CountryModal;
