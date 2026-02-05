@@ -115,7 +115,7 @@ const SetupProfile = () => {
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1 px-5">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          behavior={Platform.OS === "android" ? "padding" : undefined}
           className="flex-1"
         >
           {/* Header */}

@@ -1,4 +1,5 @@
-import { AntDesign, Entypo, Feather } from "@expo/vector-icons";
+import { AntDesign, Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
   Pressable,
@@ -8,10 +9,13 @@ import {
   View,
 } from "react-native";
 import CustomDatePicker from "../custompicker/CustomDatePicker";
+import IconSelector from "../goals/IconSelector";
+import ColorPickerModal from "./ColorPickerModal";
 
 const AddNewAccountForm = () => {
   const [color, setColor] = useState("#C49F59");
   const [showColorPicker, setShowColorPicker] = useState(false);
+  console.log(color);
 
   const [currency, setCurrency] = useState("USD");
   const [showCurrency, setShowCurrency] = useState(false);
@@ -25,6 +29,48 @@ const AddNewAccountForm = () => {
       month: "long",
       year: "numeric",
     });
+
+  //   icon
+  const [selectedIconName, setSelectedIconName] = useState<string | null>(null);
+  const [selectedIconStyle, setSelectedIconStyle] = useState<string>("solid");
+  const [iconModal, setIconModal] = useState(false);
+
+  const handleIconSelect = (iconName: string) => {
+    setSelectedIconName(iconName);
+  };
+
+  console.log("Icon Name ", selectedIconName);
+
+  // Render selected icon preview
+  const renderSelectedIcon = () => {
+    if (!selectedIconName) return null;
+
+    const iconProps = {
+      solid: selectedIconStyle === "solid",
+      brand: selectedIconStyle === "brands",
+    };
+
+    return (
+      <View className="flex-row items-center gap-3">
+        <View className="bg-[#C49F59]/20 p-2 rounded-lg">
+          <FontAwesome5
+            name={selectedIconName}
+            size={20}
+            color="#fff"
+            {...iconProps}
+          />
+        </View>
+        <View>
+          <Text className="text-white capitalize">
+            {selectedIconName.replace(/-/g, " ")}
+          </Text>
+          <Text className="text-gray-400 text-xs">
+            {selectedIconStyle} style
+          </Text>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <View>
@@ -76,7 +122,7 @@ const AddNewAccountForm = () => {
       </View>
 
       {/* Name */}
-      <View className="mb-4">
+      <View className="my-4">
         <Text className="text-white text-base font-Inter mb-2">Name</Text>
         <View className="flex-row items-center border border-[#C49F59] rounded-xl px-4 py-3 bg-[#1F1E2C]">
           <TextInput
@@ -89,7 +135,7 @@ const AddNewAccountForm = () => {
       </View>
 
       {/* Date */}
-      <View>
+      <View className="mb-4">
         <Text className="text-[#FFFFFF] text-base font-Inter my-2">Date</Text>
         <TouchableOpacity
           onPress={() => setShowDate(true)}
@@ -105,6 +151,36 @@ const AddNewAccountForm = () => {
           onClose={() => setShowDate(false)}
           onConfirm={(selected) => setDate(selected)}
         />
+      </View>
+
+      {/* Icon Selection */}
+      <View className="mb-6">
+        <Text className="text-white text-base font-semibold mb-3">
+          Select Icon
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            setIconModal(true);
+          }}
+          className="flex-row items-center justify-between border border-[#C49F59] rounded-xl px-4 py-4 bg-[#1F1E2C]/50"
+          activeOpacity={0.7}
+        >
+          {selectedIconName ? (
+            renderSelectedIcon()
+          ) : (
+            <View className="flex-row items-center">
+              <View className="bg-[#2A2940] p-2 rounded-lg mr-3">
+                <FontAwesome5 name="icons" size={18} color="#aaa" />
+              </View>
+              <Text className="text-gray-400">Choose an icon</Text>
+            </View>
+          )}
+          <FontAwesome5
+            name={selectedIconName ? "edit" : "chevron-right"}
+            size={16}
+            color={selectedIconName ? "#C49F59" : "#fff"}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Choose a color */}
@@ -129,12 +205,35 @@ const AddNewAccountForm = () => {
           />
         </Pressable>
 
-        {/* <ColorPickerModal
+        <View className="mt-[4%]">
+          <TouchableOpacity activeOpacity={0.8}>
+            <LinearGradient
+              colors={["#B08A4A", "#E0B66A"]}
+              style={{ borderRadius: 8 }}
+              className="  py-4 items-center"
+            >
+              <Text className="text-white font-semibold text-base">Save</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
+            <Text className="text-white font-Inter font-bold">Cancel</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ColorPickerModal
           visible={showColorPicker}
           initialColor={color}
           onClose={() => setShowColorPicker(false)}
           onSelectColor={setColor}
-        /> */}
+        />
+
+        {/* Icon Selector Modal */}
+        <IconSelector
+          visible={iconModal}
+          onClose={() => setIconModal(false)}
+          onSelect={handleIconSelect}
+        />
       </View>
     </View>
   );

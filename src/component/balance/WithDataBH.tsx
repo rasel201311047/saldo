@@ -11,7 +11,8 @@ const WithDataBH = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showChart, setShowChart] = useState(true);
   const [renameModal, setRenameModal] = useState(false);
-  //   console.log(menuOpen);
+
+  console.log(menuOpen);
 
   const chartData = {
     balance: 5000,

@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Text, View } from "react-native";
-import Svg, { Circle, G } from "react-native-svg";
+import { ScrollView, Text, View } from "react-native";
+import PieChart from "react-native-pie-chart";
 
 type ChartItem = {
   label: string;
@@ -18,119 +18,123 @@ const DATA: ChartItem[] = [
   { label: "Others", value: 950, color: "#8A93A6" },
 ];
 
-const SIZE = 220;
-const STROKE = 22;
-const RADIUS = (SIZE - STROKE) / 2;
-const CIRC = 2 * Math.PI * RADIUS;
-const GAP = 6; // spacing between slices
+const SIZE = 220; // chart size
 
 export default function CircleGraph() {
   const total = DATA.reduce((s, i) => s + i.value, 0);
 
-  let offset = 0;
+  // PieChart expects array of objects with { value, color }
+  const series = DATA.map((item) => ({
+    value: item.value,
+    color: item.color,
+  }));
 
   return (
-    <LinearGradient
-      colors={["#b08b4a81", "#2626a185"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{
-        padding: 16,
-        borderRadius: 16,
-        borderWidth: 1,
-        borderColor: "#C49F59",
-      }}
-    >
-      {/* DONUT */}
-      <View className="items-center justify-center">
-        <Svg width={SIZE} height={SIZE}>
-          <G rotation="-90" origin={`${SIZE / 2}, ${SIZE / 2}`}>
-            {DATA.map((item, i) => {
-              const pct = item.value / total;
-              const length = pct * CIRC - GAP;
-              const dashArray = `${length} ${CIRC}`;
+    <ScrollView style={{ flex: 1, padding: 16 }}>
+      <LinearGradient
+        colors={["#b08b4a81", "#2626a185"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          padding: 16,
+          borderRadius: 16,
+          borderWidth: 1,
+          borderColor: "#C49F59",
+        }}
+      >
+        {/* DONUT GRAPH */}
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <PieChart
+            widthAndHeight={SIZE}
+            series={series}
+            cover={0.6} // donut thickness
+          />
 
-              const dashOffset = -offset;
-              offset += pct * CIRC;
-
-              return (
-                <Circle
-                  key={i}
-                  cx={SIZE / 2}
-                  cy={SIZE / 2}
-                  r={RADIUS}
-                  stroke={item.color}
-                  strokeWidth={STROKE}
-                  strokeDasharray={dashArray}
-                  strokeDashoffset={dashOffset}
-                  strokeLinecap="round"
-                  fill="none"
-                />
-              );
-            })}
-          </G>
-        </Svg>
-
-        {/* CENTER */}
-        <View className="absolute items-center">
-          <Text className="text-gray-400 text-sm">Total</Text>
-          <Text className="text-white text-2xl font-semibold mt-1">
-            ${total.toLocaleString()}
-          </Text>
+          {/* CENTER TOTAL */}
+          <View style={{ position: "absolute", alignItems: "center" }}>
+            <Text style={{ color: "#9CA3AF", fontSize: 12 }}>Total</Text>
+            <Text
+              style={{
+                color: "#FFFFFF",
+                fontSize: 24,
+                fontWeight: "600",
+                marginTop: 4,
+              }}
+            >
+              ${total.toLocaleString()}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      {/* LEVEL / PROGRESS BARS */}
-      <View className="mt-6 space-y-4">
-        {DATA.map((item, i) => {
-          const percent = Math.round((item.value / total) * 100);
-
-          return (
-            <View key={i}>
-              <View className="flex-row items-center mb-1">
+        {/* CATEGORY LIST & PROGRESS BARS */}
+        <View style={{ marginTop: 24 }}>
+          {DATA.map((item, i) => {
+            const percent = Math.round((item.value / total) * 100);
+            return (
+              <View key={i} style={{ marginBottom: 16 }}>
                 <View
                   style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: item.color,
-                    marginRight: 8,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 4,
                   }}
-                />
+                >
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: 5,
+                      backgroundColor: item.color,
+                      marginRight: 8,
+                    }}
+                  />
+                  <Text style={{ color: "#E5E7EB", flex: 1 }}>
+                    {item.label}
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#9CA3AF",
+                      width: 32,
+                      textAlign: "right",
+                    }}
+                  >
+                    {percent}%
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#FFFFFF",
+                      width: 80,
+                      textAlign: "right",
+                      marginLeft: 8,
+                    }}
+                  >
+                    ${item.value.toLocaleString()}
+                  </Text>
+                </View>
 
-                <Text className="text-gray-200 flex-1">{item.label}</Text>
-
-                <Text className="text-gray-400 w-12 text-right">
-                  {percent}%
-                </Text>
-
-                <Text className="text-white w-20 text-right ml-2">
-                  ${item.value.toLocaleString()}
-                </Text>
-              </View>
-
-              {/* BAR */}
-              <View
-                style={{
-                  height: 6,
-                  backgroundColor: "#2A2F45",
-                  borderRadius: 6,
-                  overflow: "hidden",
-                }}
-              >
+                {/* PROGRESS BAR */}
                 <View
                   style={{
-                    width: `${percent}%`,
-                    height: "100%",
-                    backgroundColor: item.color,
+                    height: 6,
+                    backgroundColor: "#2A2F45",
                     borderRadius: 6,
+                    overflow: "hidden",
                   }}
-                />
+                >
+                  <View
+                    style={{
+                      width: `${percent}%`,
+                      height: "100%",
+                      backgroundColor: item.color,
+                      borderRadius: 6,
+                    }}
+                  />
+                </View>
               </View>
-            </View>
-          );
-        })}
-      </View>
-    </LinearGradient>
+            );
+          })}
+        </View>
+      </LinearGradient>
+    </ScrollView>
   );
 }

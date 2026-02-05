@@ -3,14 +3,19 @@ import React from "react";
 
 const _layout = () => {
   return (
-    <Stack>
-      <Stack.Screen name="signin" options={{ headerShown: false }} />
-      <Stack.Screen name="signup" options={{ headerShown: false }} />
-      <Stack.Screen name="resetpassword" options={{ headerShown: false }} />
-      <Stack.Screen name="verify" options={{ headerShown: false }} />
-      <Stack.Screen name="forgot" options={{ headerShown: false }} />
-      <Stack.Screen name="setupprofile" options={{ headerShown: false }} />
-      <Stack.Screen name="subcription" options={{ headerShown: false }} />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+      }}
+    >
+      <Stack.Screen name="signin" />
+      <Stack.Screen name="signup" />
+      <Stack.Screen name="resetpassword" />
+      <Stack.Screen name="verify" />
+      <Stack.Screen name="forgot" />
+      <Stack.Screen name="setupprofile" />
+      <Stack.Screen name="subcription" />
     </Stack>
   );
 };

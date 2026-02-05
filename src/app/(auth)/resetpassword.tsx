@@ -63,7 +63,7 @@ export default function Resetpassword() {
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "android" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
           <ScrollView

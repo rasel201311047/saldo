@@ -130,7 +130,7 @@ const CalendershowData = () => {
       </View>
 
       {/* Weeks */}
-      <View className="items-center mt-6">
+      <View className="items-center my-[6%]">
         {monthData.weeks.map((week, index) => (
           <TouchableOpacity
             key={index}
@@ -144,7 +144,7 @@ const CalendershowData = () => {
               <LinearGradient
                 colors={["#FAD885", "#C49F59", "#8A622A"]}
                 style={{ borderRadius: 50 }}
-                className="py-2 px-3 rounded-full mt-3"
+                className="py-2 px-3 rounded-full mt-[5%]"
               >
                 <Text className="text-center text-white font-medium">
                   {week.label}

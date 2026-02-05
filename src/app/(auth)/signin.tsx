@@ -1,6 +1,7 @@
 import { google } from "@/assets/icons";
 import { Images } from "@/assets/images/image";
 import GradientBackground from "@/src/component/background/GradientBackground";
+import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
@@ -34,9 +35,9 @@ const Signin = () => {
 
   return (
     <GradientBackground>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView edges={["top"]} className="flex-1">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "android" ? "padding" : "height"}
           className="flex-1"
         >
           <ScrollView
@@ -50,7 +51,10 @@ const Signin = () => {
                 <Image
                   source={Images.logo}
                   resizeMode="contain"
-                  className="w-36 h-36"
+                  style={{
+                    width: responsive.scale(120),
+                    height: responsive.scale(120),
+                  }}
                 />
               </View>
 

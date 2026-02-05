@@ -1,5 +1,4 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
-import AddNewAccountForm from "@/src/component/balance/AddNewAccountForm";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -9,7 +8,6 @@ import {
   Dimensions,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -19,7 +17,7 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const SEGMENT_WIDTH = SCREEN_WIDTH * 0.85;
 const BUTTON_WIDTH = SEGMENT_WIDTH / 2;
 
-const Accountbalanceadd = () => {
+const Datecatagory = () => {
   const [activeButton, setActiveButton] = useState<
     "Money you owe" | "Cash Balance"
   >("Money you owe");
@@ -57,21 +55,13 @@ const Accountbalanceadd = () => {
             </TouchableOpacity>
 
             <Text className="text-white font-Inter text-xl font-bold">
-              Add New Account
+              Categories
             </Text>
           </View>
 
           {/* Content */}
           <ScrollView className="flex-1">
             <View className="px-[5%] my-6">
-              <View className="border border-[#C49F59] rounded-xl px-4 py-3 mb-6">
-                <TextInput
-                  placeholder="Name"
-                  placeholderTextColor="#CFCFCF"
-                  className="text-white text-base"
-                />
-              </View>
-
               {/* Animated Segmented Control */}
               <View
                 style={{ width: SEGMENT_WIDTH }}
@@ -115,8 +105,7 @@ const Accountbalanceadd = () => {
                 </View>
               </View>
 
-              {/* form */}
-              <AddNewAccountForm />
+              {/* main contain */}
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -125,4 +114,4 @@ const Accountbalanceadd = () => {
   );
 };
 
-export default Accountbalanceadd;
+export default Datecatagory;

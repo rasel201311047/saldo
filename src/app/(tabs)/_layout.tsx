@@ -10,6 +10,7 @@ export default function TabLayout() {
       tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tabs.Screen name="goals" options={{ title: "Goals" }} />
+
       <Tabs.Screen name="calendar" options={{ title: "Calendar" }} />
 
       <Tabs.Screen name="balance" options={{ title: "Balance" }} />

@@ -141,7 +141,7 @@ const Index = () => {
 
   return (
     <GradientBackground>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView edges={["top"]} className="flex-1">
         <StatusBar barStyle="light-content" />
 
         <View className="flex-1">

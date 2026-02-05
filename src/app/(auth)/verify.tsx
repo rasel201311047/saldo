@@ -1,4 +1,5 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
@@ -101,7 +102,7 @@ const Verify: React.FC = () => {
   return (
     <GradientBackground>
       <SafeAreaView className="flex-1" edges={["top"]}>
-        <View className="bg-mainColor flex-1">
+        <View className="flex-1">
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={{ flex: 1 }}
@@ -136,9 +137,13 @@ const Verify: React.FC = () => {
                     <RNTextInput
                       key={index}
                       value={value}
+                      style={{
+                        width: responsive.scale(50),
+                        height: responsive.scale(50),
+                      }}
                       className={`border-2 ${
                         value ? "border-[#C49F59]" : "border-[#c49f5960]"
-                      } w-14 p-2 h-14 text-center text-[#fff] rounded-lg bg-transparent font-LexendBold text-3xl`}
+                      }  p-2  text-center text-[#fff] rounded-lg bg-transparent font-LexendBold text-3xl`}
                       keyboardType="numeric"
                       maxLength={1}
                       autoFocus={index === 0}

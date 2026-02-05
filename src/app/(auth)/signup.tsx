@@ -141,7 +141,7 @@ export default function Signup() {
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "android" ? "padding" : "height"}
           className="flex-1"
         >
           <ScrollView
