@@ -1,5 +1,6 @@
 import responsive from "@/src/utils/responsive";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React from "react";
 import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
 
@@ -30,7 +31,10 @@ const WeekPastdateModal = ({ visible, onClose, weekLabel, days }: Props) => {
 
           <View className="flex-row justify-between">
             {days.map((item, index) => (
-              <TouchableOpacity key={index}>
+              <TouchableOpacity
+                onPress={() => router.push("/datecatagory")}
+                key={index}
+              >
                 <LinearGradient
                   colors={
                     item.isToday

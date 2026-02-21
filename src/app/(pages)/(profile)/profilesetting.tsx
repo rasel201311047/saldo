@@ -140,11 +140,9 @@ const ProfileSetting = () => {
             </LinearGradient>
           </TouchableOpacity>
 
-          <Text className="flex-1 text-center text-white text-2xl font-bold">
+          <Text className="flex-1 ml-3 text-white text-2xl font-bold">
             Profile Setting
           </Text>
-
-          <View className="w-9" />
         </View>
 
         <ScrollView

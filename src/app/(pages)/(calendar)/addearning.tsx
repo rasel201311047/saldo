@@ -72,7 +72,7 @@ const Addearning = () => {
             </TouchableOpacity>
 
             <Text className="text-white font-Inter text-xl font-bold">
-              Plan an spendings
+              Plan an Earning
             </Text>
           </View>
 

@@ -340,7 +340,10 @@ const CreateForm = () => {
               </LinearGradient>
             </TouchableOpacity>
 
-            <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center"
+            >
               <Text className="text-white font-Inter font-bold">Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -381,23 +384,35 @@ const CreateForm = () => {
         </Modal>
 
         {/* Advance setting modal */}
+        {/* Advance setting modal */}
         <Modal visible={advanceModal} animationType="slide" transparent>
           <View className="flex-1 bg-black/70 justify-center">
             <Pressable
               className="flex-1 absolute inset-0"
               onPress={() => setAdvanceModal(false)}
             />
-            <View className="bg-[#1F1E2C] border border-[#C49F59] rounded-3xl p-5 mx-auto w-[85%] max-h-[70%]">
-              <ScrollView>
+            <View className="bg-[#1F1E2C] border border-[#C49F59] rounded-3xl p-6 mx-auto w-[85%] max-h-[75%]">
+              {/* Header */}
+              <View className="mb-6">
+                <Text className="text-white text-xl font-bold mb-1">
+                  Additional Details
+                </Text>
+                <Text className="text-gray-400 text-sm">
+                  Customize your goal further
+                </Text>
+              </View>
+
+              <ScrollView showsVerticalScrollIndicator={false}>
                 {/* Icon Selection */}
                 <View className="mb-6">
-                  <Text className="text-white text-base font-semibold mb-3">
-                    Select Icon
+                  <Text className="text-white text-base font-semibold mb-2">
+                    Goal Icon
+                  </Text>
+                  <Text className="text-gray-400 text-xs mb-3">
+                    Choose a visual representation for your goal
                   </Text>
                   <TouchableOpacity
-                    onPress={() => {
-                      setIconModal(true);
-                    }}
+                    onPress={() => setIconModal(true)}
                     className="flex-row items-center justify-between border border-[#C49F59] rounded-xl px-4 py-4 bg-[#1F1E2C]/50"
                     activeOpacity={0.7}
                   >
@@ -408,7 +423,7 @@ const CreateForm = () => {
                         <View className="bg-[#2A2940] p-2 rounded-lg mr-3">
                           <FontAwesome5 name="icons" size={18} color="#aaa" />
                         </View>
-                        <Text className="text-gray-400">Choose an icon</Text>
+                        <Text className="text-gray-400">Select an icon</Text>
                       </View>
                     )}
                     <FontAwesome5
@@ -419,18 +434,39 @@ const CreateForm = () => {
                   </TouchableOpacity>
                 </View>
 
-                {/* Date */}
+                {/* Goal Deadline - IMPROVED CLARITY */}
                 <View className="mb-6">
-                  <Text className="text-[#FFFFFF] text-base font-Inter my-2">
-                    Date
-                  </Text>
+                  <View className="flex-row items-center mb-2">
+                    <Text className="text-white text-base font-semibold">
+                      Target Completion Date
+                    </Text>
+                    <View className="bg-[#C49F59]/20 px-2 py-1 rounded ml-2">
+                      <Text className="text-[#C49F59] text-xs">Optional</Text>
+                    </View>
+                  </View>
+
+                  <View className="mb-3">
+                    <Text className="text-gray-400 text-sm">
+                      Set a deadline for when you want to achieve this goal
+                    </Text>
+                    <Text className="text-gray-500 text-xs mt-1">
+                      (Leave empty if no specific deadline)
+                    </Text>
+                  </View>
 
                   <TouchableOpacity
                     onPress={() => setShowDate(true)}
-                    className="flex-row items-center justify-between bg-transparent  border border-[#C49F59] rounded-xl px-4 py-4"
+                    className="flex-row items-center justify-between bg-transparent border border-[#C49F59] rounded-xl px-4 py-4"
                   >
-                    <Text className="text-white">{formatDate(date)}</Text>
-                    <Feather name="calendar" size={18} color="#fff" />
+                    <View className="flex-row items-center">
+                      <Feather name="target" size={18} color="#C49F59" />
+                      <Text className="text-white ml-3">
+                        {date === "2026-01-18"
+                          ? "Select a deadline"
+                          : formatDate(date)}
+                      </Text>
+                    </View>
+                    <Feather name="chevron-down" size={18} color="#fff" />
                   </TouchableOpacity>
 
                   <CustomDatePicker
@@ -444,40 +480,54 @@ const CreateForm = () => {
                   />
                 </View>
 
-                {/* Note */}
-                <View className="mb-6">
-                  <Text className="text-white text-base font-semibold mb-3">
-                    Note
+                {/* Notes */}
+                <View className="mb-8">
+                  <Text className="text-white text-base font-semibold mb-2">
+                    Notes
+                  </Text>
+                  <Text className="text-gray-400 text-xs mb-3">
+                    Add additional details or reminders (optional)
                   </Text>
                   <View className="bg-transparent border border-[#C49F59] rounded-xl px-4 py-3">
                     <TextInput
-                      placeholder="Add a note..."
-                      placeholderTextColor="#aaa"
+                      placeholder="Write your notes here..."
+                      placeholderTextColor="#666"
                       className="text-white"
                       multiline
                       numberOfLines={4}
                       textAlignVertical="top"
                       style={{ minHeight: 100 }}
                       onChangeText={(text) => setNote(text)}
+                      value={noteD}
                     />
                   </View>
                 </View>
-                {/* Buttons */}
-                <View className="mt-[4%]">
-                  <TouchableOpacity activeOpacity={0.8}>
+
+                {/* Action Buttons */}
+                <View className="flex-col gap-[4%] space-y-3 mb-2">
+                  <TouchableOpacity
+                    onPress={() => setAdvanceModal(false)}
+                    activeOpacity={0.8}
+                  >
                     <LinearGradient
                       colors={["#B08A4A", "#E0B66A"]}
-                      style={{ borderRadius: 8 }}
-                      className="  py-4 items-center"
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={{ borderRadius: 12 }}
+                      className="py-4 items-center"
                     >
-                      <Text className="text-white font-semibold text-base">
-                        OK
+                      <Text className="text-white font-bold text-base">
+                        Apply Settings
                       </Text>
                     </LinearGradient>
                   </TouchableOpacity>
 
-                  <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
-                    <Text className="text-white font-Inter font-bold">No</Text>
+                  <TouchableOpacity
+                    onPress={() => setAdvanceModal(false)}
+                    className="py-4 rounded-xl border border-[#C49F59]/30 bg-white/5 items-center"
+                    activeOpacity={0.7}
+                  >
+                    <Text className="text-gray-300 font-medium">Cancel</Text>
                   </TouchableOpacity>
                 </View>
               </ScrollView>

@@ -76,7 +76,7 @@ const Goals = () => {
                 <Text className="text-center text-[#a1a1a3] text-xs">
                   No saved Account
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/createforn")}>
                   <Text className="font-Inter text-xl text-center text-white mt-[3%] font-bold">
                     Tap to create
                   </Text>
@@ -99,7 +99,7 @@ const Goals = () => {
             <Text className="text-center text-[#a1a1a3] text-xs">
               No saved Account
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/createforn")}>
               <Text className="font-Inter text-xl text-center text-white mt-[3%] font-bold">
                 Tap to create
               </Text>
@@ -120,7 +120,7 @@ const Goals = () => {
             <Text className="text-center text-[#a1a1a3] text-xs">
               No saved Account
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/createforn")}>
               <Text className="font-Inter text-xl text-center text-white mt-[3%] font-bold">
                 Tap to create
               </Text>

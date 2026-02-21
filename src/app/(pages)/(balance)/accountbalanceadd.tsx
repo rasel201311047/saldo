@@ -57,7 +57,7 @@ const Accountbalanceadd = () => {
             </TouchableOpacity>
 
             <Text className="text-white font-Inter text-xl font-bold">
-              Add New Account
+              Create Account
             </Text>
           </View>
 

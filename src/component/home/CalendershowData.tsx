@@ -98,7 +98,7 @@ const getMonthData = (month: number, year: number) => ({
   year,
   image: monthImages[month],
   weeks: getWeekRanges(month, year).map((w) => ({
-    label: `${monthNames[month]} ${w.start}-${w.end}`,
+    label: `${monthNames[month]} ${String(w.start).padStart(2, "0")}-${String(w.end).padStart(2, "0")}`,
     ...w,
   })),
 });

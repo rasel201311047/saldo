@@ -14,7 +14,13 @@ import responsive from "@/src/utils/responsive";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Vibration,
+  View,
+} from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -36,6 +42,7 @@ const monthNamesShort = [
 const Calendar = () => {
   const [addPlus, setAddPlus] = useState(false);
   const dispatch = useDispatch();
+
   const { currentMonth, currentYear } = useSelector(
     (state: RootState) => state.calendar,
   );
@@ -133,7 +140,10 @@ const Calendar = () => {
           <View className="h-56" />
         </ScrollView>
         <TouchableOpacity
-          onPress={() => setAddPlus(true)}
+          onPress={() => {
+            Vibration.vibrate(100);
+            setAddPlus(true);
+          }}
           className=" absolute bottom-28 right-3"
         >
           <LinearGradient

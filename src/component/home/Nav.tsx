@@ -2,10 +2,12 @@ import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import NavberCalenderModal from "./NavberCalenderModal";
 const Nav = () => {
+  const [openCalender, setOpenCalender] = useState(false);
   return (
     <LinearGradient
       colors={["#b08b4a6c", "#2626a18a"]}
@@ -63,23 +65,30 @@ const Nav = () => {
           Current Balance
         </Text>
 
-        <LinearGradient
-          colors={["#b08b4a6c", "#2626a18a"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1.8, y: 1 }}
-          style={{
-            borderRadius: 50,
-            width: 150,
-            alignSelf: "center",
-          }}
-        >
-          <View className="flex-row justify-center items-center">
-            <Text className="font-Inter font-bold text-sm text-[#FFFFFF] rounded-full px-[8%] py-3">
-              January 2026
-            </Text>
-            <Entypo name="chevron-down" size={20} color="#FFFFFF" />
-          </View>
-        </LinearGradient>
+        <TouchableOpacity onPress={() => setOpenCalender(true)}>
+          <LinearGradient
+            colors={["#b08b4a6c", "#2626a18a"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1.8, y: 1 }}
+            style={{
+              borderRadius: 50,
+              width: 150,
+              alignSelf: "center",
+            }}
+          >
+            <View className="flex-row justify-center items-center">
+              <Text className="font-Inter font-bold text-sm text-[#FFFFFF] rounded-full px-[8%] py-3">
+                January 2026
+              </Text>
+              <Entypo name="chevron-down" size={20} color="#FFFFFF" />
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <NavberCalenderModal
+          visible={openCalender}
+          onClose={() => setOpenCalender(false)}
+        />
       </SafeAreaView>
     </LinearGradient>
   );

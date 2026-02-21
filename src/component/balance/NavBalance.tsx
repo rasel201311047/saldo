@@ -8,7 +8,10 @@ const NavBalance = () => {
   return (
     <View>
       <View className="flex-row justify-between items-center px-[5%]">
-        <View className="  flex-row items-center gap-2">
+        <TouchableOpacity
+          onPress={() => router.push("/profile")}
+          className="  flex-row items-center gap-2"
+        >
           <Image
             source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
             className="w-16 h-16 rounded-full"
@@ -16,7 +19,7 @@ const NavBalance = () => {
           <Text className="font-Inter font-bold text-xl text-white">
             Rasel Islam
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => router.push("/accountbalanceadd")}

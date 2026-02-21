@@ -1,15 +1,18 @@
+import { router } from "expo-router";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const NavGoals = () => {
   return (
     <View>
       <View className="flex-row justify-between items-center px-[5%]">
         <View className="  flex-row items-center gap-2">
-          <Image
-            source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
-            className="w-16 h-16 rounded-full"
-          />
+          <TouchableOpacity onPress={() => router.push("/profile")}>
+            <Image
+              source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
+              className="w-16 h-16 rounded-full"
+            />
+          </TouchableOpacity>
           <Text className="font-Inter font-bold text-xl text-white">Goals</Text>
         </View>
 

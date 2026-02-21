@@ -8,6 +8,7 @@ const _layout = () => {
       <Stack.Screen name="notification" />
       <Stack.Screen name="addspending" />
       <Stack.Screen name="addearning" />
+      <Stack.Screen name="datecatagory" />
     </Stack>
   );
 };

@@ -2,7 +2,7 @@ import { budgeticon, menu } from "@/assets/icons";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import BalanceGroph from "./BalanceGroph";
 import RenameAccount from "./RenameAccount";
@@ -12,29 +12,19 @@ const WithDataBH = () => {
   const [showChart, setShowChart] = useState(true);
   const [renameModal, setRenameModal] = useState(false);
 
-  console.log(menuOpen);
-
   const chartData = {
     balance: 5000,
     total: 5250,
     used: 0,
     limit: 250,
-    percentage: 100,
-    salary: 5000,
   };
 
   return (
-    <View
-      style={{ flex: 1 }}
-      className={` ${showChart ? "pt-[8%]" : "pt-[4%]"} `}
-    >
-      {/* ===== Balance Chart ===== */}
+    <View style={{ flex: 1 }} className={showChart ? "pt-[8%]" : "pt-[4%]"}>
       {showChart && <BalanceGroph />}
 
       {/* ===== Header ===== */}
-      <View
-        className={`flex-row items-center justify-between px-5 ${showChart ? "mt-[5%]" : ""} mb-4`}
-      >
+      <View className="flex-row items-center justify-between px-5 mt-3 mb-4 relative">
         <View className="">
           <View className="flex-row items-center gap-[6%]">
             <SvgXml xml={menu} width={20} height={20} color={"#fff"} />
@@ -49,46 +39,77 @@ const WithDataBH = () => {
           </View>
         </View>
 
-        <TouchableOpacity
-          className=" relative"
-          onPress={() => setMenuOpen(!menuOpen)}
-        >
+        {/* MENU BUTTON */}
+        <Pressable onPress={() => setMenuOpen(true)}>
           <Entypo name="dots-three-vertical" size={18} color="#fff" />
-          <View
-            className={`${menuOpen ? "flex-col" : "hidden"} bg-[#1F1E2C] absolute z-50 top-[100%] right-0 border border-[#3A3950] rounded-xl w-48 overflow-hidden`}
-          >
-            <TouchableOpacity
-              className="flex-row items-center justify-between px-4 py-3"
-              onPress={() => setShowChart((v) => !v)}
+        </Pressable>
+
+        {/* ===== DROPDOWN MENU (SAFE) ===== */}
+        {menuOpen && (
+          <>
+            {/* Backdrop */}
+            <Pressable
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: -1000,
+                zIndex: 50,
+              }}
+              onPress={() => setMenuOpen(false)}
+            />
+
+            {/* Menu */}
+            <View
+              style={{
+                position: "absolute",
+                top: 30,
+                right: 0,
+                zIndex: 100,
+                elevation: 12,
+              }}
+              className="bg-[#1F1E2C] border border-[#3A3950] rounded-xl w-48 overflow-hidden"
             >
-              <Text className="text-white">Show in chart</Text>
-              <View
-                className={`w-10 h-5 rounded-full ${
-                  showChart ? "bg-[#D4AF6A]" : "bg-[#3A3950]"
-                }`}
+              <TouchableOpacity
+                className="flex-row items-center justify-between px-4 py-3"
+                onPress={() => {
+                  setShowChart((v) => !v);
+                  setMenuOpen(false);
+                }}
               >
+                <Text className="text-white">Show in chart</Text>
                 <View
-                  className={`w-4 h-4 bg-white rounded-full mt-0.5 ${
-                    showChart ? "ml-5" : "ml-1"
+                  className={`w-10 h-5 rounded-full ${
+                    showChart ? "bg-[#D4AF6A]" : "bg-[#3A3950]"
                   }`}
-                />
-              </View>
-            </TouchableOpacity>
+                >
+                  <View
+                    className={`w-4 h-4 bg-white rounded-full mt-0.5 ${
+                      showChart ? "ml-5" : "ml-1"
+                    }`}
+                  />
+                </View>
+              </TouchableOpacity>
 
-            <View className="h-[1px] bg-[#3A3950]" />
+              <View className="h-px bg-[#3A3950]" />
 
-            <TouchableOpacity
-              onPress={() => setRenameModal(true)}
-              className="px-4 py-3"
-            >
-              <Text className="text-white font-Inter">Rename</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
+              <TouchableOpacity
+                className="px-4 py-3"
+                onPress={() => {
+                  setRenameModal(true);
+                  setMenuOpen(false);
+                }}
+              >
+                <Text className="text-white">Rename</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
 
-      {/* ===== Account Card ===== */}
-      <View className="px-4 -z-50">
+      {/* ===== Card ===== */}
+      <View className="px-4 ">
         <View className="bg-[#242333] border border-[#4F4F59] rounded-2xl p-4">
           <View className="flex-row items-center justify-between mb-3">
             <View className="flex-row items-center gap-2">
@@ -145,6 +166,7 @@ const WithDataBH = () => {
           ></LinearGradient>
         </View>
       </View>
+
       <RenameAccount
         openRemane={renameModal}
         setOpenRename={() => setRenameModal(false)}
