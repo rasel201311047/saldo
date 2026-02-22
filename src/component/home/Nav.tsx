@@ -8,6 +8,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NavberCalenderModal from "./NavberCalenderModal";
 const Nav = () => {
   const [openCalender, setOpenCalender] = useState(false);
+  const currentDate = new Date();
+
+  const formattedDate = currentDate.toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   return (
     <LinearGradient
       colors={["#b08b4a6c", "#2626a18a"]}
@@ -78,7 +85,7 @@ const Nav = () => {
           >
             <View className="flex-row justify-center items-center">
               <Text className="font-Inter font-bold text-sm text-[#FFFFFF] rounded-full px-[8%] py-3">
-                January 2026
+                {formattedDate}
               </Text>
               <Entypo name="chevron-down" size={20} color="#FFFFFF" />
             </View>

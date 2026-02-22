@@ -1,5 +1,6 @@
 import { AntDesign, Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   Pressable,
@@ -216,7 +217,10 @@ const AddNewAccountForm = () => {
             </LinearGradient>
           </TouchableOpacity>
 
-          <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center"
+          >
             <Text className="text-white font-Inter font-bold">Cancel</Text>
           </TouchableOpacity>
         </View>

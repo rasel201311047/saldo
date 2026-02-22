@@ -264,7 +264,10 @@ const Addspending = () => {
                   </LinearGradient>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center">
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  className="mt-4 py-4 rounded-xl border border-white/10 bg-white/5 items-center"
+                >
                   <Text className="text-white font-Inter font-bold">
                     Cancel
                   </Text>
