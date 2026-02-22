@@ -139,6 +139,8 @@ const CreateForm = () => {
         note: noteD,
       }),
     );
+
+    router.back();
   };
 
   return (
