@@ -1,6 +1,9 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import PhoneCodeModal from "@/src/component/profile/PhoneCodeModal";
+import { useSignupMutation } from "@/src/redux/api/Auth/authApi";
 import { useGetAllCountriesQuery } from "@/src/redux/phonenumber/countriesApi";
+import { registerForPushNotificationsAsync } from "@/src/utils/fcmService";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,8 +23,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface FormErrors {
+  name: string;
   email: string;
+  phone: string;
   password: string;
+  confirmpassword: string;
 }
 
 type PickerCountry = {
@@ -31,33 +37,53 @@ type PickerCountry = {
   flag: string;
 };
 
-const DEFAULT_PHONE_CODE = "+975";
+const DEFAULT_PHONE_CODE = "+40";
 
 export default function Signup() {
+  const [registerData, { isLoading, isError }] = useSignupMutation();
   const { data: phonecodenumbe = [] } = useGetAllCountriesQuery();
-
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [showCountryPicker, setShowCountryPicker] = useState(false);
-
   const [phoneNumber, setPhoneNumber] = useState("");
   const [searchText, setSearchText] = useState("");
-
   const [selectedCountry, setSelectedCountry] = useState<PickerCountry | null>(
     null,
   );
+  const [fcmtoken, setFcmToken] = useState("");
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
     phone: DEFAULT_PHONE_CODE,
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<FormErrors>({
+    name: "",
+    phone: "",
     email: "",
     password: "",
+    confirmpassword: "",
   });
+  // ===============FCM code ===============================
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) {
+        const rawToken = token
+          .replace("ExponentPushToken[", "")
+          .replace("]", "");
+        console.log("signup fcm Token:", rawToken);
+        setFcmToken(rawToken);
+      }
+    });
+  }, []);
 
   /* ================= Format Countries ================= */
   const countries = useMemo<PickerCountry[]>(() => {
@@ -109,8 +135,16 @@ export default function Signup() {
   };
 
   /* ================= Register ================= */
-  const handeleSignin = () => {
+  const handeleSignup = async () => {
     let newErrors: Partial<FormErrors> = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!phoneNumber) {
+      newErrors.phone = "Phone is required";
+    }
 
     if (!form.email.trim()) {
       newErrors.email = "Email is required";
@@ -118,22 +152,61 @@ export default function Signup() {
 
     if (!form.password.trim()) {
       newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (form.password != form.confirmPassword) {
+      console.log(form.password, "  ", form.confirmPassword);
+      newErrors.password = "Passwords do not match";
+      newErrors.confirmpassword = "Passwords do not match";
+    }
+
+    if (!form.confirmPassword.trim()) {
+      newErrors.confirmpassword = "Confirm Password is required";
+    } else if (form.password.length < 8) {
+      newErrors.confirmpassword = "Password must be at least 8 characters";
     }
 
     setErrors({
+      name: newErrors.name || "",
+      phone: newErrors.phone || "",
       email: newErrors.email || "",
       password: newErrors.password || "",
+      confirmpassword: newErrors.confirmpassword || "",
     });
 
     if (!newErrors.email && !newErrors.password && isCheck) {
-      router.push({
-        pathname: "/verify",
-        params: { typeOfvarification: "signup" },
-      });
+      try {
+        const response = await registerData({
+          fullName: form.name,
+          mobileNumber: phoneNumber,
+          email: form.email,
+          password: form.password,
+          confirmPassword: form.confirmPassword,
+          fcmToken: fcmtoken,
+          timezone: timezone,
+        }).unwrap();
 
-      console.log("Register success", form);
+        console.log("Success:", response);
+        if (response.success) {
+          router.replace("/calendar");
+        } else {
+          setAlertTittle("Error");
+          setAlertMessage(response?.message);
+          setAlertVisible(true);
+        }
+      } catch (error) {
+        console.log("Error:", error);
+        setAlertTittle("Error");
+        setAlertMessage(error?.data?.err?.message);
+        setAlertVisible(true);
+      }
+
+      // router.push({
+      //   pathname: "/verify",
+      //   params: { typeOfvarification: "signup" },
+      // });
+
+      // console.log("Register success", form);
     }
   };
 
@@ -169,6 +242,9 @@ export default function Signup() {
                 placeholderTextColor="#9CA3AF"
                 className=" bg-transparent   border border-[#C49F59]  rounded-xl px-4 py-4 text-white mb-4"
               />
+              {!!errors.name && (
+                <Text className="text-red-700 text-xs mt-1">{errors.name}</Text>
+              )}
 
               {/* Phone */}
               <Text className="text-[#FFFFFF] text-base font-Inter my-2">
@@ -203,6 +279,12 @@ export default function Signup() {
                 />
               </View>
 
+              {!!errors.phone && (
+                <Text className="text-red-700 text-xs mt-1">
+                  {errors.phone}
+                </Text>
+              )}
+
               {/* Email */}
               <Text className="text-[#FFFFFF] text-base font-Inter my-2">
                 Email
@@ -236,7 +318,7 @@ export default function Signup() {
                 />
                 <Pressable onPress={() => setShowPassword(!showPassword)}>
                   <Ionicons
-                    name={showPassword ? "eye-off" : "eye"}
+                    name={showPassword ? "eye" : "eye-off"}
                     size={20}
                     color={"#fff"}
                   />
@@ -245,6 +327,35 @@ export default function Signup() {
               {!!errors.password && (
                 <Text className="text-red-700 text-xs mt-1">
                   {errors.password}
+                </Text>
+              )}
+
+              {/* Password */}
+              <Text className="text-[#FFFFFF] text-base font-Inter my-2">
+                Confirm Password
+              </Text>
+              <View className="flex-row items-center w-full h-16 bg-transparent  border border-[#C49F59] rounded-xl px-[4%]  text-[15px] font-Inter font-bold text-[#0F0B18] mt-2">
+                <TextInput
+                  value={form.confirmPassword}
+                  onChangeText={(t) => setForm({ ...form, confirmPassword: t })}
+                  secureTextEntry={!showConfirmPassword}
+                  placeholder="********"
+                  placeholderTextColor={"#fff"}
+                  className="flex-1 py-3 text-[#fff]"
+                />
+                <Pressable
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  <Ionicons
+                    name={showConfirmPassword ? "eye" : "eye-off"}
+                    size={20}
+                    color={"#fff"}
+                  />
+                </Pressable>
+              </View>
+              {!!errors.confirmpassword && (
+                <Text className="text-red-700 text-xs mt-1">
+                  {errors.confirmpassword}
                 </Text>
               )}
 
@@ -258,15 +369,23 @@ export default function Signup() {
                     <FontAwesome5 name="check" size={10} color="#C49F59" />
                   )}
                 </Pressable>
-                <Text className="font-Inter text-xs text-[#FFFFFF] ">
-                  I agree to Terms & Conditions
-                </Text>
+                <View className="flex-row items-center gap-1">
+                  <Text className="font-Inter text-xs text-[#FFFFFF] ">
+                    I agree to
+                  </Text>
+
+                  <TouchableOpacity>
+                    <Text className="font-Inter font-bold text-xs text-[#D9A606] ">
+                      Terms & Conditions
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Register */}
 
               <TouchableOpacity
-                onPress={handeleSignin}
+                onPress={handeleSignup}
                 activeOpacity={0.8}
                 className="my-4"
               >
@@ -276,7 +395,7 @@ export default function Signup() {
                   className="  py-4 items-center"
                 >
                   <Text className="text-white font-bold text-base">
-                    Register
+                    {isLoading ? "Register..." : "Register"}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
@@ -287,7 +406,7 @@ export default function Signup() {
                   Have an account?
                 </Text>
                 <TouchableOpacity onPress={() => router.push("/signin")}>
-                  <Text className=" text-[#FFFFFF] text-base font-Inter font-bold ml-1">
+                  <Text className=" text-[#D9A606] text-base font-Inter font-bold ml-1">
                     Sign In
                   </Text>
                 </TouchableOpacity>
@@ -304,6 +423,23 @@ export default function Signup() {
             searchText={searchText}
             onSearchChange={setSearchText}
             onSelect={handleCountrySelect}
+          />
+
+          <CustomAlert
+            visible={alertVisible}
+            title={alertTittle}
+            message={alertMessage}
+            onConfirm={() => {
+              console.log("Confirmed");
+              setAlertVisible(false);
+            }}
+            // onCancel={() => {
+            //   console.log("Cancelled");
+            //   setAlertVisible(false);
+            // }}
+            type={"error"}
+            confirmText={"OK"}
+            cancelText="Cancel"
           />
         </KeyboardAvoidingView>
       </SafeAreaView>

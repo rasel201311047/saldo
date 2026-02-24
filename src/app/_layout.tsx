@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import "../../global.css";
 import GradientBackground from "../component/background/GradientBackground";
 import { store } from "../redux/store";
+import { registerForPushNotificationsAsync } from "../utils/fcmService";
 export default function RootLayout() {
   const [fontsLoaded] = useFonts(Fonts);
   useEffect(() => {
@@ -17,6 +18,17 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      if (token) {
+        const rawToken = token
+          .replace("ExponentPushToken[", "")
+          .replace("]", "");
+        console.log("Raw Token:", rawToken);
+      }
+    });
+  }, []);
 
   if (!fontsLoaded) return null;
   return (

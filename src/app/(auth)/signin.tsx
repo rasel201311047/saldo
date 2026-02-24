@@ -1,6 +1,8 @@
 import { google } from "@/assets/icons";
 import { Images } from "@/assets/images/image";
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
+import { useSigninMutation } from "@/src/redux/api/Auth/authApi";
 import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -24,13 +26,36 @@ import { SvgXml } from "react-native-svg";
 const Signin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [loginData, { isLoading, isError }] = useSigninMutation();
 
-  const handleLogin = () => {
-    router.replace("/falsepage");
+  const handleLogin = async () => {
+    try {
+      const response = await loginData({
+        email: form.email,
+        password: form.password,
+      }).unwrap();
+
+      console.log("Success:", response);
+      if (response.success) {
+        router.replace("/falsepage");
+      } else {
+        setAlertTittle("Error");
+        setAlertMessage(response.success);
+        setAlertVisible(true);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      setAlertTittle("Error");
+      setAlertMessage(error?.message);
+      setAlertVisible(true);
+    }
   };
 
   return (
@@ -135,7 +160,7 @@ const Signin = () => {
                   className="  py-4 items-center"
                 >
                   <Text className="text-white font-semibold text-base">
-                    Login
+                    {isLoading ? "Login...." : "Login"}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
@@ -176,6 +201,23 @@ const Signin = () => {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={"error"}
+          confirmText={"OK"}
+          cancelText="Cancel"
+        />
       </SafeAreaView>
     </GradientBackground>
   );

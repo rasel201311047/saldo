@@ -1,4 +1,4 @@
-import { AntDesign, Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
+import { Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -122,7 +122,7 @@ const AddNewAccountForm = () => {
         </View>
       </View>
 
-      {/* Name */}
+      {/* Name
       <View className="my-4">
         <Text className="text-white text-base font-Inter mb-2">Name</Text>
         <View className="flex-row items-center border border-[#C49F59] rounded-xl px-4 py-3 bg-[#1F1E2C]">
@@ -133,7 +133,7 @@ const AddNewAccountForm = () => {
           />
           <AntDesign name="dollar" size={20} color="#fff" />
         </View>
-      </View>
+      </View> */}
 
       {/* Date */}
       <View className="mb-4">

@@ -2,12 +2,18 @@
   "expo": {
     "name": "saldo",
     "slug": "saldo",
+
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "saldo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "eas": {
+        "projectId": "4cc198a7-a618-45d3-82ec-2c20bffe0512"
+      }
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -20,7 +26,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.saldo"
+      "package": "com.anonymous.saldo",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
@@ -41,7 +48,8 @@
         }
       ],
       "expo-font",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

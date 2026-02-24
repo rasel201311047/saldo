@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "221558397925",
+    "project_id": "saldo-6c5b0",
+    "storage_bucket": "saldo-6c5b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221558397925:android:58277abf7d46cc2370ed0c",
+        "android_client_info": {
+          "package_name": "com.anonymous.saldo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB53Z0Kwn7ZNn_nD0lSyPnQ5oApPX1SApA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

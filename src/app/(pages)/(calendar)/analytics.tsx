@@ -2,7 +2,6 @@ import GradientBackground from "@/src/component/background/GradientBackground";
 import BarGraph from "@/src/component/graph/BarGraph";
 import CircleGraph from "@/src/component/graph/CircleGraph";
 import LineGraph from "@/src/component/graph/LineGraph";
-import AnalyticsCard from "@/src/component/home/AnalyticsCard";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -11,17 +10,12 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Analytics = () => {
-  const dataanalytics = [
-    { title: "Balance", value: "$900" },
-    { title: "Period balance", value: "$4000" },
-  ];
-
   return (
     <GradientBackground>
       <View className="flex-1">
         <SafeAreaView edges={["top"]} className="flex-1">
           {/* Header */}
-          <View className="flex-row items-center gap-[3%] px-[5%]">
+          <View className="flex-row py-2 items-center gap-[3%] px-[5%]">
             <TouchableOpacity onPress={() => router.back()}>
               <LinearGradient
                 colors={["#b08b4a6c", "#2626a18a"]}
@@ -44,11 +38,11 @@ const Analytics = () => {
 
           <ScrollView className="flex-1">
             <View className="px-[5%] mt-5">
-              <View className="flex-row items-center justify-between">
+              {/* <View className="flex-row items-center justify-between">
                 {dataanalytics.map((item, index) => (
                   <AnalyticsCard key={index} item={item} />
                 ))}
-              </View>
+              </View> */}
               <Text className="text-white text-lg font-Inter font-bold pt-4">
                 Income vs Expenses
               </Text>

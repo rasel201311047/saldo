@@ -143,6 +143,15 @@ const CreateForm = () => {
     router.back();
   };
 
+  const getButtonText = () => {
+  switch(buttoncategory) {
+    case "LENT": return "Record Lent Amount"
+    case "BORROWED": return "Record Borrowed Amount" 
+    case "GOALS": return "Create a Financial Goal"
+    default: return ""
+  }
+}
+
   return (
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
@@ -164,7 +173,7 @@ const CreateForm = () => {
           </TouchableOpacity>
 
           <Text className="text-white font-Inter text-xl font-bold">
-            Create a {buttoncategory.toLowerCase()}
+            {getButtonText()}
           </Text>
         </View>
 
