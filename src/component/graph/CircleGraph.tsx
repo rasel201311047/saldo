@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetSpendingCategoryQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -59,6 +60,8 @@ const CATEGORY_COLORS = [
 
 export default function CircleGraph() {
   const currentDate = new Date();
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1,
@@ -291,16 +294,18 @@ export default function CircleGraph() {
               {/* CENTER TOTAL */}
               <View style={{ position: "absolute", alignItems: "center" }}>
                 <Text style={{ color: "#9CA3AF", fontSize: 12 }}>Total</Text>
-                <Text
-                  style={{
-                    color: "#FFFFFF",
-                    fontSize: 24,
-                    fontWeight: "600",
-                    marginTop: 4,
-                  }}
-                >
-                  ${total.toLocaleString()}
-                </Text>
+                <View className="flex-row items-center">
+                  <Text
+                    style={{
+                      color: "#FFFFFF",
+                      fontSize: 15,
+                      fontWeight: "600",
+                      marginTop: 4,
+                    }}
+                  >
+                    {getProfileData?.data?.currency} {total.toLocaleString()}
+                  </Text>
+                </View>
               </View>
             </View>
 
@@ -346,7 +351,10 @@ export default function CircleGraph() {
                           marginLeft: 8,
                         }}
                       >
-                        ${item.value.toLocaleString()}
+                        <Text className="text-xs ">
+                          {getProfileData?.data?.currency}
+                        </Text>{" "}
+                        {item.value.toLocaleString()}
                       </Text>
                     </View>
 

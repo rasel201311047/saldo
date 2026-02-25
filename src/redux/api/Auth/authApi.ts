@@ -61,6 +61,15 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
+    // ========================get profile data
+    getMyProfile: builder.query({
+      query: () => ({
+        url: "auth/me",
+        method: "GET",
+      }),
+      providesTags: ["Auth"],
+    }),
+
     // =======================varification of data
     verifyCode: builder.mutation({
       query: (data) => ({
@@ -88,13 +97,13 @@ export const authApi = api.injectEndpoints({
     }),
 
     // =========================profile data
-    // getMyProfile: builder.query<ProfileResponse, void>({
-    //   query: () => ({
-    //     url: "auth/me",
-    //     method: "GET",
-    //   }),
-    //   providesTags: ["Auth"],
-    // }),
+    getMyProfile: builder.query({
+      query: () => ({
+        url: "auth/me",
+        method: "GET",
+      }),
+      providesTags: ["Auth"],
+    }),
 
     // ============================forget password
     forgetPassword: builder.mutation({
@@ -144,7 +153,7 @@ export const authApi = api.injectEndpoints({
 export const {
   useSigninMutation,
   useSignupMutation,
-  // useGetMyProfileQuery,
+  useGetMyProfileQuery,
   useVerifyCodeMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,

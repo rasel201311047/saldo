@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetIncomeExpensesQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import responsive from "@/src/utils/responsive";
 import { LinearGradient } from "expo-linear-gradient";
@@ -51,6 +52,8 @@ const getAvailableYears = () => {
 const BarGraph = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const availableYears = getAvailableYears();
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
 
   const {
     data: incomeExpensesData,
@@ -92,10 +95,10 @@ const BarGraph = () => {
   }, [maxValue]);
 
   // Format currency
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (currency: string, amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: currency || "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -108,16 +111,30 @@ const BarGraph = () => {
 
   if (isError) {
     return (
-      <View className="mt-6 p-4 bg-red-500/10 rounded-xl border border-red-500/30">
-        <Text className="text-red-400 text-center font-Inter">
-          Failed to load data. Please try again.
-        </Text>
-        <TouchableOpacity
-          onPress={() => refetch()}
-          className="mt-3 bg-red-500/20 py-2 rounded-lg"
+      <View className="mt-2">
+        <LinearGradient
+          colors={["#b08b4a30", "#2626a130"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: "#C49F59",
+            padding: 20,
+          }}
         >
-          <Text className="text-red-400 text-center font-Inter">Retry</Text>
-        </TouchableOpacity>
+          <Text className="text-red-400 text-center font-Inter text-base">
+            Failed to load data. Please try again.
+          </Text>
+          <TouchableOpacity
+            onPress={() => refetch()}
+            className="mt-4 bg-red-500/20 py-3 rounded-xl border border-red-500/30"
+          >
+            <Text className="text-red-400 text-center font-Inter font-semibold">
+              Retry
+            </Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
     );
   }
@@ -130,7 +147,7 @@ const BarGraph = () => {
         showsHorizontalScrollIndicator={false}
         className="mb-4"
       >
-        <View className="flex-row ">
+        <View className="flex-row px-1">
           {availableYears.map((year) => (
             <TouchableOpacity
               key={year}
@@ -140,10 +157,19 @@ const BarGraph = () => {
                   ? "bg-[#C49F59] border-[#C49F59]"
                   : "border-[#C49F59]/30 bg-transparent"
               }`}
+              style={{
+                shadowColor: selectedYear === year ? "#C49F59" : "transparent",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: selectedYear === year ? 3 : 0,
+              }}
             >
               <Text
                 className={`font-Inter ${
-                  selectedYear === year ? "text-white" : "text-[#C49F59]"
+                  selectedYear === year
+                    ? "text-white font-semibold"
+                    : "text-[#C49F59]"
                 }`}
               >
                 {year}
@@ -172,7 +198,10 @@ const BarGraph = () => {
               Total {selectedYear}
             </Text>
             <Text className="text-white text-lg font-bold font-Inter">
-              {formatCurrency(incomeExpensesData?.data?.totalIncome || 0)}
+              {formatCurrency(
+                getProfileData?.data?.currency,
+                incomeExpensesData?.data?.totalIncome || 0,
+              )}
             </Text>
           </View>
           <View className="flex-row items-center">
@@ -193,6 +222,18 @@ const BarGraph = () => {
             className="items-center justify-center"
           >
             <ActivityIndicator size="large" color="#C49F59" />
+            <Text className="text-slate-400 mt-2 font-Inter text-xs">
+              Loading chart data...
+            </Text>
+          </View>
+        ) : chartData.length === 0 ? (
+          <View
+            style={{ height: HEIGHT }}
+            className="items-center justify-center"
+          >
+            <Text className="text-slate-400 font-Inter text-center px-4">
+              No income/expense data for {selectedYear}
+            </Text>
           </View>
         ) : (
           <ScrollView
@@ -203,7 +244,7 @@ const BarGraph = () => {
             <Svg
               width={Math.max(
                 SCREEN_WIDTH - 42,
-                chartData.length * (groupWidth + 10) + LEFT_AXIS_WIDTH + 20,
+                chartData.length * (groupWidth + 12) + LEFT_AXIS_WIDTH + 25,
               )}
               height={HEIGHT}
             >
@@ -224,7 +265,10 @@ const BarGraph = () => {
                       textAnchor="end"
                       fontFamily="Inter"
                     >
-                      {formatCurrency(value).replace("$", "")}
+                      {formatCurrency(
+                        getProfileData?.data?.currency || "USD",
+                        value,
+                      ).replace(/[^0-9.-]/g, "")}
                     </SvgText>
 
                     <Line
@@ -323,7 +367,10 @@ const BarGraph = () => {
               </Text>
             </View>
             <Text className="text-white text-lg font-bold font-Inter">
-              {formatCurrency(incomeExpensesData?.data?.avgMonthlyIncome || 0)}
+              {formatCurrency(
+                getProfileData?.data?.currency,
+                incomeExpensesData?.data?.avgMonthlyIncome || 0,
+              )}
             </Text>
           </View>
 
@@ -338,11 +385,36 @@ const BarGraph = () => {
             </View>
             <Text className="text-white text-lg font-bold font-Inter">
               {formatCurrency(
+                getProfileData?.data?.currency,
                 incomeExpensesData?.data?.avgMonthlyExpenses || 0,
               )}
             </Text>
           </View>
         </View>
+
+        {/* Additional Stats Row */}
+        {incomeExpensesData?.data && (
+          <View className="flex-row justify-between px-4 pb-3 pt-1">
+            <View className="flex-row items-center">
+              <Text className="text-slate-500 text-xs font-Inter">
+                Income:{" "}
+                {formatCurrency(
+                  getProfileData?.data?.currency,
+                  incomeExpensesData.data.totalIncome || 0,
+                )}
+              </Text>
+            </View>
+            <View className="flex-row items-center">
+              <Text className="text-slate-500 text-xs font-Inter">
+                Expenses:{" "}
+                {formatCurrency(
+                  getProfileData?.data?.currency,
+                  incomeExpensesData.data.totalExpenses || 0,
+                )}
+              </Text>
+            </View>
+          </View>
+        )}
       </LinearGradient>
     </View>
   );

@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetBalanceTredQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import responsive from "@/src/utils/responsive";
 import { FontAwesome } from "@expo/vector-icons";
@@ -63,10 +64,10 @@ const getAvailableYears = () => {
 };
 
 // Format currency for display
-const formatCurrency = (amount: number): string => {
+const formatCurrency = (currency: string, amount: number): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
@@ -111,6 +112,8 @@ const LineGraph = () => {
   );
   const scrollViewRef = useRef<ScrollView>(null);
   const availableYears = getAvailableYears();
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
 
   const {
     data: incomeBalanceTredData,
@@ -269,7 +272,7 @@ const LineGraph = () => {
   // For better scrolling experience, calculate content width
   const contentWidth = useMemo(() => {
     if (chartData.length <= 1) return CARD_WIDTH;
-    return CHART_PADDING * 2 + (chartData.length - 1) * 45; // 45px gap between points for professional look
+    return CHART_PADDING * 2 + (chartData.length - 1) * 45;
   }, [chartData.length]);
 
   const getY = (value: number) => {
@@ -285,7 +288,7 @@ const LineGraph = () => {
 
   const path = chartData
     .map((value, index) => {
-      const x = CHART_PADDING + index * 45; // Fixed spacing for professional look
+      const x = CHART_PADDING + index * 45;
       const y = getY(value);
       return `${index === 0 ? "M" : "L"} ${x} ${y}`;
     })
@@ -527,7 +530,12 @@ const LineGraph = () => {
             }}
             className="text-lg font-Inter font-bold text-[#FFFFFF]"
           >
-            {isLoading ? "..." : formatCurrency(apiData.currentBalance)}
+            {isLoading
+              ? "..."
+              : formatCurrency(
+                  getProfileData?.data?.currency,
+                  apiData?.currentBalance,
+                )}
           </Text>
 
           {!isLoading && (
