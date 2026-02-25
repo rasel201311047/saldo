@@ -187,7 +187,7 @@ const Index = () => {
               <ProgressButton
                 progress={(currentIndex + 1) / splashContent.length}
                 onPress={() => {
-                  if (isLast) router.replace("/signin");
+                  if (isLast) router.replace("/setupprofile");
                   else swiperRef.current?.scrollBy(1);
                 }}
               />

@@ -1,0 +1,1172 @@
+[
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ad.png",
+    "countryName": "Andorra",
+    "currency": "EUR",
+    "countryCodePhone": "+376"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ae.png",
+    "countryName": "United Arab Emirates",
+    "currency": "AED",
+    "countryCodePhone": "+971"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/af.png",
+    "countryName": "Afghanistan",
+    "currency": "AFN",
+    "countryCodePhone": "+93"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ag.png",
+    "countryName": "Antigua and Barbuda",
+    "currency": "XCD",
+    "countryCodePhone": "+1-268"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/al.png",
+    "countryName": "Albania",
+    "currency": "ALL",
+    "countryCodePhone": "+355"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/am.png",
+    "countryName": "Armenia",
+    "currency": "AMD",
+    "countryCodePhone": "+374"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ao.png",
+    "countryName": "Angola",
+    "currency": "AOA",
+    "countryCodePhone": "+244"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ar.png",
+    "countryName": "Argentina",
+    "currency": "ARS",
+    "countryCodePhone": "+54"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/at.png",
+    "countryName": "Austria",
+    "currency": "EUR",
+    "countryCodePhone": "+43"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/au.png",
+    "countryName": "Australia",
+    "currency": "AUD",
+    "countryCodePhone": "+61"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/az.png",
+    "countryName": "Azerbaijan",
+    "currency": "AZN",
+    "countryCodePhone": "+994"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ba.png",
+    "countryName": "Bosnia and Herzegovina",
+    "currency": "BAM",
+    "countryCodePhone": "+387"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bb.png",
+    "countryName": "Barbados",
+    "currency": "BBD",
+    "countryCodePhone": "+1-246"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bd.png",
+    "countryName": "Bangladesh",
+    "currency": "BDT",
+    "countryCodePhone": "+880"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/be.png",
+    "countryName": "Belgium",
+    "currency": "EUR",
+    "countryCodePhone": "+32"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bf.png",
+    "countryName": "Burkina Faso",
+    "currency": "XOF",
+    "countryCodePhone": "+226"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bg.png",
+    "countryName": "Bulgaria",
+    "currency": "BGN",
+    "countryCodePhone": "+359"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bh.png",
+    "countryName": "Bahrain",
+    "currency": "BHD",
+    "countryCodePhone": "+973"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bi.png",
+    "countryName": "Burundi",
+    "currency": "BIF",
+    "countryCodePhone": "+257"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bj.png",
+    "countryName": "Benin",
+    "currency": "XOF",
+    "countryCodePhone": "+229"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bn.png",
+    "countryName": "Brunei",
+    "currency": "BND",
+    "countryCodePhone": "+673"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bo.png",
+    "countryName": "Bolivia",
+    "currency": "BOB",
+    "countryCodePhone": "+591"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/br.png",
+    "countryName": "Brazil",
+    "currency": "BRL",
+    "countryCodePhone": "+55"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bs.png",
+    "countryName": "Bahamas",
+    "currency": "BSD",
+    "countryCodePhone": "+1-242"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bt.png",
+    "countryName": "Bhutan",
+    "currency": "BTN",
+    "countryCodePhone": "+975"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bw.png",
+    "countryName": "Botswana",
+    "currency": "BWP",
+    "countryCodePhone": "+267"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/by.png",
+    "countryName": "Belarus",
+    "currency": "BYN",
+    "countryCodePhone": "+375"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/bz.png",
+    "countryName": "Belize",
+    "currency": "BZD",
+    "countryCodePhone": "+501"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ca.png",
+    "countryName": "Canada",
+    "currency": "CAD",
+    "countryCodePhone": "+1"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cd.png",
+    "countryName": "DR Congo",
+    "currency": "CDF",
+    "countryCodePhone": "+243"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cf.png",
+    "countryName": "Central African Republic",
+    "currency": "XAF",
+    "countryCodePhone": "+236"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cg.png",
+    "countryName": "Republic of the Congo",
+    "currency": "XAF",
+    "countryCodePhone": "+242"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ch.png",
+    "countryName": "Switzerland",
+    "currency": "CHF",
+    "countryCodePhone": "+41"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ci.png",
+    "countryName": "Ivory Coast",
+    "currency": "XOF",
+    "countryCodePhone": "+225"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cl.png",
+    "countryName": "Chile",
+    "currency": "CLP",
+    "countryCodePhone": "+56"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cm.png",
+    "countryName": "Cameroon",
+    "currency": "XAF",
+    "countryCodePhone": "+237"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cn.png",
+    "countryName": "China",
+    "currency": "CNY",
+    "countryCodePhone": "+86"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/co.png",
+    "countryName": "Colombia",
+    "currency": "COP",
+    "countryCodePhone": "+57"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cr.png",
+    "countryName": "Costa Rica",
+    "currency": "CRC",
+    "countryCodePhone": "+506"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cu.png",
+    "countryName": "Cuba",
+    "currency": "CUP",
+    "countryCodePhone": "+53"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cv.png",
+    "countryName": "Cape Verde",
+    "currency": "CVE",
+    "countryCodePhone": "+238"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cy.png",
+    "countryName": "Cyprus",
+    "currency": "EUR",
+    "countryCodePhone": "+357"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/cz.png",
+    "countryName": "Czech Republic",
+    "currency": "CZK",
+    "countryCodePhone": "+420"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/de.png",
+    "countryName": "Germany",
+    "currency": "EUR",
+    "countryCodePhone": "+49"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/dj.png",
+    "countryName": "Djibouti",
+    "currency": "DJF",
+    "countryCodePhone": "+253"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/dk.png",
+    "countryName": "Denmark",
+    "currency": "DKK",
+    "countryCodePhone": "+45"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/dm.png",
+    "countryName": "Dominica",
+    "currency": "XCD",
+    "countryCodePhone": "+1-767"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/do.png",
+    "countryName": "Dominican Republic",
+    "currency": "DOP",
+    "countryCodePhone": "+1-809"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/dz.png",
+    "countryName": "Algeria",
+    "currency": "DZD",
+    "countryCodePhone": "+213"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ec.png",
+    "countryName": "Ecuador",
+    "currency": "USD",
+    "countryCodePhone": "+593"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ee.png",
+    "countryName": "Estonia",
+    "currency": "EUR",
+    "countryCodePhone": "+372"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/eg.png",
+    "countryName": "Egypt",
+    "currency": "EGP",
+    "countryCodePhone": "+20"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/er.png",
+    "countryName": "Eritrea",
+    "currency": "ERN",
+    "countryCodePhone": "+291"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/es.png",
+    "countryName": "Spain",
+    "currency": "EUR",
+    "countryCodePhone": "+34"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/et.png",
+    "countryName": "Ethiopia",
+    "currency": "ETB",
+    "countryCodePhone": "+251"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/fi.png",
+    "countryName": "Finland",
+    "currency": "EUR",
+    "countryCodePhone": "+358"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/fj.png",
+    "countryName": "Fiji",
+    "currency": "FJD",
+    "countryCodePhone": "+679"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/fm.png",
+    "countryName": "Micronesia",
+    "currency": "USD",
+    "countryCodePhone": "+691"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/fr.png",
+    "countryName": "France",
+    "currency": "EUR",
+    "countryCodePhone": "+33"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ga.png",
+    "countryName": "Gabon",
+    "currency": "XAF",
+    "countryCodePhone": "+241"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gb.png",
+    "countryName": "United Kingdom",
+    "currency": "GBP",
+    "countryCodePhone": "+44"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gd.png",
+    "countryName": "Grenada",
+    "currency": "XCD",
+    "countryCodePhone": "+1-473"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ge.png",
+    "countryName": "Georgia",
+    "currency": "GEL",
+    "countryCodePhone": "+995"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gh.png",
+    "countryName": "Ghana",
+    "currency": "GHS",
+    "countryCodePhone": "+233"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gm.png",
+    "countryName": "Gambia",
+    "currency": "GMD",
+    "countryCodePhone": "+220"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gn.png",
+    "countryName": "Guinea",
+    "currency": "GNF",
+    "countryCodePhone": "+224"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gq.png",
+    "countryName": "Equatorial Guinea",
+    "currency": "XAF",
+    "countryCodePhone": "+240"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gr.png",
+    "countryName": "Greece",
+    "currency": "EUR",
+    "countryCodePhone": "+30"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gt.png",
+    "countryName": "Guatemala",
+    "currency": "GTQ",
+    "countryCodePhone": "+502"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gw.png",
+    "countryName": "Guinea-Bissau",
+    "currency": "XOF",
+    "countryCodePhone": "+245"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/gy.png",
+    "countryName": "Guyana",
+    "currency": "GYD",
+    "countryCodePhone": "+592"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/hn.png",
+    "countryName": "Honduras",
+    "currency": "HNL",
+    "countryCodePhone": "+504"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/hr.png",
+    "countryName": "Croatia",
+    "currency": "EUR",
+    "countryCodePhone": "+385"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ht.png",
+    "countryName": "Haiti",
+    "currency": "HTG",
+    "countryCodePhone": "+509"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/hu.png",
+    "countryName": "Hungary",
+    "currency": "HUF",
+    "countryCodePhone": "+36"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/id.png",
+    "countryName": "Indonesia",
+    "currency": "IDR",
+    "countryCodePhone": "+62"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ie.png",
+    "countryName": "Ireland",
+    "currency": "EUR",
+    "countryCodePhone": "+353"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/il.png",
+    "countryName": "Israel",
+    "currency": "ILS",
+    "countryCodePhone": "+972"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/in.png",
+    "countryName": "India",
+    "currency": "INR",
+    "countryCodePhone": "+91"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/iq.png",
+    "countryName": "Iraq",
+    "currency": "IQD",
+    "countryCodePhone": "+964"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ir.png",
+    "countryName": "Iran",
+    "currency": "IRR",
+    "countryCodePhone": "+98"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/is.png",
+    "countryName": "Iceland",
+    "currency": "ISK",
+    "countryCodePhone": "+354"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/it.png",
+    "countryName": "Italy",
+    "currency": "EUR",
+    "countryCodePhone": "+39"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/jm.png",
+    "countryName": "Jamaica",
+    "currency": "JMD",
+    "countryCodePhone": "+1-876"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/jo.png",
+    "countryName": "Jordan",
+    "currency": "JOD",
+    "countryCodePhone": "+962"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/jp.png",
+    "countryName": "Japan",
+    "currency": "JPY",
+    "countryCodePhone": "+81"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ke.png",
+    "countryName": "Kenya",
+    "currency": "KES",
+    "countryCodePhone": "+254"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kg.png",
+    "countryName": "Kyrgyzstan",
+    "currency": "KGS",
+    "countryCodePhone": "+996"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kh.png",
+    "countryName": "Cambodia",
+    "currency": "KHR",
+    "countryCodePhone": "+855"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ki.png",
+    "countryName": "Kiribati",
+    "currency": "AUD",
+    "countryCodePhone": "+686"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/km.png",
+    "countryName": "Comoros",
+    "currency": "KMF",
+    "countryCodePhone": "+269"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kn.png",
+    "countryName": "Saint Kitts and Nevis",
+    "currency": "XCD",
+    "countryCodePhone": "+1-869"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kp.png",
+    "countryName": "North Korea",
+    "currency": "KPW",
+    "countryCodePhone": "+850"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kr.png",
+    "countryName": "South Korea",
+    "currency": "KRW",
+    "countryCodePhone": "+82"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kw.png",
+    "countryName": "Kuwait",
+    "currency": "KWD",
+    "countryCodePhone": "+965"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/kz.png",
+    "countryName": "Kazakhstan",
+    "currency": "KZT",
+    "countryCodePhone": "+7"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/la.png",
+    "countryName": "Laos",
+    "currency": "LAK",
+    "countryCodePhone": "+856"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lb.png",
+    "countryName": "Lebanon",
+    "currency": "LBP",
+    "countryCodePhone": "+961"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lc.png",
+    "countryName": "Saint Lucia",
+    "currency": "XCD",
+    "countryCodePhone": "+1-758"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/li.png",
+    "countryName": "Liechtenstein",
+    "currency": "CHF",
+    "countryCodePhone": "+423"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lk.png",
+    "countryName": "Sri Lanka",
+    "currency": "LKR",
+    "countryCodePhone": "+94"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lr.png",
+    "countryName": "Liberia",
+    "currency": "LRD",
+    "countryCodePhone": "+231"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ls.png",
+    "countryName": "Lesotho",
+    "currency": "LSL",
+    "countryCodePhone": "+266"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lt.png",
+    "countryName": "Lithuania",
+    "currency": "EUR",
+    "countryCodePhone": "+370"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lu.png",
+    "countryName": "Luxembourg",
+    "currency": "EUR",
+    "countryCodePhone": "+352"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/lv.png",
+    "countryName": "Latvia",
+    "currency": "EUR",
+    "countryCodePhone": "+371"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ly.png",
+    "countryName": "Libya",
+    "currency": "LYD",
+    "countryCodePhone": "+218"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ma.png",
+    "countryName": "Morocco",
+    "currency": "MAD",
+    "countryCodePhone": "+212"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mc.png",
+    "countryName": "Monaco",
+    "currency": "EUR",
+    "countryCodePhone": "+377"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/md.png",
+    "countryName": "Moldova",
+    "currency": "MDL",
+    "countryCodePhone": "+373"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/me.png",
+    "countryName": "Montenegro",
+    "currency": "EUR",
+    "countryCodePhone": "+382"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mg.png",
+    "countryName": "Madagascar",
+    "currency": "MGA",
+    "countryCodePhone": "+261"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mh.png",
+    "countryName": "Marshall Islands",
+    "currency": "USD",
+    "countryCodePhone": "+692"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mk.png",
+    "countryName": "North Macedonia",
+    "currency": "MKD",
+    "countryCodePhone": "+389"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ml.png",
+    "countryName": "Mali",
+    "currency": "XOF",
+    "countryCodePhone": "+223"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mm.png",
+    "countryName": "Myanmar",
+    "currency": "MMK",
+    "countryCodePhone": "+95"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mn.png",
+    "countryName": "Mongolia",
+    "currency": "MNT",
+    "countryCodePhone": "+976"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mr.png",
+    "countryName": "Mauritania",
+    "currency": "MRU",
+    "countryCodePhone": "+222"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mt.png",
+    "countryName": "Malta",
+    "currency": "EUR",
+    "countryCodePhone": "+356"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mu.png",
+    "countryName": "Mauritius",
+    "currency": "MUR",
+    "countryCodePhone": "+230"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mv.png",
+    "countryName": "Maldives",
+    "currency": "MVR",
+    "countryCodePhone": "+960"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mw.png",
+    "countryName": "Malawi",
+    "currency": "MWK",
+    "countryCodePhone": "+265"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mx.png",
+    "countryName": "Mexico",
+    "currency": "MXN",
+    "countryCodePhone": "+52"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/my.png",
+    "countryName": "Malaysia",
+    "currency": "MYR",
+    "countryCodePhone": "+60"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/mz.png",
+    "countryName": "Mozambique",
+    "currency": "MZN",
+    "countryCodePhone": "+258"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/na.png",
+    "countryName": "Namibia",
+    "currency": "NAD",
+    "countryCodePhone": "+264"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ne.png",
+    "countryName": "Niger",
+    "currency": "XOF",
+    "countryCodePhone": "+227"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ng.png",
+    "countryName": "Nigeria",
+    "currency": "NGN",
+    "countryCodePhone": "+234"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ni.png",
+    "countryName": "Nicaragua",
+    "currency": "NIO",
+    "countryCodePhone": "+505"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/nl.png",
+    "countryName": "Netherlands",
+    "currency": "EUR",
+    "countryCodePhone": "+31"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/no.png",
+    "countryName": "Norway",
+    "currency": "NOK",
+    "countryCodePhone": "+47"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/np.png",
+    "countryName": "Nepal",
+    "currency": "NPR",
+    "countryCodePhone": "+977"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/nr.png",
+    "countryName": "Nauru",
+    "currency": "AUD",
+    "countryCodePhone": "+674"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/nz.png",
+    "countryName": "New Zealand",
+    "currency": "NZD",
+    "countryCodePhone": "+64"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/om.png",
+    "countryName": "Oman",
+    "currency": "OMR",
+    "countryCodePhone": "+968"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pa.png",
+    "countryName": "Panama",
+    "currency": "PAB",
+    "countryCodePhone": "+507"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pe.png",
+    "countryName": "Peru",
+    "currency": "PEN",
+    "countryCodePhone": "+51"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pg.png",
+    "countryName": "Papua New Guinea",
+    "currency": "PGK",
+    "countryCodePhone": "+675"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ph.png",
+    "countryName": "Philippines",
+    "currency": "PHP",
+    "countryCodePhone": "+63"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pk.png",
+    "countryName": "Pakistan",
+    "currency": "PKR",
+    "countryCodePhone": "+92"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pl.png",
+    "countryName": "Poland",
+    "currency": "PLN",
+    "countryCodePhone": "+48"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pt.png",
+    "countryName": "Portugal",
+    "currency": "EUR",
+    "countryCodePhone": "+351"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/pw.png",
+    "countryName": "Palau",
+    "currency": "USD",
+    "countryCodePhone": "+680"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/py.png",
+    "countryName": "Paraguay",
+    "currency": "PYG",
+    "countryCodePhone": "+595"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/qa.png",
+    "countryName": "Qatar",
+    "currency": "QAR",
+    "countryCodePhone": "+974"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ro.png",
+    "countryName": "Romania",
+    "currency": "RON",
+    "countryCodePhone": "+40"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/rs.png",
+    "countryName": "Serbia",
+    "currency": "RSD",
+    "countryCodePhone": "+381"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ru.png",
+    "countryName": "Russia",
+    "currency": "RUB",
+    "countryCodePhone": "+7"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/rw.png",
+    "countryName": "Rwanda",
+    "currency": "RWF",
+    "countryCodePhone": "+250"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sa.png",
+    "countryName": "Saudi Arabia",
+    "currency": "SAR",
+    "countryCodePhone": "+966"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sb.png",
+    "countryName": "Solomon Islands",
+    "currency": "SBD",
+    "countryCodePhone": "+677"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sc.png",
+    "countryName": "Seychelles",
+    "currency": "SCR",
+    "countryCodePhone": "+248"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sd.png",
+    "countryName": "Sudan",
+    "currency": "SDG",
+    "countryCodePhone": "+249"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/se.png",
+    "countryName": "Sweden",
+    "currency": "SEK",
+    "countryCodePhone": "+46"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sg.png",
+    "countryName": "Singapore",
+    "currency": "SGD",
+    "countryCodePhone": "+65"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/si.png",
+    "countryName": "Slovenia",
+    "currency": "EUR",
+    "countryCodePhone": "+386"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sk.png",
+    "countryName": "Slovakia",
+    "currency": "EUR",
+    "countryCodePhone": "+421"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sl.png",
+    "countryName": "Sierra Leone",
+    "currency": "SLL",
+    "countryCodePhone": "+232"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sm.png",
+    "countryName": "San Marino",
+    "currency": "EUR",
+    "countryCodePhone": "+378"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sn.png",
+    "countryName": "Senegal",
+    "currency": "XOF",
+    "countryCodePhone": "+221"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/so.png",
+    "countryName": "Somalia",
+    "currency": "SOS",
+    "countryCodePhone": "+252"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sr.png",
+    "countryName": "Suriname",
+    "currency": "SRD",
+    "countryCodePhone": "+597"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ss.png",
+    "countryName": "South Sudan",
+    "currency": "SSP",
+    "countryCodePhone": "+211"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/st.png",
+    "countryName": "Sao Tome and Principe",
+    "currency": "STN",
+    "countryCodePhone": "+239"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sv.png",
+    "countryName": "El Salvador",
+    "currency": "USD",
+    "countryCodePhone": "+503"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sy.png",
+    "countryName": "Syria",
+    "currency": "SYP",
+    "countryCodePhone": "+963"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/sz.png",
+    "countryName": "Eswatini",
+    "currency": "SZL",
+    "countryCodePhone": "+268"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/td.png",
+    "countryName": "Chad",
+    "currency": "XAF",
+    "countryCodePhone": "+235"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tg.png",
+    "countryName": "Togo",
+    "currency": "XOF",
+    "countryCodePhone": "+228"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/th.png",
+    "countryName": "Thailand",
+    "currency": "THB",
+    "countryCodePhone": "+66"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tj.png",
+    "countryName": "Tajikistan",
+    "currency": "TJS",
+    "countryCodePhone": "+992"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tl.png",
+    "countryName": "Timor-Leste",
+    "currency": "USD",
+    "countryCodePhone": "+670"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tm.png",
+    "countryName": "Turkmenistan",
+    "currency": "TMT",
+    "countryCodePhone": "+993"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tn.png",
+    "countryName": "Tunisia",
+    "currency": "TND",
+    "countryCodePhone": "+216"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/to.png",
+    "countryName": "Tonga",
+    "currency": "TOP",
+    "countryCodePhone": "+676"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tr.png",
+    "countryName": "Turkey",
+    "currency": "TRY",
+    "countryCodePhone": "+90"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tt.png",
+    "countryName": "Trinidad and Tobago",
+    "currency": "TTD",
+    "countryCodePhone": "+1-868"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tv.png",
+    "countryName": "Tuvalu",
+    "currency": "AUD",
+    "countryCodePhone": "+688"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tw.png",
+    "countryName": "Taiwan",
+    "currency": "TWD",
+    "countryCodePhone": "+886"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/tz.png",
+    "countryName": "Tanzania",
+    "currency": "TZS",
+    "countryCodePhone": "+255"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ua.png",
+    "countryName": "Ukraine",
+    "currency": "UAH",
+    "countryCodePhone": "+380"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ug.png",
+    "countryName": "Uganda",
+    "currency": "UGX",
+    "countryCodePhone": "+256"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/us.png",
+    "countryName": "United States",
+    "currency": "USD",
+    "countryCodePhone": "+1"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/uy.png",
+    "countryName": "Uruguay",
+    "currency": "UYU",
+    "countryCodePhone": "+598"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/uz.png",
+    "countryName": "Uzbekistan",
+    "currency": "UZS",
+    "countryCodePhone": "+998"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/va.png",
+    "countryName": "Vatican City",
+    "currency": "EUR",
+    "countryCodePhone": "+379"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/vc.png",
+    "countryName": "Saint Vincent and the Grenadines",
+    "currency": "XCD",
+    "countryCodePhone": "+1-784"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ve.png",
+    "countryName": "Venezuela",
+    "currency": "VES",
+    "countryCodePhone": "+58"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/vn.png",
+    "countryName": "Vietnam",
+    "currency": "VND",
+    "countryCodePhone": "+84"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/vu.png",
+    "countryName": "Vanuatu",
+    "currency": "VUV",
+    "countryCodePhone": "+678"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ws.png",
+    "countryName": "Samoa",
+    "currency": "WST",
+    "countryCodePhone": "+685"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/ye.png",
+    "countryName": "Yemen",
+    "currency": "YER",
+    "countryCodePhone": "+967"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/za.png",
+    "countryName": "South Africa",
+    "currency": "ZAR",
+    "countryCodePhone": "+27"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/zm.png",
+    "countryName": "Zambia",
+    "currency": "ZMW",
+    "countryCodePhone": "+260"
+  },
+  {
+    "flag": "https://flagpedia.net/data/flags/icon/72x54/zw.png",
+    "countryName": "Zimbabwe",
+    "currency": "ZWL",
+    "countryCodePhone": "+263"
+  }
+]

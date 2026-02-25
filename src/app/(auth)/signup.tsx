@@ -180,6 +180,7 @@ export default function Signup() {
           fullName: form.name,
           mobileNumber: phoneNumber,
           email: form.email,
+          countryCode: selectedCountry?.phoneCode || DEFAULT_PHONE_CODE,
           password: form.password,
           confirmPassword: form.confirmPassword,
           fcmToken: fcmtoken,
@@ -188,7 +189,7 @@ export default function Signup() {
 
         console.log("Success:", response);
         if (response.success) {
-          router.replace("/calendar");
+          router.replace("/setupprofile");
         } else {
           setAlertTittle("Error");
           setAlertMessage(response?.message);
