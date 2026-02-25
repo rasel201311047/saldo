@@ -38,19 +38,13 @@ const Analytics = () => {
 
           <ScrollView className="flex-1">
             <View className="px-[5%] mt-5">
-              {/* <View className="flex-row items-center justify-between">
-                {dataanalytics.map((item, index) => (
-                  <AnalyticsCard key={index} item={item} />
-                ))}
-              </View> */}
               <Text className="text-white text-lg font-Inter font-bold pt-4">
                 Income vs Expenses
               </Text>
               <BarGraph />
-              <Text className="text-white text-lg font-bold pt-4">
+              <Text className="text-white mt-4 text-lg font-bold pt-4">
                 Balance Trend
               </Text>
-              <View className="h-[2%] w-full" />
 
               <LineGraph />
               <Text className="text-white text-lg font-bold py-4">

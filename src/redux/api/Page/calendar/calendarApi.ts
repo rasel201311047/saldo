@@ -27,4 +27,8 @@ export const calendarApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export const {} = calendarApi;
+export const {
+  useGetIncomeExpensesQuery,
+  useGetBalanceTredQuery,
+  useGetSpendingCategoryQuery,
+} = calendarApi;
