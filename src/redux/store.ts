@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { countryDataPicker } from "../services/countryDataPicker";
 import authReducer from "./api/Auth/authSlice";
 import { api } from "./baseApi";
 import { languageApi } from "./language/languageApi";
@@ -12,6 +13,7 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     [countriesApi.reducerPath]: countriesApi.reducer,
     [languageApi.reducerPath]: languageApi.reducer,
+    [countryDataPicker.reducerPath]: countryDataPicker.reducer,
     icons: iconReducer,
     calendar: calendarReducer,
     user: userReducer,
@@ -20,7 +22,12 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(api.middleware, countriesApi.middleware, languageApi.middleware),
+    }).concat(
+      api.middleware,
+      countriesApi.middleware,
+      languageApi.middleware,
+      countryDataPicker.middleware,
+    ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
