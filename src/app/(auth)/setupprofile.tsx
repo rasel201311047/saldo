@@ -18,9 +18,17 @@ import CurrencyPickerModal from "../../component/profile/CurrencyModalPicker";
 import { useCountryDataPicker } from "../../hook/useCountryDataPicker";
 
 // Types (these can be imported from your types file)
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
+import { useSetupProfileMutation } from "@/src/redux/api/Auth/authApi";
 import { Country, Currency, Language } from "@/src/type/thepicker";
+import { router } from "expo-router";
 
 const SetupProfile = () => {
+  // Alert states
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const [alertVisible, setAlertVisible] = useState(false);
   // State
   const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(
     null,
@@ -32,7 +40,7 @@ const SetupProfile = () => {
   const [showCountryModal, setShowCountryModal] = useState(false);
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
-
+  const [setupProfile, { isLoading: isSettingUp }] = useSetupProfileMutation();
   // Custom hook - now using useCountryDataPicker
   const {
     countries,
@@ -144,9 +152,37 @@ const SetupProfile = () => {
     // Here you would typically send the selected data to your backend or context
     // For this example, we'll just log it to the console
     console.log("Profile Completed with:");
-    console.log("Country:", selectedCountry);
-    console.log("Currency:", selectedCurrency);
-    console.log("Language:", selectedLanguage);
+    console.log("Country:", selectedCountry?.countryName);
+    console.log("Currency:", selectedCurrency?.code);
+    console.log("Language:", selectedLanguage?.name);
+
+    try {
+      const response = await setupProfile({
+        country: selectedCountry?.countryName,
+        currency: selectedCurrency?.code,
+        language: selectedLanguage?.name,
+      }).unwrap();
+      console.log("Profile setup response:", response);
+      if (response.success) {
+        // Navigate to the next screen or show success message
+        router.replace("/calendar");
+      } else {
+        // Handle unsuccessful response (e.g., show an alert)
+        setAlertTittle("Error");
+        setAlertMessage(
+          response?.message || "An error occurred. Please try again.",
+        );
+        setAlertVisible(true);
+      }
+    } catch (error) {
+      console.log("Profile setup error:", error);
+      setAlertTittle("Error");
+      setAlertMessage(
+        error?.data?.message || "An error occurred. Please try again.",
+      );
+      setAlertVisible(true);
+      // Handle error (e.g., show an alert)
+    }
   };
 
   return (
@@ -320,6 +356,23 @@ const SetupProfile = () => {
           onSearch={setLanguageSearch}
           isLoading={isLoadingLanguages}
           searchTerm={languageSearchTerm}
+        />
+
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={"error"}
+          confirmText={"OK"}
+          cancelText="Cancel"
         />
       </GradientBackground>
     </>

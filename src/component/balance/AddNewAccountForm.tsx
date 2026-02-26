@@ -122,19 +122,6 @@ const AddNewAccountForm = () => {
         </View>
       </View>
 
-      {/* Name
-      <View className="my-4">
-        <Text className="text-white text-base font-Inter mb-2">Name</Text>
-        <View className="flex-row items-center border border-[#C49F59] rounded-xl px-4 py-3 bg-[#1F1E2C]">
-          <TextInput
-            placeholder="Enter your name"
-            placeholderTextColor="#9CA3AF"
-            className="flex-1 text-white text-base font-Inter"
-          />
-          <AntDesign name="dollar" size={20} color="#fff" />
-        </View>
-      </View> */}
-
       {/* Date */}
       <View className="mb-4">
         <Text className="text-[#FFFFFF] text-base font-Inter my-2">Date</Text>

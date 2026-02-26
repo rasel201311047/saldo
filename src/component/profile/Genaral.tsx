@@ -10,13 +10,38 @@ import {
 } from "@/assets/icons";
 import { Entypo } from "@expo/vector-icons";
 import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
 import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
-import LogoutModal from "./LogoutModal";
+
+import { logoutUser } from "@/src/redux/api/Auth/authSlice";
+import { useDispatch } from "react-redux";
+import SuccessModal from "../auth/SuccessModal";
+import CustomAlert from "../customAlart/CustomAlert";
 
 const Genaral = () => {
-  const [logoutModal, setLogoutModal] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [successmodal, setsuccessmodal] = useState(false);
+  const [alertErrorVisible, setAlertErrorVisible] = useState(false);
+  const dispatch = useDispatch();
+  const logoutHandler = async () => {
+    try {
+      // Delete SecureStore data
+      await SecureStore.deleteItemAsync("user");
+      await SecureStore.deleteItemAsync("token");
+
+      // Clear Redux state
+      dispatch(logoutUser());
+      setsuccessmodal(true);
+
+      console.log("Logout successful");
+    } catch (error) {
+      setAlertErrorVisible(true);
+      console.log("Logout error:", error);
+    }
+  };
+
   return (
     <ScrollView className="flex-1 ">
       {/* Profile Section */}
@@ -81,7 +106,7 @@ const Genaral = () => {
       </View>
       {/* Log Out */}
       <TouchableOpacity
-        onPress={() => setLogoutModal(true)}
+        onPress={() => setAlertVisible(true)}
         className="bg-[#242333] mt-[4%] p-4 rounded-2xl flex-row items-center"
       >
         <View className="w-[20] h-[20] rounded-full justify-center items-center">
@@ -94,11 +119,38 @@ const Genaral = () => {
 
       {/* =====================
       logout
-      ==============================*/}
-      <LogoutModal
-        visible={logoutModal}
-        onClose={() => setLogoutModal(false)}
+            ==============================*/}
+      <CustomAlert
+        visible={alertVisible}
+        title={"Logout"}
+        message={"Are you sure you want to logout?"}
+        onConfirm={() => {
+          logoutHandler();
+          setAlertVisible(false);
+        }}
+        onCancel={() => {
+          console.log("Cancelled");
+          setAlertVisible(false);
+        }}
+        type={"destructive"}
+        confirmText={"Logout"}
+        cancelText="Cancel"
       />
+
+      <CustomAlert
+        visible={alertErrorVisible}
+        title={"Error"}
+        message={"Logout failed. Please try again."}
+        onConfirm={() => {
+          setAlertErrorVisible(false);
+        }}
+        type={"error"}
+        confirmText={"OK"}
+        cancelText=""
+      />
+
+      {/* alertErrorVisible */}
+      <SuccessModal visible={successmodal} message="Logout Successful!" />
     </ScrollView>
   );
 };

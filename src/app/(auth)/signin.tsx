@@ -47,13 +47,17 @@ const Signin = () => {
         router.replace("/falsepage");
       } else {
         setAlertTittle("Error");
-        setAlertMessage(response.success);
+        setAlertMessage(
+          response?.message || "An error occurred. Please try again.",
+        );
         setAlertVisible(true);
       }
     } catch (error) {
       console.log("Error:", error);
       setAlertTittle("Error");
-      setAlertMessage(error?.message);
+      setAlertMessage(
+        error?.data?.message || "An error occurred. Please try again.",
+      );
       setAlertVisible(true);
     }
   };

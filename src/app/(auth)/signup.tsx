@@ -192,13 +192,17 @@ export default function Signup() {
           router.replace("/setupprofile");
         } else {
           setAlertTittle("Error");
-          setAlertMessage(response?.message);
+          setAlertMessage(
+            response?.message || "An error occurred. Please try again.",
+          );
           setAlertVisible(true);
         }
       } catch (error) {
         console.log("Error:", error);
         setAlertTittle("Error");
-        setAlertMessage(error?.data?.err?.message);
+        setAlertMessage(
+          error?.data?.message || "An error occurred. Please try again.",
+        );
         setAlertVisible(true);
       }
 

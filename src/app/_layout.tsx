@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import "../../global.css";
 import GradientBackground from "../component/background/GradientBackground";
 import { store } from "../redux/store";
+import AppInitializer from "../utils/AppInitializer";
 import { registerForPushNotificationsAsync } from "../utils/fcmService";
 export default function RootLayout() {
   const [fontsLoaded] = useFonts(Fonts);
@@ -37,6 +38,7 @@ export default function RootLayout() {
         <GradientBackground>
           <SafeAreaView edges={["bottom"]} style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
+            <AppInitializer />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="(pages)" />

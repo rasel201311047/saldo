@@ -70,6 +70,16 @@ export const authApi = api.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
+    // ========================setup profile
+    setupProfile: builder.mutation({
+      query: (data) => ({
+        url: "users/profile-setup",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
+
     // =======================varification of data
     verifyCode: builder.mutation({
       query: (data) => ({
@@ -154,6 +164,7 @@ export const {
   useSigninMutation,
   useSignupMutation,
   useGetMyProfileQuery,
+  useSetupProfileMutation,
   useVerifyCodeMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
