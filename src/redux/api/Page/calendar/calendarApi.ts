@@ -2,7 +2,46 @@ import { api } from "../../../baseApi";
 
 export const calendarApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    //================================= Analytics
+    // =================================
+    //  Notifications
+    // ================================
+    getNotificationData: builder.query({
+      query: () => ({
+        url: "notifications/me",
+        method: "GET",
+      }),
+    }),
+
+    // =================================
+    //  Current Balance
+    // ================================
+    getCurrentBalance: builder.query({
+      query: () => ({
+        url: "balances/current-balance",
+        method: "GET",
+      }),
+    }),
+
+    // =================================
+    //  Reports show
+    // ===============================
+
+    getReportData: builder.query({
+      query: ({
+        startDate,
+        endDate,
+      }: {
+        startDate: string;
+        endDate: string;
+      }) => ({
+        url: `budgets/transactions-by-range?startDate=${startDate}&endDate=${endDate}`,
+        method: "GET",
+      }),
+    }),
+
+    //=================================
+    //  Analytics
+    // ================================
     getIncomeExpenses: builder.query({
       query: (year: number) => ({
         url: `/analytics/income-vs-expenses?year=${year}`,
@@ -29,6 +68,9 @@ export const calendarApi = api.injectEndpoints({
 
 export const {
   useGetIncomeExpensesQuery,
+  useGetCurrentBalanceQuery,
+  useGetNotificationDataQuery,
+  useGetReportDataQuery,
   useGetBalanceTredQuery,
   useGetSpendingCategoryQuery,
 } = calendarApi;

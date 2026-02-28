@@ -1,3 +1,5 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import { useGetCurrentBalanceQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,7 +8,41 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NavberCalenderModal from "./NavberCalenderModal";
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 const Nav = () => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  const { data: getCurrentBalanceData, isLoading: currentBalanceLoading } =
+    useGetCurrentBalanceQuery();
+
+  console.log("Profile Data:", getCurrentBalanceData?.data);
   const [openCalender, setOpenCalender] = useState(false);
   const currentDate = new Date();
 
@@ -33,7 +69,11 @@ const Nav = () => {
             className=""
           >
             <Image
-              source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
+              source={{
+                uri:
+                  getProfileData?.data?.profilePicture ||
+                  "https://i.ibb.co.com/BVvVXn3h/user-5.png",
+              }}
               className="w-16 h-16 rounded-full"
             />
           </TouchableOpacity>
@@ -47,7 +87,8 @@ const Nav = () => {
             }}
           >
             <Text className="font-Inter font-bold text-xl text-[#FFFFFF] rounded-full px-[8%] py-3">
-              $0.00
+              {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+              {getCurrentBalanceData?.data.toFixed(2) || "0.00"}
             </Text>
           </LinearGradient>
 

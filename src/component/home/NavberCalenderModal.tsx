@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import ReportRangeModal from "./report/ReportRangeModal";
 
 const { height } = Dimensions.get("window");
 
@@ -44,12 +45,15 @@ const NavberCalenderModal: React.FC<Props> = ({
   const todayString = new Date().toISOString().split("T")[0];
 
   const [currentMonth1, setCurrentMonth1] = useState(startDate || todayString);
+  const [reportShow, setReportShow] = useState(false);
 
   const [currentMonth2, setCurrentMonth2] = useState(() => {
     const next = new Date();
     next.setMonth(next.getMonth() + 1);
     return next.toISOString().split("T")[0];
   });
+  console.log("Start Date:", startDate);
+  console.log("End Date:", endDate);
 
   useEffect(() => {
     if (startDate) {
@@ -77,72 +81,7 @@ const NavberCalenderModal: React.FC<Props> = ({
     }
   };
 
-  // ✅ Proper Weekly / Monthly
-  const handleTypeChange = (type: "weekly" | "monthly") => {
-    setSelectedType(type);
-    if (!startDate) return;
-
-    const start = new Date(startDate);
-    let end = new Date(start);
-
-    if (type === "weekly") {
-      end.setDate(start.getDate() + 6);
-    } else {
-      end = new Date(start.getFullYear(), start.getMonth() + 1, 0);
-    }
-
-    const endString = end.toISOString().split("T")[0];
-    setEndDate(endString);
-    setCurrentMonth2(endString);
-  };
-
-  // ✅ Quick Select
-  const handleQuickSelect = (days: number) => {
-    if (!startDate) return;
-
-    const start = new Date(startDate);
-    const end = new Date(start);
-    end.setDate(start.getDate() + days - 1);
-
-    const endString = end.toISOString().split("T")[0];
-    setEndDate(endString);
-    setCurrentMonth2(endString);
-  };
-
-  // ✅ Proper Presets
-  const handlePreset = (type: "week" | "month" | "nextMonth") => {
-    const now = new Date();
-    let start = new Date(now);
-    let end = new Date(now);
-
-    if (type === "week") {
-      const day = now.getDay();
-      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-      start = new Date(now.setDate(diff));
-      end = new Date(start);
-      end.setDate(start.getDate() + 6);
-    }
-
-    if (type === "month") {
-      start = new Date(now.getFullYear(), now.getMonth(), 1);
-      end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    }
-
-    if (type === "nextMonth") {
-      start = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      end = new Date(now.getFullYear(), now.getMonth() + 2, 0);
-    }
-
-    const startString = start.toISOString().split("T")[0];
-    const endString = end.toISOString().split("T")[0];
-
-    setStartDate(startString);
-    setEndDate(endString);
-    setCurrentMonth1(startString);
-    setCurrentMonth2(endString);
-  };
-
-  // ✅ Clean Period Marking
+  //  Clean Period Marking
   const getMarkedDates = () => {
     if (!startDate) return {};
 
@@ -198,7 +137,7 @@ const NavberCalenderModal: React.FC<Props> = ({
       type: selectedType,
     });
 
-    onClose();
+    setReportShow(true);
   };
 
   const formatDisplayDate = (date: string | null) => {
@@ -276,45 +215,6 @@ const NavberCalenderModal: React.FC<Props> = ({
 
                 {/* RIGHT SIDE */}
                 <View className="w-full  mx-auto border-[#C49F59] p-5">
-                  {/* <TouchableOpacity
-                    onPress={() => handleTypeChange("weekly")}
-                    className="py-3"
-                  >
-                    <Text className="text-white text-center">
-                      Weekly (7 days)
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    onPress={() => handleTypeChange("monthly")}
-                    className="py-3"
-                  >
-                    <Text className="text-white text-center">Monthly</Text>
-                  </TouchableOpacity> */}
-
-                  <View className="mt-6">
-                    <TouchableOpacity
-                      onPress={() => handlePreset("week")}
-                      className="mt-5 border border-[#C49F59] py-4 rounded-full"
-                    >
-                      <Text className="text-[#C49F59] text-center"> Week</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      onPress={() => handlePreset("month")}
-                      className="mt-2 border border-[#C49F59]  py-4 rounded-full"
-                    >
-                      <Text className="text-[#C49F59] text-center">Month</Text>
-                    </TouchableOpacity>
-
-                    {/* <TouchableOpacity
-                      onPress={() => handlePreset("nextMonth")}
-                      className="py-3"
-                    >
-                      <Text className="text-white">Next Month</Text>
-                    </TouchableOpacity> */}
-                  </View>
-
                   <TouchableOpacity
                     onPress={handleApply}
                     className="mt-10 bg-[#C49F59] py-4 rounded-full"
@@ -338,6 +238,12 @@ const NavberCalenderModal: React.FC<Props> = ({
           </View>
         </View>
       </View>
+      <ReportRangeModal
+        visible={reportShow}
+        onClose={() => setReportShow(false)}
+        startDate={startDate ? new Date(startDate) : new Date()}
+        endDate={endDate ? new Date(endDate) : new Date()}
+      />
     </Modal>
   );
 };

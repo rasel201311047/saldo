@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import WeekPastdateModal from "./WeekPastdateModal";
+import ReportRangeModal from "./report/ReportRangeModal";
 
 /* ---------------- CONSTANTS ---------------- */
 
@@ -109,15 +110,89 @@ const CalendershowData = () => {
   const { currentMonth, currentYear } = useSelector(
     (state: RootState) => state.calendar,
   );
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState<any>(null);
+  const [reportShow, setReportShow] = useState(false);
+  const [startDate, setStartDate] = useState<string | null>("");
+  const [endDate, setEndDate] = useState<string | null>("");
 
   const monthData = getMonthData(currentMonth, currentYear);
+  const handleReportShow = (level: string) => {
+    console.log("Report Show Clicked", monthData.year, monthData.name, level);
+    const [month, dateRange] = level.split(" ");
+    const [startDay, endDay] = dateRange.split("-");
+    const year = monthData.year;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const monthIndex = monthNames.indexOf(month);
+    const startDate = new Date(
+      Date.UTC(year, monthIndex, parseInt(startDay), 0, 0, 0, 0),
+    );
+    const endDate = new Date(
+      Date.UTC(year, monthIndex, parseInt(endDay), 23, 59, 59, 999),
+    );
+    const start = startDate.toISOString();
+    const end = endDate.toISOString();
+    setEndDate(end);
+    setStartDate(start);
+    setReportShow(true);
+
+    console.log(start, end);
+  };
+
+  const handleReportData = (week: any, level: string) => {
+    console.log("Report Show Clicked", monthData.year, monthData.name, level);
+    const [month, dateRange] = level.split(" ");
+    const [startDay, endDay] = dateRange.split("-");
+    const year = monthData.year;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const monthIndex = monthNames.indexOf(month);
+    const startDate = new Date(
+      Date.UTC(year, monthIndex, parseInt(startDay), 0, 0, 0, 0),
+    );
+    const endDate = new Date(
+      Date.UTC(year, monthIndex, parseInt(endDay), 23, 59, 59, 999),
+    );
+    const start = startDate.toISOString();
+    const end = endDate.toISOString();
+    setEndDate(end);
+    setStartDate(start);
+    setSelectedWeek(week);
+    setModalVisible(true);
+
+    console.log(start, end);
+  };
 
   return (
     <View>
-      {/* Header */}
+      {/* Header   */}
       <View style={{ height: responsive.verticalScale(180) }}>
         <Image source={monthData.image} className="w-full h-full" />
         <View className="absolute inset-0 items-center">
@@ -132,28 +207,32 @@ const CalendershowData = () => {
       {/* Weeks */}
       <View className="items-center my-[6%]">
         {monthData.weeks.map((week, index) => (
-          <TouchableOpacity
-            key={index}
-            disabled={!week.isCurrent}
-            onPress={() => {
-              setSelectedWeek(week);
-              setModalVisible(true);
-            }}
-          >
+          <View key={index}>
             {week.isCurrent ? (
-              <LinearGradient
-                colors={["#FAD885", "#C49F59", "#8A622A"]}
-                style={{ borderRadius: 50 }}
-                className="py-2 px-3 rounded-full mt-[5%]"
+              <TouchableOpacity
+                onPress={() => {
+                  handleReportData(week, week.label);
+                }}
               >
-                <Text className="text-center text-white font-medium">
-                  {week.label}
-                </Text>
-              </LinearGradient>
+                <LinearGradient
+                  colors={["#FAD885", "#C49F59", "#8A622A"]}
+                  style={{ borderRadius: 50 }}
+                  className="py-2 px-3 rounded-full mt-[5%]"
+                >
+                  <Text className="text-center text-white font-medium">
+                    {week.label}
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
             ) : (
-              <Text className="text-white mt-3 opacity-40">{week.label}</Text>
+              <TouchableOpacity
+                onPress={() => handleReportShow(week.label)}
+                className="mb-[2%]"
+              >
+                <Text className="text-white mt-3 opacity-40">{week.label}</Text>
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
+          </View>
         ))}
       </View>
 
@@ -164,8 +243,19 @@ const CalendershowData = () => {
           onClose={() => setModalVisible(false)}
           weekLabel={selectedWeek.label}
           days={selectedWeek.days}
+          year={monthData.year}
+          startDate={startDate ? new Date(startDate) : new Date()}
+          endDate={endDate ? new Date(endDate) : new Date()}
         />
       )}
+
+      {/* the report */}
+      <ReportRangeModal
+        visible={reportShow}
+        onClose={() => setReportShow(false)}
+        startDate={startDate ? new Date(startDate) : new Date()}
+        endDate={endDate ? new Date(endDate) : new Date()}
+      />
     </View>
   );
 };
