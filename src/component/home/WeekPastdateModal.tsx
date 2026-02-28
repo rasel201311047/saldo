@@ -267,7 +267,7 @@ const WeekPastdateModal = ({
                       className="py-2 px-3 "
                     >
                       <Text className="text-[#fff] text-center font-semibold text-lg">
-                        + Add Transaction
+                        + Add
                       </Text>
                     </LinearGradient>
                   </TouchableOpacity>

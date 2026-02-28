@@ -4,6 +4,8 @@ import AddModalHome from "@/src/component/home/AddModalHome";
 import ButtonSection from "@/src/component/home/ButtonSection";
 import CalendershowData from "@/src/component/home/CalendershowData";
 import Nav from "@/src/component/home/Nav";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import { useGetEarningSpendingQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import {
   nextMonth,
   previousMonth,
@@ -39,6 +41,35 @@ const monthNamesShort = [
   "Dec",
 ];
 
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
+
 const Calendar = () => {
   const [addPlus, setAddPlus] = useState(false);
   const dispatch = useDispatch();
@@ -46,7 +77,15 @@ const Calendar = () => {
   const { currentMonth, currentYear } = useSelector(
     (state: RootState) => state.calendar,
   );
-
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  const { data: currentBalance, isLoading: isCurrentBalanceLoading } =
+    useGetEarningSpendingQuery({ data: `${currentYear}-${currentMonth + 1}` });
+  console.log(
+    "currentBalance",
+    currentBalance?.data?.totalIncome,
+    currentBalance?.data?.totalSpending,
+  );
   const handleNextMonth = () => {
     dispatch(nextMonth());
   };
@@ -99,7 +138,8 @@ const Calendar = () => {
                     Earnings
                   </Text>
                   <Text className="text-[#fff] text-base font-Inter font-medium">
-                    $0.00
+                    {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                    {currentBalance?.data?.totalIncome || "0.00"}
                   </Text>
                 </View>
 
@@ -123,7 +163,8 @@ const Calendar = () => {
                     Spendings
                   </Text>
                   <Text className="text-[#fff] text-base font-Inter font-medium">
-                    $0.00
+                    {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                    {currentBalance?.data?.totalSpending || "0.00"}
                   </Text>
                 </View>
 

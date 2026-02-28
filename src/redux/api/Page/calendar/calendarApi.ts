@@ -38,6 +38,16 @@ export const calendarApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    // ================================
+    //  EARNING SPENDING
+    // ================================
+
+    getEarningSpending: builder.query({
+      query: ({ data }: { data: string }) => ({
+        url: `balances/monthly-summary?month=${data}`,
+        method: "GET",
+      }),
+    }),
 
     //=================================
     //  Analytics
@@ -70,6 +80,7 @@ export const {
   useGetIncomeExpensesQuery,
   useGetCurrentBalanceQuery,
   useGetNotificationDataQuery,
+  useGetEarningSpendingQuery,
   useGetReportDataQuery,
   useGetBalanceTredQuery,
   useGetSpendingCategoryQuery,
