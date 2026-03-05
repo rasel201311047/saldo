@@ -2,14 +2,22 @@ import { HomeImg } from "@/assets/home/homeimg";
 import Background1 from "@/src/component/background/Background1";
 import GoalsSec from "@/src/component/goals/GoalsSec";
 import NavGoals from "@/src/component/goals/NavGoals";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useAppDispatch } from "@/src/redux/hooks";
 import { setButtonCatagory } from "@/src/redux/slices/userSlice";
 import { RootState } from "@/src/redux/store";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Dimensions,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 
@@ -18,8 +26,30 @@ const { height } = Dimensions.get("window");
 const Goals = () => {
   const [active, setActive] = useState("GOALS");
   const dispatch = useAppDispatch();
-
   const LoanRecord = useSelector((state: RootState) => state.user.loanRecord);
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  console.log("Profile Data in Goals:", getProfileData?.data?.premiumPlan);
+  if (profileLoading) {
+    return (
+      <Background1>
+        <SafeAreaView
+          edges={["top"]}
+          className="flex-1 justify-center items-center"
+        >
+          <ActivityIndicator size="large" color="#ECCD72" />
+        </SafeAreaView>
+      </Background1>
+    );
+  }
+
+  useEffect(() => {
+    const premiumPlan = getProfileData?.data?.premiumPlan;
+
+    if (premiumPlan === "TRIAL_EXPIRED" || !premiumPlan) {
+      router.replace("/subcription");
+    }
+  }, [getProfileData]);
 
   const renderEmptyState = (helperText: string) => (
     <View className="flex-1 justify-between">

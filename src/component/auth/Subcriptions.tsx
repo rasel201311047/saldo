@@ -99,7 +99,10 @@ const Subcriptions = () => {
           upgrading to premium.
         </Text>
 
-        <TouchableOpacity className="absolute right-0 top-0">
+        <TouchableOpacity
+          onPress={() => router.push("/calendar")}
+          className="absolute right-0 top-0"
+        >
           <Ionicons name="close" size={22} color="#aaa" />
         </TouchableOpacity>
       </View>

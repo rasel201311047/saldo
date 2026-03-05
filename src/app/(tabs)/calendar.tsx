@@ -6,23 +6,21 @@ import CalendershowData from "@/src/component/home/CalendershowData";
 import Nav from "@/src/component/home/Nav";
 import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetEarningSpendingQuery } from "@/src/redux/api/Page/calendar/calendarApi";
-import {
-  nextMonth,
-  previousMonth,
-  resetToCurrent,
-} from "@/src/redux/slices/calendarSlice";
+import { nextMonth, previousMonth } from "@/src/redux/slices/calendarSlice";
 import { RootState } from "@/src/redux/store";
 import responsive from "@/src/utils/responsive";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   Text,
   TouchableOpacity,
   Vibration,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -81,28 +79,34 @@ const Calendar = () => {
     useGetMyProfileQuery();
   const { data: currentBalance, isLoading: isCurrentBalanceLoading } =
     useGetEarningSpendingQuery({ data: `${currentYear}-${currentMonth + 1}` });
+
+  if (profileLoading || isCurrentBalanceLoading) {
+    return (
+      <Background1>
+        <SafeAreaView
+          edges={["top"]}
+          className="flex-1 justify-center items-center"
+        >
+          <ActivityIndicator size="large" color="#ECCD72" />
+        </SafeAreaView>
+      </Background1>
+    );
+  }
+
   console.log(
     "currentBalance",
     currentBalance?.data?.totalIncome,
     currentBalance?.data?.totalSpending,
   );
+
+  console.log("currentBalance", getProfileData);
+
   const handleNextMonth = () => {
     dispatch(nextMonth());
   };
 
   const handlePreviousMonth = () => {
     dispatch(previousMonth());
-  };
-
-  const handleReset = () => {
-    dispatch(resetToCurrent());
-  };
-
-  const isCurrentMonth = () => {
-    const today = new Date();
-    return (
-      currentMonth === today.getMonth() && currentYear === today.getFullYear()
-    );
   };
 
   return (

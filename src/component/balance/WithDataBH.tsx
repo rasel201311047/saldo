@@ -1,20 +1,74 @@
 import { budgeticon, menu } from "@/assets/icons";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import { useGetBalanceAccountQuery } from "@/src/redux/api/Page/Balance/balanceApi";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 import BalanceGroph from "./BalanceGroph";
 import RenameAccount from "./RenameAccount";
+// =====================
+//   Carency Symbols
+// =====================
+
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 
 const WithDataBH = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showChart, setShowChart] = useState(true);
   const [renameModal, setRenameModal] = useState(false);
 
+  const {
+    data: balanceData,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetBalanceAccountQuery();
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+
+  console.log("Balance Data in WithDataBH:", balanceData?.data?.accounts[0].id);
+
+  if (isLoading || profileLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text className="text-gray-500">Loading...</Text>
+      </View>
+    );
+  }
+
   const chartData = {
-    balance: 5000,
-    total: 5250,
+    balance: balanceData?.data?.totalBalance || 0,
+    total: 55250,
     used: 0,
     limit: 250,
   };
@@ -24,7 +78,7 @@ const WithDataBH = () => {
       {showChart && <BalanceGroph />}
 
       {/* ===== Header ===== */}
-      <View className="flex-row items-center justify-between px-5 mt-3 mb-4 relative">
+      <View className="flex-row items-center justify-between  mt-3 mb-4 relative">
         <View className="">
           <View className="flex-row items-center gap-[6%]">
             <SvgXml xml={menu} width={20} height={20} color={"#fff"} />
@@ -34,7 +88,8 @@ const WithDataBH = () => {
           <View className="flex-row items-center gap-[3%]">
             <View className="w-5 h-5" />
             <Text className="text-sm text-[#FFFFFF] font-Inter">
-              +${chartData.balance.toLocaleString()}
+              +{getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+              {chartData.balance.toLocaleString()}
             </Text>
           </View>
         </View>
@@ -94,7 +149,7 @@ const WithDataBH = () => {
 
               <View className="h-px bg-[#3A3950]" />
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 className="px-4 py-3"
                 onPress={() => {
                   setRenameModal(true);
@@ -102,69 +157,99 @@ const WithDataBH = () => {
                 }}
               >
                 <Text className="text-white">Rename</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </>
         )}
       </View>
 
-      {/* ===== Card ===== */}
-      <View className="px-4 ">
-        <View className="bg-[#242333] border border-[#4F4F59] rounded-2xl p-4">
-          <View className="flex-row items-center justify-between mb-3">
-            <View className="flex-row items-center gap-2">
-              <SvgXml xml={budgeticon} width={24} height={24} color={"#fff"} />
-              <Text className="text-white font-Inter text-base">Salary</Text>
-            </View>
-            <Text className="text-white text-lg font-Inter font-semibold">
-              $
-              {chartData.total.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Text>
-          </View>
+      {/* ===== Card  ===== */}
 
-          <View className="flex-row justify-between mb-2">
-            <Text className="text-gray-400 text-xs">
-              <Text className="text-white font-Inter text-base">
-                $
-                {chartData.limit.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </Text>{" "}
-              <Text className="font-Inter">limit</Text>
-            </Text>
-            <Text className="text-gray-400 text-xs font-Inter">
-              used{" "}
-              <Text className="text-white font-Inter text-base">
-                $
-                {chartData.used.toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </Text>
-            </Text>
-          </View>
+      <View className=" flex-col gap-2 ">
+        {Array.isArray(balanceData?.data?.accounts) &&
+          balanceData.data.accounts.map((account, index) => (
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  params: { id: account.id },
+                  pathname: "/balancedetails",
+                })
+              }
+              key={index}
+            >
+              <View className="bg-[#242333] border border-[#4F4F59] rounded-2xl p-4">
+                <View className="flex-row items-center justify-between mb-3">
+                  <View className="flex-row items-center gap-2">
+                    <SvgXml
+                      xml={budgeticon}
+                      width={24}
+                      height={24}
+                      color={"#fff"}
+                    />
+                    <Text className="text-white font-Inter text-base">
+                      {account?.name}
+                    </Text>
+                  </View>
+                  <Text className="text-white text-lg font-Inter font-semibold">
+                    {getCurrencySymbol(getProfileData?.data?.currency)}
+                    {account?.amount?.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </Text>
+                </View>
 
-          {/* <View className="h-2 bg-[#2B2A3A] rounded-full overflow-hidden">
+                <View className="flex-row justify-between mb-2">
+                  <Text className="text-gray-400 text-xs">
+                    <Text className="text-white font-Inter text-base">
+                      {getCurrencySymbol(getProfileData?.data?.currency)}
+                      {account?.creditLimit?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </Text>{" "}
+                    <Text className="font-Inter">limit</Text>
+                  </Text>
+                  <Text className="text-gray-400 text-xs font-Inter">
+                    used{" "}
+                    <Text className="text-white font-Inter text-base">
+                      {getCurrencySymbol(getProfileData?.data?.currency)}
+                      {account?.usedBalance?.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </Text>
+                  </Text>
+                </View>
+
+                {/* <View className="h-2 bg-[#2B2A3A] rounded-full overflow-hidden">
             <View
               className="h-2 bg-[#D4AF6A]"
               style={{ width: `${(chartData.used / chartData.limit) * 100}%` }}
             />
           </View> */}
-          <LinearGradient
-            colors={["#FAD885", "#C49F59", "#8A622A"]}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 50,
-              height: 8,
-            }}
-          ></LinearGradient>
-        </View>
+                <View
+                  style={{
+                    height: 8,
+                    backgroundColor: "#E5E5E5",
+                    borderRadius: 50,
+                    overflow: "hidden",
+                  }}
+                >
+                  <LinearGradient
+                    colors={["#FAD885", "#C49F59", "#8A622A"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={{
+                      width: `${Math.min((account?.usedBalance / account?.amount) * 100, 100)}%`,
+                      height: "100%",
+                      borderRadius: 50,
+                    }}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
       </View>
 
       <RenameAccount

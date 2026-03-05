@@ -3,8 +3,14 @@ import React from "react";
 
 const _layout = () => {
   return (
-    <Stack>
-      <Stack.Screen name="accountbalanceadd" options={{ headerShown: false }} />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+      }}
+    >
+      <Stack.Screen name="accountbalanceadd" />
+      <Stack.Screen name="balancedetails" />
     </Stack>
   );
 };
