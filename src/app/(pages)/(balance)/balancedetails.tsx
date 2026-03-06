@@ -29,6 +29,7 @@ const Balancedetails = () => {
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
 
   const account = balanceData?.data;
+  console.log("Account Details Data:", account?._id);
 
   useEffect(() => {
     if (account) {
@@ -73,7 +74,7 @@ const Balancedetails = () => {
   const handleEdit = () => {
     // Navigate to edit screen
     router.push({
-      pathname: "/balance/edit",
+      pathname: "/editbalance",
       params: { id: account?._id },
     });
   };
@@ -100,6 +101,10 @@ const Balancedetails = () => {
     );
   };
 
+  //====================================================
+  //  information card component
+  // ====================================================
+
   const InfoCard = ({ label, value, icon, color = "#ECCD72" }: any) => (
     <Animated.View
       style={{
@@ -112,6 +117,7 @@ const Balancedetails = () => {
         colors={["#2a2a2a", "#1a1a1a"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
+        style={{ borderRadius: 16 }}
         className="p-4 rounded-2xl border border-[#333333]"
       >
         <View className="flex-row items-center mb-2">
@@ -171,7 +177,9 @@ const Balancedetails = () => {
           className="flex-1 px-[5%]"
           showsVerticalScrollIndicator={false}
         >
-          {/* Main Balance Card */}
+          {/* ===========================
+          Main Balance Card 
+          ================================*/}
           <Animated.View
             style={{
               opacity: fadeAnim,
@@ -190,6 +198,7 @@ const Balancedetails = () => {
                 shadowOpacity: 0.3,
                 shadowRadius: 8,
                 elevation: 8,
+                borderRadius: 24,
               }}
             >
               <View className="items-center">
@@ -283,6 +292,7 @@ const Balancedetails = () => {
                 colors={["#4CAF50", "#45a049"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 16 }}
                 className="py-4 rounded-2xl items-center flex-row justify-center"
               >
                 <FontAwesome5 name="edit" size={18} color="#fff" />
@@ -301,6 +311,7 @@ const Balancedetails = () => {
                 colors={["#F44336", "#d32f2f"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 16 }}
                 className="py-4 rounded-2xl items-center flex-row justify-center"
               >
                 <FontAwesome5 name="trash" size={18} color="#fff" />

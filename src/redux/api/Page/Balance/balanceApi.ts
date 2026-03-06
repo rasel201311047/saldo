@@ -11,13 +11,23 @@ export const balanceApi = api.injectEndpoints({
 
     getBalanceAccountById: builder.query({
       query: (id: string) => ({
-        url: `/balances/${id}`,
+        url: `balances/${id}`,
         method: "GET",
+      }),
+    }),
+    putBalanceUpdateById: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `balances/${id}`,
+        method: "PUT",
+        body: data,
       }),
     }),
   }),
   overrideExisting: false,
 });
 
-export const { useGetBalanceAccountQuery, useGetBalanceAccountByIdQuery } =
-  balanceApi;
+export const {
+  useGetBalanceAccountQuery,
+  useGetBalanceAccountByIdQuery,
+  usePutBalanceUpdateByIdMutation,
+} = balanceApi;

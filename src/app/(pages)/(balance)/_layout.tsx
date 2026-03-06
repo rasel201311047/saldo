@@ -11,6 +11,7 @@ const _layout = () => {
     >
       <Stack.Screen name="accountbalanceadd" />
       <Stack.Screen name="balancedetails" />
+      <Stack.Screen name="editbalance" />
     </Stack>
   );
 };

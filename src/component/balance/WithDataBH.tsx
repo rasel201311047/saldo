@@ -222,12 +222,6 @@ const WithDataBH = () => {
                   </Text>
                 </View>
 
-                {/* <View className="h-2 bg-[#2B2A3A] rounded-full overflow-hidden">
-            <View
-              className="h-2 bg-[#D4AF6A]"
-              style={{ width: `${(chartData.used / chartData.limit) * 100}%` }}
-            />
-          </View> */}
                 <View
                   style={{
                     height: 8,

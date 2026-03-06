@@ -308,7 +308,12 @@ const CustomDatePicker = ({ visible, date, onClose, onConfirm }: Props) => {
                 <Text className="text-gray-400">Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => onConfirm(selectedDate)}>
+              <TouchableOpacity
+                onPress={() => {
+                  onConfirm(selectedDate);
+                  onClose();
+                }}
+              >
                 <LinearGradient
                   colors={["#B08A4A", "#E0B66A"]}
                   style={{ borderRadius: 10 }}

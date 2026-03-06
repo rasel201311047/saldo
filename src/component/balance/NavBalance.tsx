@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -5,6 +6,9 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const NavBalance = () => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  console.log("Profile Data in NavBalance:", getProfileData?.data?.fullName);
   return (
     <View>
       <View className="flex-row justify-between items-center px-[5%]">
@@ -13,11 +17,15 @@ const NavBalance = () => {
           className="  flex-row items-center gap-2"
         >
           <Image
-            source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
+            source={{
+              uri:
+                getProfileData?.data?.profilePicture ||
+                "https://i.ibb.co.com/BVvVXn3h/user-5.png",
+            }}
             className="w-16 h-16 rounded-full"
           />
           <Text className="font-Inter font-bold text-xl text-white">
-            Rasel Islam
+            {profileLoading ? "Loading..." : getProfileData?.data?.fullName}
           </Text>
         </TouchableOpacity>
 
