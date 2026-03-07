@@ -1,11 +1,17 @@
 import { HomeImg } from "@/assets/home/homeimg";
 import Background1 from "@/src/component/background/Background1";
+import BorrowedSec from "@/src/component/goals/BorrowedSec";
 import GoalsSec from "@/src/component/goals/GoalsSec";
+import LentSec from "@/src/component/goals/LentSec";
 import NavGoals from "@/src/component/goals/NavGoals";
 import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import {
+  useGetBorrowedShowingQuery,
+  useGetGoalShowingQuery,
+  useGetLentShowingQuery,
+} from "@/src/redux/api/Page/Goals/goalsApi";
 import { useAppDispatch } from "@/src/redux/hooks";
 import { setButtonCatagory } from "@/src/redux/slices/userSlice";
-import { RootState } from "@/src/redux/store";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -19,14 +25,24 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
 
 const Goals = () => {
   const [active, setActive] = useState("GOALS");
   const dispatch = useAppDispatch();
-  const LoanRecord = useSelector((state: RootState) => state.user.loanRecord);
+  const { data: getGoalShowing, isLoading: isGoalShowingLoading } =
+    useGetGoalShowingQuery();
+
+  const { data: getBorrowedShowing, isLoading: isBorrowedShowingLoading } =
+    useGetBorrowedShowingQuery();
+  const { data: getLentShowing, isLoading: isLentShowingLoading } =
+    useGetLentShowingQuery();
+
+  // console.log("Goals Data:", getGoalShowing?.data?.goals);
+  // console.log("Borrowed Data:", getBorrowedShowing?.data?.borrowed);
+  // console.log("Lent Data:", getLentShowing?.data?.lent);
+
   const { data: getProfileData, isLoading: profileLoading } =
     useGetMyProfileQuery();
   console.log("Profile Data in Goals:", getProfileData?.data?.premiumPlan);
@@ -45,12 +61,28 @@ const Goals = () => {
 
   useEffect(() => {
     const premiumPlan = getProfileData?.data?.premiumPlan;
-
+    // "TRIAL_EXPIRED" ||
     if (premiumPlan === "TRIAL_EXPIRED" || !premiumPlan) {
       router.replace("/subcription");
     }
   }, [getProfileData]);
 
+  if (
+    isGoalShowingLoading ||
+    isBorrowedShowingLoading ||
+    isLentShowingLoading
+  ) {
+    return (
+      <Background1>
+        <SafeAreaView
+          edges={["top"]}
+          className="flex-1 justify-center items-center"
+        >
+          <ActivityIndicator size="large" color="#D4AF66" />
+        </SafeAreaView>
+      </Background1>
+    );
+  }
   const renderEmptyState = (helperText: string) => (
     <View className="flex-1 justify-between">
       {/* Helper text with better styling */}
@@ -76,7 +108,12 @@ const Goals = () => {
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push("/createforn")}
+            onPress={() =>
+              router.push({
+                params: { category: active },
+                pathname: "/createforn",
+              })
+            }
             activeOpacity={0.7}
             className="mt-6"
           >
@@ -146,7 +183,7 @@ const Goals = () => {
         <View className="flex-1 px-[5%]">
           {active === "GOALS" && (
             <View className="flex-1">
-              {LoanRecord ? (
+              {getGoalShowing?.data?.goals ? (
                 <GoalsSec />
               ) : (
                 renderEmptyState("Money you're saving for something you want")
@@ -154,15 +191,37 @@ const Goals = () => {
             </View>
           )}
 
-          {active === "BORROWED" &&
-            renderEmptyState("Money you borrowed and still need to pay back")}
+          {active === "BORROWED" && (
+            <View className="flex-1">
+              {getGoalShowing?.data?.goals ? (
+                <BorrowedSec />
+              ) : (
+                renderEmptyState(
+                  "Money you borrowed and still need to pay back",
+                )
+              )}
+            </View>
+          )}
 
-          {active === "LENT" && renderEmptyState("Money others owe you")}
+          {active === "LENT" && (
+            <View className="flex-1">
+              {getGoalShowing?.data?.goals ? (
+                <LentSec />
+              ) : (
+                renderEmptyState("Money others owe you")
+              )}
+            </View>
+          )}
         </View>
 
         {/* Floating action button */}
         <TouchableOpacity
-          onPress={() => router.push("/createforn")}
+          onPress={() =>
+            router.push({
+              params: { category: active },
+              pathname: "/createforn",
+            })
+          }
           className="absolute bottom-28 right-3"
           activeOpacity={0.8}
         >
