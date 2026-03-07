@@ -7,6 +7,7 @@ export const balanceApi = api.injectEndpoints({
         url: "balances/total-account",
         method: "GET",
       }),
+      providesTags: ["Balance"],
     }),
 
     getBalanceAccountById: builder.query({
@@ -14,6 +15,7 @@ export const balanceApi = api.injectEndpoints({
         url: `balances/${id}`,
         method: "GET",
       }),
+      providesTags: ["Balance"],
     }),
     putBalanceUpdateById: builder.mutation({
       query: ({ id, data }) => ({
@@ -21,6 +23,29 @@ export const balanceApi = api.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["Balance"],
+    }),
+    // ===============================
+    //  Add new balance account
+    // ===============================
+    postBalanceAddNewAccount: builder.mutation({
+      query: (data) => ({
+        url: "balances/add-account",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Balance"],
+    }),
+
+    // ================================
+    //  Delete balance account
+    // ================================
+    deleteBalanceAccountById: builder.mutation({
+      query: (id: string) => ({
+        url: `balances/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Balance"],
     }),
   }),
   overrideExisting: false,
@@ -30,4 +55,6 @@ export const {
   useGetBalanceAccountQuery,
   useGetBalanceAccountByIdQuery,
   usePutBalanceUpdateByIdMutation,
+  useDeleteBalanceAccountByIdMutation,
+  usePostBalanceAddNewAccountMutation,
 } = balanceApi;

@@ -7,6 +7,8 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -18,7 +20,7 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const SEGMENT_WIDTH = SCREEN_WIDTH * 0.85;
 const BUTTON_WIDTH = SEGMENT_WIDTH / 2;
 
-const editbalance = () => {
+const Editbalance = () => {
   const [activeButton, setActiveButton] = useState<
     "Money you owe" | "Cash Balance"
   >("Money you owe");
@@ -60,63 +62,70 @@ const editbalance = () => {
           </View>
 
           {/* Content */}
-          <ScrollView className="flex-1">
-            <View className="px-[5%] my-6">
-              {/* Animated Segmented Control */}
-              <View
-                style={{ width: SEGMENT_WIDTH }}
-                className="bg-[#242333] rounded-full mx-auto "
-              >
-                <Animated.View
-                  style={{
-                    position: "absolute",
-                    width: BUTTON_WIDTH,
-                    height: "100%",
-                    backgroundColor:
-                      activeButton === "Money you owe" ? "#EE2626" : "#38B27A",
-                    borderRadius: 999,
-                    transform: [{ translateX }],
-                  }}
-                />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "android" ? "padding" : "height"}
+            className="flex-1"
+          >
+            <ScrollView className="flex-1">
+              <View className="px-[5%] my-6">
+                {/* Animated Segmented Control */}
+                <View
+                  style={{ width: SEGMENT_WIDTH }}
+                  className="bg-[#242333] rounded-full mx-auto "
+                >
+                  <Animated.View
+                    style={{
+                      position: "absolute",
+                      width: BUTTON_WIDTH,
+                      height: "100%",
+                      backgroundColor:
+                        activeButton === "Money you owe"
+                          ? "#EE2626"
+                          : "#38B27A",
+                      borderRadius: 999,
+                      transform: [{ translateX }],
+                    }}
+                  />
 
-                {/* Buttons */}
-                <View className="flex-row">
-                  <TouchableOpacity
-                    activeOpacity={0.9}
-                    onPress={() => setActiveButton("Money you owe")}
-                    style={{ width: BUTTON_WIDTH }}
-                    className="py-5 items-center"
-                  >
-                    <Text className="text-white text-lg font-Inter">
-                      Money you owe
-                    </Text>
-                  </TouchableOpacity>
+                  {/* Buttons */}
+                  <View className="flex-row">
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      onPress={() => setActiveButton("Money you owe")}
+                      style={{ width: BUTTON_WIDTH }}
+                      className="py-5 items-center"
+                    >
+                      <Text className="text-white text-lg font-Inter">
+                        Money you owe
+                      </Text>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity
-                    activeOpacity={0.9}
-                    onPress={() => setActiveButton("Cash Balance")}
-                    style={{ width: BUTTON_WIDTH }}
-                    className="py-5 items-center"
-                  >
-                    <Text className="text-white text-lg font-Inter">
-                      Cash Balance
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.9}
+                      onPress={() => setActiveButton("Cash Balance")}
+                      style={{ width: BUTTON_WIDTH }}
+                      className="py-5 items-center"
+                    >
+                      <Text className="text-white text-lg font-Inter">
+                        Cash Balance
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-              <Text className="text-white text-center mt-4 font-Inter">
-                This is money you still need to pay back (credit card, loan, or
-                borrowed money).
-              </Text>
+                <Text className="text-white text-center mt-4 font-Inter">
+                  This is money you still need to pay back (credit card, loan,
+                  or borrowed money).
+                </Text>
 
-              {/* form */}
-              <EditAccount />
-            </View>
-          </ScrollView>
+                {/* form */}
+                <EditAccount />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </View>
     </GradientBackground>
   );
 };
 
-export default editbalance;
+export default Editbalance;

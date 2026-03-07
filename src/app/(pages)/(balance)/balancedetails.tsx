@@ -1,12 +1,16 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
-import { useGetBalanceAccountByIdQuery } from "@/src/redux/api/Page/Balance/balanceApi";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import {
+  useDeleteBalanceAccountByIdMutation,
+  useGetBalanceAccountByIdQuery,
+} from "@/src/redux/api/Page/Balance/balanceApi";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Dimensions,
   ScrollView,
@@ -18,10 +22,52 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
+
 const Balancedetails = () => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   const params = useLocalSearchParams();
   const { data: balanceData, isLoading: balanceLoading } =
     useGetBalanceAccountByIdQuery(params.id as string);
+
+  const [deleteBalanceAccountById, { isLoading: deleteLoading }] =
+    useDeleteBalanceAccountByIdMutation();
+
+  // Alert state
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertVisible2, setAlertVisible2] = useState(false);
+  const [alertTittle2, setAlertTittle2] = useState("");
+  const [alertMessage2, setAlertMessage2] = useState("");
 
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -80,25 +126,29 @@ const Balancedetails = () => {
   };
 
   const handleRemove = () => {
-    Alert.alert(
-      "Delete Account",
+    setAlertVisible(true);
+    setAlertTittle("Delete Account");
+    setAlertMessage(
       "Are you sure you want to delete this account? This action cannot be undone.",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-        },
-        {
-          text: "Delete",
-          onPress: () => {
-            // Handle delete logic here
-            Alert.alert("Success", "Account deleted successfully");
-            router.back();
-          },
-          style: "destructive",
-        },
-      ],
     );
+  };
+
+  // Delete account function
+  const handleDelete = async () => {
+    try {
+      const res = await deleteBalanceAccountById(params.id as string);
+      if (deleteLoading) {
+        setAlertTittle("Removing...");
+        setAlertMessage("Please wait while we remove the account.");
+      }
+      if (res?.data?.success) {
+        router.push("/balance");
+      }
+    } catch (error: any) {
+      setAlertVisible2(true);
+      setAlertTittle2("Error");
+      setAlertMessage2("An error occurred while deleting the account.");
+    }
   };
 
   //====================================================
@@ -202,15 +252,15 @@ const Balancedetails = () => {
               }}
             >
               <View className="items-center">
-                <Text className="text-6xl mb-2">{account?.icon || "💎"}</Text>
+                <FontAwesome5 name={account?.icon} size={40} color="#fff" />
+                {/* <Text className="text-6xl mb-2">{account?.icon || "💎"}</Text> */}
                 <Text className="text-white/80 font-Inter text-lg mb-2">
                   Current Balance
                 </Text>
+
                 <Text className="text-white font-Inter text-4xl font-bold">
-                  {formatCurrency(
-                    account?.amount || 0,
-                    account?.currency || "USD",
-                  )}
+                  {getCurrencySymbol(getProfileData?.data?.currency)}
+                  {account?.amount}
                 </Text>
                 <View className="flex-row mt-4">
                   <View className="bg-white/20 px-4 py-2 rounded-full">
@@ -248,7 +298,7 @@ const Balancedetails = () => {
             label="Credit Limit"
             value={formatCurrency(
               account?.creditLimit || 0,
-              account?.currency || "USD",
+              getProfileData?.data?.currency || "USD",
             )}
             icon="credit-card"
             color="#F44336"
@@ -316,12 +366,45 @@ const Balancedetails = () => {
               >
                 <FontAwesome5 name="trash" size={18} color="#fff" />
                 <Text className="text-white font-Inter font-semibold ml-2">
-                  Remove
+                  {deleteLoading ? "Removing..." : "Remove"}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
           </Animated.View>
         </ScrollView>
+
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            handleDelete();
+            setAlertVisible(false);
+          }}
+          onCancel={() => {
+            console.log("Cancelled");
+            setAlertVisible(false);
+          }}
+          type={"destructive"}
+          confirmText={"OK"}
+          cancelText="Cancel"
+        />
+        <CustomAlert
+          visible={alertVisible2}
+          title={alertTittle2}
+          message={alertMessage2}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={"error"}
+          confirmText={"OK"}
+          cancelText="Cancel"
+        />
       </SafeAreaView>
     </GradientBackground>
   );

@@ -37,9 +37,9 @@ const Balance = () => {
     );
   }
   const renderEmptyState = () => (
-    <View className="flex-1 justify-between">
+    <View className="flex-1 justify-between ">
       {/* Image and content */}
-      <View className="items-center flex-1 justify-center -mt-20">
+      <View className="items-center flex-1 justify-center mt-20">
         <Image
           source={HomeImg.balanceHome}
           className="w-[80%] max-w-[300px] h-[200px]"

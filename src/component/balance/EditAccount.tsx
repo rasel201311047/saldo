@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import {
   useGetBalanceAccountByIdQuery,
   usePutBalanceUpdateByIdMutation,
@@ -15,14 +16,44 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import CustomAlert from "../customAlart/CustomAlert";
 import CustomDatePicker from "../custompicker/CustomDatePicker";
 import IconSelector from "../goals/IconSelector";
 import ColorPickerModal from "./ColorPickerModal";
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 
 const EditAccount = () => {
   const params = useLocalSearchParams();
   console.log("Edit Account Params:", params?.id);
-
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   // Get account data
   const { data: balanceData, isLoading: balanceLoading } =
     useGetBalanceAccountByIdQuery(params.id as string);
@@ -44,6 +75,11 @@ const EditAccount = () => {
   const [selectedIconStyle, setSelectedIconStyle] = useState<string>("solid");
   const [iconModal, setIconModal] = useState(false);
   const [accountType, setAccountType] = useState("Savings");
+  //   alter
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   // Populate form with existing data when loaded
   useEffect(() => {
@@ -120,15 +156,27 @@ const EditAccount = () => {
       console.log("Update result:", result);
 
       if (result.success) {
-        Alert.alert("Success", "Account updated successfully!", [
-          { text: "OK", onPress: () => router.back() },
-        ]);
+        setAlertVisible(true);
+        setAlertTittle("Success");
+        setAlertMessage("Account updated successfully!");
+        setAlertType("success");
+        // Alert.alert("Success", "Account updated successfully!", [
+        //   { text: "OK", onPress: () => router.back() },
+        // ]);
       } else {
-        Alert.alert("Error", result.message || "Failed to update account");
+        setAlertVisible(true);
+        setAlertTittle("Error");
+        setAlertMessage(result.message || "Failed to update account");
+        setAlertType("error");
+        // Alert.alert("Error", result.message || "Failed to update account");
       }
     } catch (error) {
       console.error("Update error:", error);
-      Alert.alert("Error", "An error occurred while updating the account");
+      setAlertVisible(true);
+      setAlertTittle("Error");
+      setAlertMessage(error?.data?.message || "Failed to update account");
+      setAlertType("error");
+      //   Alert.alert("Error", "An error occurred while updating the account");
     }
   };
 
@@ -203,7 +251,7 @@ const EditAccount = () => {
             <Pressable onPress={() => setShowCurrency(!showCurrency)}>
               <View className="bg-[#584C2F] px-4 py-5 rounded-lg flex-row items-center">
                 <Text className="text-white font-Inter text-sm">
-                  {currency}
+                  {getProfileData?.data?.currency}
                 </Text>
               </View>
             </Pressable>
@@ -322,6 +370,24 @@ const EditAccount = () => {
           onSelect={handleIconSelect}
         />
       </View>
+
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTittle}
+        message={alertMessage}
+        onConfirm={() => {
+          console.log("Confirmed");
+          setAlertVisible(false);
+          router.back();
+        }}
+        // onCancel={() => {
+        //   console.log("Cancelled");
+        //   setAlertVisible(false);
+        // }}
+        type={alertType}
+        confirmText={"OK"}
+        cancelText="Cancel"
+      />
     </View>
   );
 };
