@@ -13,6 +13,15 @@ export const balanceApi = api.injectEndpoints({
       }),
       providesTags: ["Goals"],
     }),
+
+    getSingleGoalDetails: builder.query({
+      query: (id: string) => ({
+        url: `goals/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Goals"],
+    }),
+
     getBorrowedShowing: builder.query({
       query: () => ({
         url: "borrowed",
@@ -20,9 +29,25 @@ export const balanceApi = api.injectEndpoints({
       }),
       providesTags: ["Goals"],
     }),
+
+    getSingleBorrowedDetails: builder.query({
+      query: (id: string) => ({
+        url: `borrowed/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Goals"],
+    }),
     getLentShowing: builder.query({
       query: () => ({
         url: "lent",
+        method: "GET",
+      }),
+      providesTags: ["Goals"],
+    }),
+
+    getSingleLentDetails: builder.query({
+      query: (id: string) => ({
+        url: `lent/${id}`,
         method: "GET",
       }),
       providesTags: ["Goals"],
@@ -62,8 +87,11 @@ export const balanceApi = api.injectEndpoints({
 
 export const {
   useGetGoalShowingQuery,
+  useGetSingleGoalDetailsQuery,
   useGetBorrowedShowingQuery,
+  useGetSingleBorrowedDetailsQuery,
   useGetLentShowingQuery,
+  useGetSingleLentDetailsQuery,
   usePostGoalsAddNewGoalMutation,
   usePostBorrowedAddNewGoalMutation,
   usePostLentAddNewGoalMutation,

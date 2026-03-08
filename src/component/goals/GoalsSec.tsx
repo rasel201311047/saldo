@@ -1,16 +1,47 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetGoalShowingQuery } from "@/src/redux/api/Page/Goals/goalsApi";
-import { RootState } from "@/src/redux/store";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { useSelector } from "react-redux";
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 
 const GoalsSec = () => {
-  const loanRecord = useSelector((state: RootState) => state.user.loanRecord);
   const { data: getGoalShowing, isLoading: isGoalShowingLoading } =
     useGetGoalShowingQuery();
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+
+  console.log("the dta", getProfileData?.data?.currency);
+
   // demo values (replace with redux later)
   const target = 10000;
   const saved = 500;
@@ -26,6 +57,7 @@ const GoalsSec = () => {
             Total left
           </Text>
           <Text className="text-white text-lg font-Inter font-semibold">
+            {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
             {getGoalShowing?.data?.totalLeft}
           </Text>
         </View>
@@ -46,7 +78,12 @@ const GoalsSec = () => {
           getGoalShowing?.data?.goals.map((goal, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => router.push("/goalsedit")}
+              onPress={() =>
+                router.push({
+                  params: { id: goal?.id },
+                  pathname: "/goalsedit",
+                })
+              }
               className="bg-[#242333] rounded-2xl p-4 mb-6"
             >
               {/* Header */}
@@ -67,14 +104,16 @@ const GoalsSec = () => {
                 </View>
 
                 <Text className="text-white text-lg font-Inter font-semibold">
-                  $10,000.00
+                  {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                  {goal?.targetAmount}
                 </Text>
               </View>
 
               {/* Progress Values */}
               <View className="flex-row justify-between mb-1">
                 <Text className="text-gray-400 text-xs font-Inter">
-                  ${goal?.accumulatedAmount.toFixed(2)}
+                  {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                  {goal?.accumulatedAmount.toFixed(2)}
                 </Text>
                 <Text className="text-gray-400 text-xs font-Inter">
                   {goal?.progressPercentage.toFixed(1)}%
@@ -97,6 +136,7 @@ const GoalsSec = () => {
                 <Text className="text-gray-400 text-xs font-Inter">
                   Left:{" "}
                   <Text className="text-white font-Inter">
+                    {getCurrencySymbol(getProfileData?.data?.currency)}
                     {goal?.amountLeft}
                   </Text>
                 </Text>

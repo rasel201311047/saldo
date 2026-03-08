@@ -2,17 +2,23 @@ import { BudgetImg } from "@/assets/budget/budgetimg";
 import GradientBackground from "@/src/component/background/GradientBackground";
 import CompleteModal from "@/src/component/goals/CompleteModal";
 import DeleteModal from "@/src/component/home/DeleteModal";
+import { useGetSingleGoalDetailsQuery } from "@/src/redux/api/Page/Goals/goalsApi";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Goalsedit = () => {
+  const params = useLocalSearchParams();
   const [opendelete, setOpenDelete] = useState(false);
   const [openComplete, setOpenComplete] = useState(false);
+  console.log("the param data: ", params);
+  const { data: singleGoalDetails, isLoading: singleGoalDetailsLoading } =
+    useGetSingleGoalDetailsQuery(params.id);
 
+  console.log("data : ", singleGoalDetails);
   return (
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
