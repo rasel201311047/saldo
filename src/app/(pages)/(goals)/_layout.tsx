@@ -6,6 +6,7 @@ const _layout = () => {
     <Stack>
       <Stack.Screen name="createforn" options={{ headerShown: false }} />
       <Stack.Screen name="goalsedit" options={{ headerShown: false }} />
+      <Stack.Screen name="editgoalform" options={{ headerShown: false }} />
     </Stack>
   );
 };

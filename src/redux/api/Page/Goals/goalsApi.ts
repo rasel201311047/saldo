@@ -22,6 +22,36 @@ export const balanceApi = api.injectEndpoints({
       providesTags: ["Goals"],
     }),
 
+    // complete
+    patchGoalsComplete: builder.mutation({
+      query: (id: string) => ({
+        url: `goals/${id}/complete`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    // delete
+    deleteGoal: builder.mutation({
+      query: (id: string) => ({
+        url: `goals/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    // add progress
+    addGoalProgress: builder.mutation<
+      any,
+      { id: string; data: { amount: number } }
+    >({
+      query: ({ id, data }) => ({
+        url: `goals/${id}/progress`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Goals"],
+    }),
     getBorrowedShowing: builder.query({
       query: () => ({
         url: "borrowed",
@@ -88,6 +118,9 @@ export const balanceApi = api.injectEndpoints({
 export const {
   useGetGoalShowingQuery,
   useGetSingleGoalDetailsQuery,
+  usePatchGoalsCompleteMutation,
+  useAddGoalProgressMutation,
+  useDeleteGoalMutation,
   useGetBorrowedShowingQuery,
   useGetSingleBorrowedDetailsQuery,
   useGetLentShowingQuery,

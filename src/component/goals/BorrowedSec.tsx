@@ -74,7 +74,12 @@ const BorrowedSec = () => {
         getBorrowedShowing?.data?.borrowed.map((item, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => router.push("/goalsedit")}
+            onPress={() =>
+              router.push({
+                params: { id: item?.id, type: "borrowed" },
+                pathname: "/goalsedit",
+              })
+            }
             className="bg-[#242333] rounded-2xl p-4 mb-6"
           >
             {/* Header */}

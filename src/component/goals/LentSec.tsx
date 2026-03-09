@@ -76,7 +76,12 @@ const LentSec = () => {
         getLentShowing?.data?.lent.map((lent, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => router.push("/goalsedit")}
+            onPress={() =>
+              router.push({
+                params: { id: lent?.id, type: "lent" },
+                pathname: "/goalsedit",
+              })
+            }
             className="bg-[#242333] rounded-2xl p-4 mb-6"
           >
             {/* Header */}

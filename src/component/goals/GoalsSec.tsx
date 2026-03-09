@@ -80,7 +80,7 @@ const GoalsSec = () => {
               key={index}
               onPress={() =>
                 router.push({
-                  params: { id: goal?.id },
+                  params: { id: goal?.id, type: "goal" },
                   pathname: "/goalsedit",
                 })
               }
