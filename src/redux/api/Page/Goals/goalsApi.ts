@@ -1,4 +1,38 @@
 import { api } from "../../../baseApi";
+interface GoalData {
+  name: string;
+  targetAmount: number;
+  category: string;
+  accumulatedAmount: number;
+  icon: string;
+  color: string;
+  date: string;
+  notes: string;
+}
+
+interface BorrowedData {
+  name: string;
+  notes: string;
+  icon: string;
+  color: string;
+  amount: number;
+
+  accumulatedAmount: number;
+  lender: string;
+  debtDate: string;
+  payoffDate: string;
+}
+interface LentData {
+  name: string;
+  notes: string;
+  icon: string;
+  color: string;
+  amount: number;
+  accumulatedAmount: number;
+  lender: string;
+  lentDate: string;
+  payoffDate: string;
+}
 
 export const balanceApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -52,6 +86,21 @@ export const balanceApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Goals"],
     }),
+
+    // edit
+
+    editgoalform: builder.mutation<any, { id: string; data: GoalData }>({
+      query: ({ id, data }) => ({
+        url: `goals/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    // ======================
+    // borrowed
+    // =======================
     getBorrowedShowing: builder.query({
       query: () => ({
         url: "borrowed",
@@ -67,6 +116,48 @@ export const balanceApi = api.injectEndpoints({
       }),
       providesTags: ["Goals"],
     }),
+    deleteBorrowed: builder.mutation({
+      query: (id: string) => ({
+        url: `borrowed/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+    // add progress
+    addBorrowedProgress: builder.mutation<
+      any,
+      { id: string; data: { amount: number } }
+    >({
+      query: ({ id, data }) => ({
+        url: `borrowed/${id}/payment`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    patchBorrowedMark: builder.mutation({
+      query: (id: string) => ({
+        url: `borrowed/${id}/paid`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    editBorrowedform: builder.mutation<any, { id: string; data: BorrowedData }>(
+      {
+        query: ({ id, data }) => ({
+          url: `borrowed/${id}`,
+          method: "PATCH",
+          body: data,
+        }),
+        invalidatesTags: ["Goals"],
+      },
+    ),
+
+    // ======================
+    // Lent
+    // =======================
     getLentShowing: builder.query({
       query: () => ({
         url: "lent",
@@ -81,6 +172,23 @@ export const balanceApi = api.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["Goals"],
+    }),
+
+    deleteLent: builder.mutation({
+      query: (id: string) => ({
+        url: `lent/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Goals"],
+    }),
+
+    editLentform: builder.mutation<any, { id: string; data: LentData }>({
+      query: ({ id, data }) => ({
+        url: `lent/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Goals"],
     }),
 
     // ===============================
@@ -116,15 +224,26 @@ export const balanceApi = api.injectEndpoints({
 });
 
 export const {
+  // goal
   useGetGoalShowingQuery,
   useGetSingleGoalDetailsQuery,
   usePatchGoalsCompleteMutation,
   useAddGoalProgressMutation,
   useDeleteGoalMutation,
+  useEditgoalformMutation,
+  // borrowed
   useGetBorrowedShowingQuery,
   useGetSingleBorrowedDetailsQuery,
+  useDeleteBorrowedMutation,
+  useAddBorrowedProgressMutation,
+  usePatchBorrowedMarkMutation,
+  useEditBorrowedformMutation,
+  // lent
   useGetLentShowingQuery,
   useGetSingleLentDetailsQuery,
+  useDeleteLentMutation,
+  useEditLentformMutation,
+
   usePostGoalsAddNewGoalMutation,
   usePostBorrowedAddNewGoalMutation,
   usePostLentAddNewGoalMutation,

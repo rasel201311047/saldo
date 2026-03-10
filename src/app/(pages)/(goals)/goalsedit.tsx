@@ -3,18 +3,21 @@ import GradientBackground from "@/src/component/background/GradientBackground";
 import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import CompleteModal from "@/src/component/goals/CompleteModal";
 import DeleteModal from "@/src/component/home/DeleteModal";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import {
+  useAddBorrowedProgressMutation,
   useAddGoalProgressMutation,
   useGetSingleBorrowedDetailsQuery,
   useGetSingleGoalDetailsQuery,
   useGetSingleLentDetailsQuery,
-} from "@/src/redux/api/Page/Goals/goalsApi"; // adjust import path if needed
+} from "@/src/redux/api/Page/Goals/goalsApi";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { skipToken } from "@reduxjs/toolkit/query/react"; // for conditional skipping
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   Text,
   TextInput,
@@ -23,12 +26,42 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 const Goalsedit = () => {
   const params = useLocalSearchParams();
   const { id, type } = params;
   const [amount, setAmount] = useState<number | null>(null);
   const [opendelete, setOpenDelete] = useState(false);
   const [openComplete, setOpenComplete] = useState(false);
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   const { data: goalData, isLoading: goalLoading } =
     useGetSingleGoalDetailsQuery(type === "goal" ? id : skipToken);
   const { data: borrowedData, isLoading: borrowedLoading } =
@@ -42,6 +75,9 @@ const Goalsedit = () => {
 
   const [addprogressdata, { isLoading: addProgressLoading }] =
     useAddGoalProgressMutation();
+
+  const [addBorrowedprogressdata, { isLoading: addBorrowedProgressLoading }] =
+    useAddBorrowedProgressMutation();
 
   // Determine which data is active and loading
   let activeData, isLoading;
@@ -69,6 +105,17 @@ const Goalsedit = () => {
         year: "numeric",
       })
     : "No date";
+
+  // date formate
+  const AnyformattedDate = (date?: string) => {
+    return date
+      ? new Date(date).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : "No date";
+  };
 
   // Category / lender handling
   let categoryName = "";
@@ -103,6 +150,12 @@ const Goalsedit = () => {
           data: { amount },
         }).unwrap();
       }
+      if (type === "borrowed") {
+        response = await addBorrowedprogressdata({
+          id: id,
+          data: { amount },
+        }).unwrap();
+      }
 
       if (response.success) {
         setAlertVisible(true);
@@ -125,6 +178,16 @@ const Goalsedit = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <GradientBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#D4AF66" />
+        </View>
+      </GradientBackground>
+    );
+  }
+
   return (
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
@@ -145,7 +208,14 @@ const Goalsedit = () => {
             </LinearGradient>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                params: { id: id, category: type },
+                pathname: "/editgoalform",
+              })
+            }
+          >
             <LinearGradient
               colors={["#b08b4a6c", "#2626a18a"]}
               style={{
@@ -189,14 +259,16 @@ const Goalsedit = () => {
                     Accumulated amount
                   </Text>
                   <Text className="text-white text-[16px] font-semibold mt-1.5">
-                    ${accumulatedAmount.toFixed(2)}
+                    {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                    {accumulatedAmount.toFixed(2)}
                   </Text>
                 </View>
 
                 <View className="w-[48%] bg-[#262233] rounded-2xl p-4">
                   <Text className="text-[#B5B5B5] text-[13px]">Total</Text>
                   <Text className="text-white text-[16px] font-semibold mt-1.5">
-                    ${totalAmount.toFixed(2)}
+                    {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                    {totalAmount.toFixed(2)}
                   </Text>
                 </View>
               </View>
@@ -224,7 +296,13 @@ const Goalsedit = () => {
                         className="bg-[#584C2F] py-4 px-[5%] rounded-xl"
                       >
                         <Text className="text-white text-[13px] font-Inter">
-                          Add
+                          {addProgressLoading || addBorrowedProgressLoading ? (
+                            <View>
+                              <ActivityIndicator size="small" color="#fff" />
+                            </View>
+                          ) : (
+                            "Add"
+                          )}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -243,45 +321,86 @@ const Goalsedit = () => {
                 </View>
               )}
 
-              {type === "borrowed" ||
-                (type === "lent" && (
-                  <View>
-                    {/* date */}
-                    <View className="flex-row justify-between items-center my-4">
-                      <Text className="text-[#B5B5B5] text-[14px] mb-2">
-                        Debt Date
-                      </Text>
-                      <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
-                        <Text className="text-white text-[13px]">
-                          {formattedDate}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View className="flex-row justify-between items-center">
-                      <Text className="text-[#B5B5B5] text-[14px] mb-2">
-                        Lender
-                      </Text>
-
+              {/* borrow */}
+              {type === "borrowed" && (
+                <View>
+                  {/* date */}
+                  <View className="flex-row justify-between items-center my-4">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Debt Date
+                    </Text>
+                    <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
                       <Text className="text-white text-[13px]">
-                        Rasel Islam
+                        {AnyformattedDate(activeData?.lentDate)}
                       </Text>
-                    </View>
-
-                    {/* date */}
-
-                    <View className="flex-row justify-between items-center my-4">
-                      <Text className="text-[#B5B5B5] text-[14px] mb-2">
-                        Payoff Date
-                      </Text>
-                      <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
-                        <Text className="text-white text-[13px]">
-                          {formattedDate}
-                        </Text>
-                      </View>
                     </View>
                   </View>
-                ))}
+
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Lender
+                    </Text>
+
+                    <Text className="text-white text-[13px]">
+                      {" "}
+                      {activeData?.lender}
+                    </Text>
+                  </View>
+
+                  {/* date */}
+
+                  <View className="flex-row justify-between items-center my-4">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Payoff Date
+                    </Text>
+                    <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
+                      <Text className="text-white text-[13px]">
+                        {AnyformattedDate(activeData?.payoffDate)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+
+              {/* len */}
+              {type === "lent" && (
+                <View>
+                  {/* date */}
+                  <View className="flex-row justify-between items-center my-4">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Debt Date
+                    </Text>
+                    <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
+                      <Text className="text-white text-[13px]">
+                        {AnyformattedDate(activeData?.lentDate)}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Lender
+                    </Text>
+
+                    <Text className="text-white text-[13px]">
+                      {activeData?.lender}
+                    </Text>
+                  </View>
+
+                  {/* date */}
+
+                  <View className="flex-row justify-between items-center my-4">
+                    <Text className="text-[#B5B5B5] text-[14px] mb-2">
+                      Payoff Date
+                    </Text>
+                    <View className="self-start bg-[#2A2536] px-4 py-1.5 rounded-full">
+                      <Text className="text-white text-[13px]">
+                        {AnyformattedDate(activeData?.payoffDate)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
 
               {/* Mark as complete */}
               <View className="flex-row justify-between mt-2">
@@ -302,7 +421,7 @@ const Goalsedit = () => {
 
                 {type === "borrowed" && (
                   <TouchableOpacity
-                    // onPress={() => setOpenComplete(true)}
+                    onPress={() => setOpenComplete(true)}
                     className=" border border-[#E6C27A] px-3 py-1 items-center justify-center rounded-xl "
                   >
                     <Text className="text-[#fff] text-[15px]">
@@ -336,12 +455,14 @@ const Goalsedit = () => {
 
         <DeleteModal
           theDeleteId={id}
+          catagory={type}
           opendelete={opendelete}
           setOpendelete={() => setOpenDelete(false)}
         />
 
         <CompleteModal
           theCompleteId={id}
+          catagory={type}
           openComplete={openComplete}
           setOpenComplete={() => setOpenComplete(false)}
         />

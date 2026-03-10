@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { logoutUser } from "@/src/redux/api/Auth/authSlice";
 import { useDispatch } from "react-redux";
 import SuccessModal from "../auth/SuccessModal";
@@ -24,6 +25,8 @@ const Genaral = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const [successmodal, setsuccessmodal] = useState(false);
   const [alertErrorVisible, setAlertErrorVisible] = useState(false);
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   const dispatch = useDispatch();
   const logoutHandler = async () => {
     try {
@@ -42,20 +45,21 @@ const Genaral = () => {
     }
   };
 
+  console.log(getProfileData?.data?.profilePicture);
   return (
     <ScrollView className="flex-1 ">
       {/* Profile Section */}
       <View className="  mx-auto my-3 ">
-        <View className="flex-row items-center">
+        <View className="flex-row items-center justify-center">
           <View className="w-24 h-24 rounded-full justify-center items-center ">
             <Image
-              source={{ uri: "https://i.ibb.co/27NB7NcJ/user-12.png" }}
+              source={{ uri: getProfileData?.data?.profilePicture }}
               className="w-full h-full rounded-full"
             />
           </View>
         </View>
         <Text className="text-xl mt-2 text-[#FFFFFF] font-JosefinSansSemiBold">
-          Rasel Islam
+          {getProfileData?.data?.fullName}
         </Text>
       </View>
 

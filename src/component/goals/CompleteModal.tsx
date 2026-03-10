@@ -1,9 +1,13 @@
 import { HomeImg } from "@/assets/home/homeimg";
-import { usePatchGoalsCompleteMutation } from "@/src/redux/api/Page/Goals/goalsApi";
+import {
+  usePatchBorrowedMarkMutation,
+  usePatchGoalsCompleteMutation,
+} from "@/src/redux/api/Page/Goals/goalsApi";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   Modal,
   Pressable,
@@ -14,17 +18,21 @@ import {
 import CustomAlert from "../customAlart/CustomAlert";
 interface SetupBudgetProps {
   theCompleteId: string;
+  catagory: string;
   openComplete: boolean;
   setOpenComplete: (v: boolean) => void;
 }
 
 const CompleteModal: React.FC<SetupBudgetProps> = ({
   theCompleteId,
+  catagory,
   openComplete,
   setOpenComplete,
 }) => {
   const [completethegoal, { isLoading: isLoadingGoal }] =
     usePatchGoalsCompleteMutation();
+  const [markRepaid, { isLoading: isLoadingmarkRepaid }] =
+    usePatchBorrowedMarkMutation();
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTittle, setAlertTittle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -33,7 +41,14 @@ const CompleteModal: React.FC<SetupBudgetProps> = ({
 
   const handleTheComplete = async () => {
     try {
-      const res = await completethegoal(theCompleteId).unwrap();
+      let res;
+
+      if (catagory === "goal") {
+        res = await completethegoal(theCompleteId).unwrap();
+      } else if (catagory === "borrowed") {
+        res = await markRepaid(theCompleteId).unwrap();
+      }
+
       if (res.success) {
         router.back();
       } else {
@@ -76,7 +91,7 @@ const CompleteModal: React.FC<SetupBudgetProps> = ({
               <Image source={HomeImg.completeicon} className="w-full h-full" />
             </View>
             <Text className="text-[#FFFFFF] w-[80%] mx-auto font-Inter text-center  text-xl font-bold">
-              Complete Goal
+              {catagory === "goal" ? " Complete Goal" : "Mark as Repaid"}
             </Text>
             <View className="flex-row items-center gap-2">
               <TouchableOpacity
@@ -91,7 +106,21 @@ const CompleteModal: React.FC<SetupBudgetProps> = ({
                 className="bg-[#38B27A] my-[1%] py-2 w-[45%]  rounded-lg justify-center items-center"
               >
                 <Text className="text-base text-[#fff] font-Inter">
-                  {isLoadingGoal ? "Completing..." : "Yes, complete it"}
+                  {catagory === "goal" ? (
+                    isLoadingGoal ? (
+                      <View>
+                        <ActivityIndicator size="small" color="#fff" />
+                      </View>
+                    ) : (
+                      "Yes, complete it"
+                    )
+                  ) : isLoadingmarkRepaid ? (
+                    <View>
+                      <ActivityIndicator size="small" color="#fff" />
+                    </View>
+                  ) : (
+                    "Yes, Repaid it"
+                  )}
                 </Text>
               </TouchableOpacity>
             </View>

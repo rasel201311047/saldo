@@ -10,6 +10,7 @@ export const calendarApi = api.injectEndpoints({
         url: "notifications/me",
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals", "Auth", "Profile"],
     }),
 
     // =================================
@@ -20,6 +21,7 @@ export const calendarApi = api.injectEndpoints({
         url: "balances/current-balance",
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
     }),
 
     // =================================
@@ -37,6 +39,7 @@ export const calendarApi = api.injectEndpoints({
         url: `budgets/transactions-by-range?startDate=${startDate}&endDate=${endDate}`,
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
     }),
     // ================================
     //  EARNING SPENDING
@@ -47,6 +50,7 @@ export const calendarApi = api.injectEndpoints({
         url: `balances/monthly-summary?month=${data}`,
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
     }),
 
     //=================================
@@ -57,6 +61,7 @@ export const calendarApi = api.injectEndpoints({
         url: `/analytics/income-vs-expenses?year=${year}`,
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
     }),
 
     getBalanceTred: builder.query({
@@ -64,12 +69,34 @@ export const calendarApi = api.injectEndpoints({
         url: `/analytics/balance-trend?year=${year}&month=${month}`,
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
     }),
     getSpendingCategory: builder.query({
       query: ({ year, month }: { year: number; month: number }) => ({
         url: `analytics/spending-by-category?year=${year}&month=${month}`,
         method: "GET",
       }),
+      providesTags: ["Balance", "Goals"],
+    }),
+    //=================================
+    //  budget
+    // ================================
+
+    getBudgeDatawithfilter: builder.query({
+      query: (status: string) => ({
+        url: `budgets?status=${status}`,
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
+    }),
+
+    postBudgeData: builder.mutation({
+      query: (data) => ({
+        url: "budgets",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Balance", "Goals"],
     }),
   }),
 
@@ -84,4 +111,6 @@ export const {
   useGetReportDataQuery,
   useGetBalanceTredQuery,
   useGetSpendingCategoryQuery,
+  useGetBudgeDatawithfilterQuery,
+  usePostBudgeDataMutation,
 } = calendarApi;

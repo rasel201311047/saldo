@@ -1,5 +1,6 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
 import PhoneCodeModal from "@/src/component/profile/PhoneCodeModal";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetAllCountriesQuery } from "@/src/redux/phonenumber/countriesApi";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -16,34 +17,45 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 type ProfileForm = {
   fullName: string;
   phone: string;
   location: string;
+  country: string;
+  currency: string;
+  language: string;
 };
+
 type PickerCountry = {
   cca2: string;
   name: string;
   phoneCode: string;
   flag: string;
 };
+
 const DEFAULT_PHONE_CODE = "+975";
+
 const ProfileSetting = () => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   const { data: phonecodenumbe = [], isLoading } = useGetAllCountriesQuery();
 
   const [profileImage, setProfileImage] = useState(
     "https://i.ibb.co/27NB7NcJ/user-12.png",
   );
-  const [name, setName] = useState("Claudiu");
+  const [name, setName] = useState("");
 
   const [form, setForm] = useState<ProfileForm>({
     fullName: "",
     phone: DEFAULT_PHONE_CODE,
     location: "",
+    country: "",
+    currency: "",
+    language: "",
   });
 
   const [searchText, setSearchText] = useState("");
-  //   phonw
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<PickerCountry | null>(
@@ -60,19 +72,71 @@ const ProfileSetting = () => {
     }));
   }, [phonecodenumbe]);
 
+  /* ================= Populate form with user data ================= */
+  useEffect(() => {
+    if (getProfileData?.data) {
+      const userData = getProfileData.data;
+
+      // Set name
+      setName(userData.fullName || "");
+
+      // Set profile image if available
+      if (userData.profilePicture) {
+        setProfileImage(userData.profilePicture);
+      }
+
+      // Extract phone number and code
+      const mobileNumber = userData.mobileNumber || "";
+      let phoneCode = DEFAULT_PHONE_CODE;
+      let phoneNum = mobileNumber;
+
+      // Try to find country by name from user data
+      if (countries.length && userData.country) {
+        const countryFromData = countries.find(
+          (c) => c.name.toLowerCase() === userData.country?.toLowerCase(),
+        );
+        if (countryFromData) {
+          phoneCode = countryFromData.phoneCode;
+          // Remove the phone code from the mobile number if it starts with it
+          if (mobileNumber.startsWith(phoneCode.replace("+", ""))) {
+            phoneNum = mobileNumber.substring(phoneCode.length - 1);
+          }
+        }
+      }
+
+      setPhoneNumber(phoneNum);
+
+      // Set form data
+      setForm({
+        fullName: userData.fullName || "",
+        phone: `${phoneCode}${phoneNum}`,
+        location: userData.country || "",
+        country: userData.country || "",
+        currency: userData.currency || "",
+        language: userData.language || "",
+      });
+    }
+  }, [getProfileData, countries]);
+
   /* ================= Pre-select country by code ================= */
   useEffect(() => {
-    if (countries.length && !selectedCountry) {
-      const country = countries.find((c) => c.phoneCode === DEFAULT_PHONE_CODE);
+    if (countries.length && !selectedCountry && form.country) {
+      // First try to find by country name
+      let country = countries.find(
+        (c) => c.name.toLowerCase() === form.country.toLowerCase(),
+      );
+
+      // If not found by name, try by phone code
+      if (!country) {
+        const phoneCode = form.phone.replace(phoneNumber, "");
+        country = countries.find((c) => c.phoneCode === phoneCode);
+      }
+
       if (country) {
         setSelectedCountry(country);
-        setForm((p) => ({
-          ...p,
-          phone: `${country.phoneCode}${phoneNumber}`,
-        }));
       }
     }
-  }, [countries]);
+  }, [countries, form.country, form.phone, phoneNumber]);
 
   const filteredCountries = countries.filter((c) =>
     c.name.toLowerCase().includes(searchText.toLowerCase()),
@@ -90,11 +154,12 @@ const ProfileSetting = () => {
       });
     }
   };
+
   /* ================= Loading ================= */
-  if (isLoading || !selectedCountry) {
+  if (isLoading || profileLoading || !selectedCountry) {
     return (
       <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#c9a35a" />
       </View>
     );
   }
@@ -121,8 +186,17 @@ const ProfileSetting = () => {
     setForm((p) => ({
       ...p,
       phone: `${country.phoneCode}${phoneNumber}`,
+      country: country.name,
     }));
     setShowCountryPicker(false);
+  };
+
+  const handleSave = () => {
+    // Handle save logic here
+    console.log("Saving profile:", {
+      ...form,
+      profileImage,
+    });
   };
 
   return (
@@ -172,9 +246,12 @@ const ProfileSetting = () => {
           <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
             <TextInput
               value={name}
-              onChangeText={setName}
+              onChangeText={(text) => {
+                setName(text);
+                setForm({ ...form, fullName: text });
+              }}
               placeholder="Your Name"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#666"
               className="text-white text-base"
             />
           </View>
@@ -216,7 +293,7 @@ const ProfileSetting = () => {
                 keyboardType="phone-pad"
                 value={phoneNumber}
                 onChangeText={handlePhoneChange}
-                placeholderTextColor={"#fff"}
+                placeholderTextColor={"#666"}
                 className="flex-1 px-4 py-3 text-white"
               />
             </View>
@@ -228,10 +305,10 @@ const ProfileSetting = () => {
           </Text>
           <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
             <TextInput
-              //   value={name}
-              //   onChangeText={setName}
-              placeholder="Bangladesh"
-              placeholderTextColor="#fff"
+              value={form.country}
+              onChangeText={(text) => setForm({ ...form, country: text })}
+              placeholder="Country"
+              placeholderTextColor="#666"
               className="text-white text-base"
             />
           </View>
@@ -242,10 +319,10 @@ const ProfileSetting = () => {
           </Text>
           <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
             <TextInput
-              //   value={name}
-              //   onChangeText={setName}
-              placeholder="USD"
-              placeholderTextColor="#fff"
+              value={form.currency}
+              onChangeText={(text) => setForm({ ...form, currency: text })}
+              placeholder="Currency"
+              placeholderTextColor="#666"
               className="text-white text-base"
             />
           </View>
@@ -256,15 +333,16 @@ const ProfileSetting = () => {
           </Text>
           <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
             <TextInput
-              //   value={name}
-              //   onChangeText={setName}
+              value={form.language}
+              onChangeText={(text) => setForm({ ...form, language: text })}
               placeholder="Language"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#666"
               className="text-white text-base"
             />
           </View>
+
           {/* SAVE BUTTON */}
-          <TouchableOpacity className="mb-10">
+          <TouchableOpacity onPress={handleSave} className="mb-10">
             <LinearGradient
               colors={["#e3bf75", "#b08b4a"]}
               className="py-4 rounded-xl items-center"
@@ -274,8 +352,8 @@ const ProfileSetting = () => {
             </LinearGradient>
           </TouchableOpacity>
         </ScrollView>
-        {/* ================= Country Picker Modal ================= */}
 
+        {/* ================= Country Picker Modal ================= */}
         <PhoneCodeModal
           visible={showCountryPicker}
           onClose={() => setShowCountryPicker(false)}

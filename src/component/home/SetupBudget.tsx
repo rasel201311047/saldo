@@ -1,3 +1,5 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import { usePostBudgeDataMutation } from "@/src/redux/api/Page/calendar/calendarApi";
 import { Feather } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,8 +13,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import CustomAlert from "../customAlart/CustomAlert";
 import DeleteModal from "./DeleteModal";
-type Period = "Weekly" | "Monthly" | "Yearly";
+type Period = "Weekly" | "Monthly";
 
 interface SetupBudgetProps {
   open: boolean;
@@ -28,15 +31,40 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
   setOpen,
   selected,
 }) => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  const [postdatabudge, { isLoading: isLoadbudge }] =
+    usePostBudgeDataMutation();
   const [opendelete, setOpendelete] = useState(false);
-  const [period, setPeriod] = useState<Period>("Weekly");
+  const [period, setPeriod] = useState<Period>("WEEKLY");
   const [showPeriod, setShowPeriod] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
 
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState(getProfileData?.data?.currency);
   const [showCurrency, setShowCurrency] = useState(false);
-  const currencyOptions = ["USD", "EUR", "GBP", "JPY", "AUD"];
+  // alart
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
+  const handleBudge = async () => {
+    const playload = {
+      category: selected?.title,
+      budgetValue: Number(amount),
+      status: period,
+    };
+
+    console.log(playload);
+
+    try {
+      const response = await postdatabudge(playload).unwrap();
+      console.log("Budget Added:", response);
+      setOpen(false);
+    } catch (error) {
+      console.log("Budget Error:", error);
+    }
+  };
   return (
     <Modal visible={open} transparent animationType="fade">
       <View className="flex-1 bg-black/60 justify-center items-center">
@@ -64,7 +92,7 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
 
               {showPeriod && (
                 <View className="absolute right-0 top-9 bg-[#222232] rounded-lg border border-[#4F4F59] overflow-hidden z-50">
-                  {["Weekly", "Monthly", "Yearly"].map((p) => (
+                  {["WEEKLY", "MONTHLY"].map((p) => (
                     <Pressable
                       key={p}
                       onPress={() => {
@@ -115,32 +143,8 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
                   <Text className="text-white font-Inter text-sm">
                     {currency}
                   </Text>
-                  <Entypo name="chevron-down" size={20} color="#fff" />
                 </View>
               </Pressable>
-
-              {showCurrency && (
-                <View className="absolute right-0 top-12 bg-[#584C2F] rounded-lg border border-[#4F4F59] overflow-hidden z-50">
-                  {currencyOptions.map((c) => (
-                    <Pressable
-                      key={c}
-                      onPress={() => {
-                        setCurrency(c);
-                        setShowCurrency(false);
-                      }}
-                      className="px-2 py-2"
-                    >
-                      <Text
-                        className={`text-sm font-Inter ${
-                          currency === c ? "text-[#FAD885]" : "text-white"
-                        }`}
-                      >
-                        {c}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-              )}
             </View>
 
             <Pressable
@@ -161,7 +165,7 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
               >
                 <Text className="text-white text-sm">Cancel</Text>
               </Pressable>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleBudge}>
                 <LinearGradient
                   colors={["#FAD885", "#C49F59", "#8A622A"]}
                   style={{ borderRadius: 8 }}
@@ -177,6 +181,22 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
       <DeleteModal
         opendelete={opendelete}
         setOpendelete={() => setOpendelete(false)}
+      />
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTittle}
+        message={alertMessage}
+        onConfirm={() => {
+          console.log("Confirmed");
+          setAlertVisible(false);
+        }}
+        // onCancel={() => {
+        //   console.log("Cancelled");
+        //   setAlertVisible(false);
+        // }}
+        type={"error"}
+        confirmText={"OK"}
+        cancelText="Cancel"
       />
     </Modal>
   );

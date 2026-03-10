@@ -4,7 +4,13 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 const getCurrencySymbol = (code?: string) => {
   if (!code) return "";
 
@@ -47,6 +53,13 @@ const LentSec = () => {
   const saved = 500;
   const progress = (saved / target) * 100;
 
+  if (isLentShowingLoading || profileLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#E5C274" />
+      </View>
+    );
+  }
   return (
     <ScrollView className="flex-1 pt-4">
       {/* ===== TOP SUMMARY ===== */}

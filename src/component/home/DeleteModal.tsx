@@ -1,4 +1,8 @@
-import { useDeleteGoalMutation } from "@/src/redux/api/Page/Goals/goalsApi";
+import {
+  useDeleteBorrowedMutation,
+  useDeleteGoalMutation,
+  useDeleteLentMutation,
+} from "@/src/redux/api/Page/Goals/goalsApi";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -13,23 +17,37 @@ import {
 import CustomAlert from "../customAlart/CustomAlert";
 interface SetupBudgetProps {
   theDeleteId: string;
+  catagory: string;
   opendelete: boolean;
   setOpendelete: (v: boolean) => void;
 }
 
 const DeleteModal: React.FC<SetupBudgetProps> = ({
   theDeleteId,
+  catagory,
   opendelete,
   setOpendelete,
 }) => {
   const [deletethegoal, { isLoading: isLoadingGoal }] = useDeleteGoalMutation();
+  const [deletetheBorrowed, { isLoading: isLoadingBorrowed }] =
+    useDeleteBorrowedMutation();
+
+  const [deletetheLent, { isLoading: isLoadingLent }] = useDeleteLentMutation();
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTittle, setAlertTittle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
   const handleDelete = async () => {
     try {
-      const res = await deletethegoal(theDeleteId).unwrap();
+      let res;
+      if (catagory === "goal") {
+        res = await deletethegoal(theDeleteId).unwrap();
+      } else if (catagory === "borrowed") {
+        res = await deletetheBorrowed(theDeleteId).unwrap();
+      } else if (catagory === "lent") {
+        res = await deletetheLent(theDeleteId).unwrap();
+      }
+
       if (res.success) {
         router.back();
       } else {
@@ -77,7 +95,7 @@ const DeleteModal: React.FC<SetupBudgetProps> = ({
               className="bg-[#EE2626] my-[1%] py-2 w-full  rounded-lg justify-center items-center"
             >
               <Text className="text-base text-[#fff] font-Inter">
-                {isLoadingGoal ? (
+                {isLoadingGoal || isLoadingBorrowed || isLoadingLent ? (
                   <View>
                     <ActivityIndicator size="small" color="#D4AF66" />
                   </View>
