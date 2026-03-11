@@ -1,10 +1,16 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import {
+  useOtpresendValidationMutation,
+  useVerifyCodeMutation,
+} from "@/src/redux/api/Auth/authApi";
 import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   NativeSyntheticEvent,
   Platform,
@@ -20,15 +26,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Verify: React.FC = () => {
   // get the type
   const { typeOfvarification } = useLocalSearchParams();
-  //min
-  const [timeLeft, setTimeLeft] = useState(20);
+  const email = Array.isArray(typeOfvarification)
+    ? typeOfvarification[0]
+    : typeOfvarification || "";
+
+  // Timer state
+  const [timeLeft, setTimeLeft] = useState(180);
   const [canResend, setCanResend] = useState(false);
-  // ======================
-  // otp
-  // ======================
+
+  // API mutations
+  const [verifyCode, { isLoading: isLoadingVerifyCode }] =
+    useVerifyCodeMutation();
+  const [resendCode, { isLoading: isLoadingResendCode }] =
+    useOtpresendValidationMutation();
+
+  // OTP state
   const otpRefs = useRef<(RNTextInput | null)[]>([]);
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   // Handle OTP input
   const handleOTP = (text: string, index: number): void => {
     const numericText = text.replace(/[^0-9]/g, "");
@@ -53,10 +68,9 @@ const Verify: React.FC = () => {
       otpRefs.current[index - 1]?.focus();
     }
   };
-  // ============
+
   // Countdown timer
-  // ============
-  React.useEffect(() => {
+  useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (timeLeft > 0) {
@@ -81,21 +95,84 @@ const Verify: React.FC = () => {
   };
 
   // Resend handler
-  const handleResend = () => {
-    setTimeLeft(20);
-    console.log("Resend OTP triggered");
+  const handleResend = async () => {
+    if (!email) {
+      Alert.alert("Error", "Email is required");
+      return;
+    }
+
+    try {
+      const response = await resendCode({
+        email: email,
+      }).unwrap();
+
+      if (response?.success) {
+        setTimeLeft(180);
+        Alert.alert(
+          "Success",
+          "Verification code has been resent to your email",
+        );
+      }
+    } catch (error: any) {
+      console.error("Resend error:", error);
+
+      const errorMessage =
+        error?.data?.message ||
+        error?.data?.error?.message ||
+        error?.message ||
+        "Failed to resend code. Please try again.";
+
+      Alert.alert("Error", errorMessage);
+    }
   };
 
-  // handel send OTP
-  const handleVarification = async () => {
+  // Handle verification
+  const handleVerification = async () => {
     const code = otp.join("");
-    console.log("===========================", code);
-    console.log(code);
-    if (typeOfvarification === "signup") {
-      router.replace("/setupprofile");
+
+    // Validate OTP
+    if (code.length < 6) {
+      Alert.alert("Error", "Please enter complete 6-digit code");
+      return;
     }
-    if (typeOfvarification === "forget") {
-      router.replace("/resetpassword");
+
+    if (!email) {
+      Alert.alert("Error", "Email is required");
+      return;
+    }
+
+    try {
+      const response = await verifyCode({
+        email: email,
+        otp: code,
+      }).unwrap();
+
+      if (response?.success) {
+        Alert.alert("Success", "Email verified successfully!", [
+          {
+            text: "OK",
+            onPress: () =>
+              router.push({
+                pathname: "/resetpassword",
+                params: { email: email, otp: code },
+              }),
+          },
+        ]);
+      }
+    } catch (error: any) {
+      console.error("Verification error:", error);
+
+      const errorMessage =
+        error?.data?.message ||
+        error?.data?.error?.message ||
+        error?.message ||
+        "Failed to verify code. Please try again.";
+
+      Alert.alert("Error", errorMessage);
+
+      // Clear OTP fields on error
+      setOtp(["", "", "", "", "", ""]);
+      otpRefs.current[0]?.focus();
     }
   };
 
@@ -126,12 +203,12 @@ const Verify: React.FC = () => {
                   OTP Verification
                 </Text>
 
-                <Text className="text-gray-200 mt-2 text-center  text-base font-Inter">
+                <Text className="text-gray-200 mt-2 text-center text-base font-Inter">
                   Enter the 6 digits code that you received on {"\n"}
-                  your email
+                  {email ? email : "your email"}
                 </Text>
 
-                {/* OTP */}
+                {/* OTP Input Fields */}
                 <View className="flex-row gap-2 justify-center my-5">
                   {otp.map((value, index) => (
                     <RNTextInput
@@ -143,11 +220,11 @@ const Verify: React.FC = () => {
                       }}
                       className={`border-2 ${
                         value ? "border-[#C49F59]" : "border-[#c49f5960]"
-                      }  p-2  text-center text-[#fff] rounded-lg bg-transparent font-LexendBold text-3xl`}
+                      } p-2 text-center text-[#fff] rounded-lg bg-transparent font-LexendBold text-3xl`}
                       keyboardType="numeric"
                       maxLength={1}
                       autoFocus={index === 0}
-                      editable={!isSubmitting}
+                      editable={!isLoadingVerifyCode}
                       selectionColor={"#fff"}
                       onChangeText={(text) => handleOTP(text, index)}
                       onKeyPress={(e) => handleKeyPress(index, value, e)}
@@ -156,51 +233,49 @@ const Verify: React.FC = () => {
                   ))}
                 </View>
 
-                {!canResend ? (
-                  <Text className="mt-10 text-center font-Inter text-[#fff] font-bold text-sm">
-                    Resend Code{" "}
-                    <Text className="text-[#fff] font-Inter font-normal text-sm">
-                      {formatTime(timeLeft)}
-                    </Text>
-                  </Text>
-                ) : (
-                  <Text className="mt-10 text-center font-Inter font-bold text-md"></Text>
-                )}
-
-                {/* Send Button */}
-                {!canResend ? (
-                  <TouchableOpacity
-                    onPress={handleVarification}
-                    activeOpacity={0.8}
-                    className="my-4"
-                  >
-                    <LinearGradient
-                      colors={["#B08A4A", "#E0B66A"]}
-                      style={{ borderRadius: 8 }}
-                      className="  py-4 items-center"
-                    >
-                      <Text className="text-white font-semibold text-base">
-                        send
+                {/* Timer / Resend Text */}
+                <Text className="mt-10 text-center font-Inter text-[#fff] font-bold text-sm">
+                  {!canResend ? (
+                    <>
+                      Resend Code in{" "}
+                      <Text className="text-[#fff] font-Inter font-normal text-sm">
+                        {formatTime(timeLeft)}
                       </Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={handleResend}
-                    activeOpacity={0.8}
-                    className="my-4"
-                  >
-                    <LinearGradient
-                      colors={["#B08A4A", "#E0B66A"]}
-                      style={{ borderRadius: 8 }}
-                      className="  py-4 items-center"
-                    >
-                      <Text className="text-white font-semibold text-base">
+                    </>
+                  ) : (
+                    <>
+                      Didn't receive the code?{" "}
+                      <Text
+                        onPress={handleResend}
+                        className="text-[#C49F59] font-bold"
+                      >
                         Resend
                       </Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                )}
+                    </>
+                  )}
+                </Text>
+
+                {/* Verify Button */}
+                <TouchableOpacity
+                  onPress={handleVerification}
+                  activeOpacity={0.8}
+                  className="my-4"
+                  disabled={isLoadingVerifyCode}
+                >
+                  <LinearGradient
+                    colors={["#B08A4A", "#E0B66A"]}
+                    style={{ borderRadius: 8 }}
+                    className="py-4 items-center"
+                  >
+                    {isLoadingVerifyCode ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text className="text-white font-semibold text-base">
+                        Verify
+                      </Text>
+                    )}
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </KeyboardAvoidingView>

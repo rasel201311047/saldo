@@ -137,8 +137,8 @@ const AddNewAccountForm = () => {
 
       if (response.success) {
         setAlertVisible(true);
-        setAlertTittle("Validation Error");
-        setAlertMessage("Please enter an account name");
+        setAlertTittle("Success");
+        setAlertMessage(response.message);
         setAlertType("success");
       }
     } catch (error: any) {

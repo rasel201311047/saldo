@@ -1,9 +1,13 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
+import { usePostChangePasswordMutation } from "@/src/redux/api/Page/profile/profileApi";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -15,12 +19,65 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Changepassword = () => {
+  const [changePassword, { isLoading }] = usePostChangePasswordMutation();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  // alart
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+
+  const handleSavePassword = async () => {
+    // Validation
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      Alert.alert("Error", "New password and confirm password do not match");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      Alert.alert("Error", "New password must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      const response = await changePassword({
+        oldPassword,
+        newPassword,
+        confirmPassword,
+      }).unwrap();
+
+      if (response.success) {
+        setAlertVisible(true);
+        setAlertType("success");
+        setAlertTittle("success");
+        setAlertMessage(response?.message);
+      }
+    } catch (error: any) {
+      console.error("Password change error:", error);
+
+      // Handle different error formats
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to change password. Please try again.";
+
+      setAlertVisible(true);
+      setAlertType("error");
+      setAlertTittle("Error");
+      setAlertMessage(errorMessage);
+    }
+  };
+
   return (
     <GradientBackground>
       <SafeAreaView edges={["top"]} className="flex-1">
@@ -36,9 +93,7 @@ const Changepassword = () => {
             </LinearGradient>
           </TouchableOpacity>
 
-          <Text className="text-white text-xl font-bold">
-            Monthly & Weekly Report
-          </Text>
+          <Text className="text-white text-xl font-bold">Change Password</Text>
         </View>
 
         {/* main contain */}
@@ -58,14 +113,14 @@ const Changepassword = () => {
               <Text className="text-[#FFFFFF] text-base font-Inter my-2">
                 Old Password
               </Text>
-              <View className="flex-row items-center bg-transparent  border border-[#C49F59] rounded-xl px-4 py-2 text-sm font-Inter text-[#fff]">
+              <View className="flex-row items-center bg-transparent border border-[#C49F59] rounded-xl px-4 py-2">
                 <TextInput
                   placeholder="*****************"
                   secureTextEntry={!showOld}
                   value={oldPassword}
                   onChangeText={setOldPassword}
                   placeholderTextColor={"#fff"}
-                  className="flex-1 py-3  text-sm font-Inter text-[#fff] "
+                  className="flex-1 py-3 text-sm font-Inter text-[#fff]"
                 />
                 <TouchableOpacity onPress={() => setShowOld(!showOld)}>
                   <Ionicons
@@ -82,14 +137,14 @@ const Changepassword = () => {
               <Text className="text-[#FFFFFF] text-base font-Inter my-2">
                 New Password
               </Text>
-              <View className="flex-row items-center bg-transparent  border border-[#C49F59] rounded-xl px-4 py-2 text-sm font-Inter text-[#fff] ">
+              <View className="flex-row items-center bg-transparent border border-[#C49F59] rounded-xl px-4 py-2">
                 <TextInput
                   placeholder="*****************"
                   secureTextEntry={!showNew}
                   value={newPassword}
                   onChangeText={setNewPassword}
                   placeholderTextColor={"#fff"}
-                  className="flex-1 py-3  text-sm font-Inter text-[#fff] "
+                  className="flex-1 py-3 text-sm font-Inter text-[#fff]"
                 />
                 <TouchableOpacity onPress={() => setShowNew(!showNew)}>
                   <Ionicons
@@ -106,14 +161,14 @@ const Changepassword = () => {
               <Text className="text-[#FFFFFF] text-base font-Inter my-2">
                 Confirm Password
               </Text>
-              <View className="flex-row items-center bg-transparent  border border-[#C49F59] rounded-xl px-4 py-2 text-sm font-Inter text-[#fff]">
+              <View className="flex-row items-center bg-transparent border border-[#C49F59] rounded-xl px-4 py-2">
                 <TextInput
                   placeholder="*****************"
                   secureTextEntry={!showConfirm}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   placeholderTextColor={"#fff"}
-                  className="flex-1 py-3  text-sm font-Inter text-[#fff] "
+                  className="flex-1 py-3 text-sm font-Inter text-[#fff]"
                 />
                 <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
                   <Ionicons
@@ -126,17 +181,44 @@ const Changepassword = () => {
             </View>
 
             {/* Save Button */}
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleSavePassword}
+              disabled={isLoading}
+            >
               <LinearGradient
                 colors={["#B08A4A", "#E0B66A"]}
                 style={{ borderRadius: 8 }}
-                className="  py-4 items-center"
+                className="py-4 items-center"
               >
-                <Text className="text-white font-semibold text-base">Save</Text>
+                {isLoading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text className="text-white font-semibold text-base">
+                    Save
+                  </Text>
+                )}
               </LinearGradient>
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
+
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={alertType}
+          confirmText={"OK"}
+          cancelText="Cancel"
+        />
       </SafeAreaView>
     </GradientBackground>
   );

@@ -1,5 +1,7 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import CustomDatePicker from "@/src/component/custompicker/CustomDatePicker";
+import { usePostStartstateMonthMutation } from "@/src/redux/api/Page/profile/profileApi";
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -14,14 +16,28 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Startmonth = () => {
+  const [dataselectStartMonth, { isLoading: startdateloadin }] =
+    usePostStartstateMonthMutation();
+  function getCurrentDate() {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  }
+
+  console.log(getCurrentDate());
   const [showDate, setShowDate] = useState(false);
-  const [date, setDate] = useState("2026-01-18");
+  const [date, setDate] = useState(getCurrentDate());
 
   // Animation values
   const fadeAnim = useState(new Animated.Value(0))[0];
   const slideAnim = useState(new Animated.Value(50))[0];
   const buttonScale = useState(new Animated.Value(1))[0];
   const pulseAnim = useState(new Animated.Value(1))[0];
+
+  // alart
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -78,10 +94,13 @@ const Startmonth = () => {
       useNativeDriver: true,
     }).start();
   };
-
-  const handleConfirm = (selected: string) => {
+  function getDay(date) {
+    return date.split("-")[2];
+  }
+  const handleConfirm = async (selected: string) => {
     setDate(selected);
     setShowDate(false);
+    console.log(getDay(date));
 
     // Confirmation animation
     Animated.sequence([
@@ -96,6 +115,30 @@ const Startmonth = () => {
         useNativeDriver: true,
       }),
     ]).start();
+
+    try {
+      const res = await dataselectStartMonth({
+        monthStartDate: Number(getDay(date)),
+      }).unwrap();
+      console.log("Success:", res);
+      if (res?.success) {
+        setAlertVisible(true);
+        setAlertType("success");
+        setAlertTittle("success");
+        setAlertMessage(res?.message);
+      } else {
+        setAlertVisible(true);
+        setAlertType("error");
+        setAlertTittle("error");
+        setAlertMessage(res?.message);
+      }
+    } catch (error) {
+      console.log("Error details:", JSON.stringify(error, null, 2));
+      setAlertVisible(true);
+      setAlertType("error");
+      setAlertTittle("Error");
+      setAlertMessage(error?.data?.message);
+    }
   };
 
   return (
@@ -268,7 +311,6 @@ const Startmonth = () => {
                 onPress={() => {
                   // Handle save/confirm action
                   handleConfirm(date);
-                  router.back();
                 }}
                 onPressIn={handleButtonPressIn}
                 onPressOut={handleButtonPressOut}
@@ -304,6 +346,23 @@ const Startmonth = () => {
           date={date}
           onClose={() => setShowDate(false)}
           onConfirm={handleConfirm}
+        />
+
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={alertType}
+          confirmText={"OK"}
+          cancelText="Cancel"
         />
       </SafeAreaView>
     </GradientBackground>

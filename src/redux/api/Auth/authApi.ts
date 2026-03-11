@@ -83,7 +83,7 @@ export const authApi = api.injectEndpoints({
     // =======================varification of data
     verifyCode: builder.mutation({
       query: (data) => ({
-        url: "/auth/verify-email",
+        url: "auth/verify-otp",
         method: "POST",
         body: data,
       }),
@@ -91,19 +91,11 @@ export const authApi = api.injectEndpoints({
     // ======================== resend validation
     otpresendValidation: builder.mutation({
       query: (data) => ({
-        url: "/auth/resend-otp",
+        url: "auth/resend-otp",
         method: "POST",
         body: data,
       }),
-    }),
-
-    // ===========================resend forget otp
-    otpresendForget: builder.mutation({
-      query: (data) => ({
-        url: "/auth/resend-forgot-password-otp",
-        method: "POST",
-        body: data,
-      }),
+      invalidatesTags: ["Auth"],
     }),
 
     // =========================profile data
@@ -118,43 +110,32 @@ export const authApi = api.injectEndpoints({
     // ============================forget password
     forgetPassword: builder.mutation({
       query: (data) => ({
-        url: "/auth/forgot-password",
+        url: "auth/forgot-password",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Auth"],
     }),
-    //========================reset password password
+
+    // ===========================reset password
     resetPassword: builder.mutation({
       query: (data) => ({
-        url: "/auth/reset-password",
+        url: "auth/reset-password",
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Auth"],
     }),
 
-    // =========================log out
-    // logout: builder.mutation<LogOutResponse, void>({
-    //   query: () => ({
-    //     url: "auth/logout",
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: ["Auth", "Profile"],
-
-    //   async onQueryStarted(_, { dispatch, queryFulfilled }) {
-    //     try {
-    //       await queryFulfilled;
-
-    //       // Delete token (secure)
-    //       await SecureStore.deleteItemAsync("token");
-    //       await SecureStore.deleteItemAsync("user");
-
-    //       // Clear Redux state
-    //       dispatch(logoutUser());
-    //     } catch (err) {
-    //       console.log("Logout failed:", err);
-    //     }
-    //   },
-    // }),
+    // edit profile
+    editProfile: builder.mutation({
+      query: (data) => ({
+        url: "auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 
   overrideExisting: false,
@@ -167,8 +148,6 @@ export const {
   useSetupProfileMutation,
   useVerifyCodeMutation,
   useForgetPasswordMutation,
-  useResetPasswordMutation,
-  // useLogoutMutation,
-  useOtpresendForgetMutation,
   useOtpresendValidationMutation,
+  useResetPasswordMutation,
 } = authApi;

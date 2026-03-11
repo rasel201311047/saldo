@@ -30,7 +30,7 @@ const AppInitializer = () => {
 
     if (!token) {
       setNavigated(true);
-      router.replace("/signin");
+      router.replace("/");
       return;
     }
 
@@ -38,7 +38,7 @@ const AppInitializer = () => {
 
     if (isError || !data) {
       setNavigated(true);
-      router.replace("/signin");
+      router.replace("/");
       return;
     }
 
@@ -47,7 +47,7 @@ const AppInitializer = () => {
     if (data?.success && data?.data) {
       router.replace("/calendar");
     } else {
-      router.replace("/index");
+      router.replace("/");
     }
   }, [tokenLoaded, token, isLoading, isError, data, navigated]);
 

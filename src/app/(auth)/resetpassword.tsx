@@ -1,7 +1,9 @@
 import SuccessModal from "@/src/component/auth/SuccessModal";
 import GradientBackground from "@/src/component/background/GradientBackground";
+import { useResetPasswordMutation } from "@/src/redux/api/Auth/authApi";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -20,20 +22,29 @@ interface FormErrors {
 }
 
 export default function Resetpassword() {
+  const { email, otp } = useLocalSearchParams();
+  const [resetpassword, { isLoading: resetPasswordLoading }] =
+    useResetPasswordMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfrimPassword, setShowConfrimPassword] = useState(false);
   const [successmodal, setsuccessmodal] = useState(false);
+  console.log(email, otp);
   const [form, setForm] = useState({
     confrimpassword: "",
     password: "",
   });
+  // alt
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   const [errors, setErrors] = useState<FormErrors>({
     confrimpassword: "",
     password: "",
   });
 
-  const handeleSignin = () => {
+  const handeleSignin = async () => {
     let newErrors: Partial<FormErrors> = {};
 
     if (!form.confrimpassword.trim()) {
@@ -42,8 +53,8 @@ export default function Resetpassword() {
 
     if (!form.password.trim()) {
       newErrors.password = "Password is required";
-    } else if (form.password.length < 6) {
-      newErrors.password = "Please enter a password with at least 6 characters";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Please enter a password with at least 8 characters";
     } else if (form.password !== form.confrimpassword) {
       newErrors.confrimpassword = "cannot match password";
     }
@@ -53,9 +64,30 @@ export default function Resetpassword() {
       password: newErrors.password || "",
     });
 
-    if (!newErrors.confrimpassword && !newErrors.password) {
-      setsuccessmodal(true);
-      console.log("success", form);
+    try {
+      const response = await resetpassword({
+        email: email,
+        otp: otp,
+        newPassword: form.password,
+        confirmPassword: form.confrimpassword,
+      }).unwrap();
+
+      if (response.success) {
+        setsuccessmodal(true);
+      }
+    } catch (error: any) {
+      console.error("Password change error:", error);
+
+      // Handle different error formats
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to change password. Please try again.";
+
+      setAlertVisible(true);
+      setAlertType("error");
+      setAlertTittle("Error");
+      setAlertMessage(errorMessage);
     }
   };
 

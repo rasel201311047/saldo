@@ -94,6 +94,8 @@ const Balance = () => {
               )}
             </View>
           </View>
+
+          <View className="h-96 w-full" />
         </ScrollView>
       </SafeAreaView>
     </Background1>

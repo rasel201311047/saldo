@@ -98,6 +98,25 @@ export const calendarApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Balance", "Goals"],
     }),
+    //=================================
+    //  income add
+    // ================================
+    postIncomeData: builder.mutation({
+      query: (data) => ({
+        url: "balances/income",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Balance", "Goals"],
+    }),
+    postspendingData: builder.mutation({
+      query: (data) => ({
+        url: "balances/spending",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Balance", "Goals"],
+    }),
   }),
 
   overrideExisting: false,
@@ -113,4 +132,7 @@ export const {
   useGetSpendingCategoryQuery,
   useGetBudgeDatawithfilterQuery,
   usePostBudgeDataMutation,
+
+  usePostIncomeDataMutation,
+  usePostspendingDataMutation,
 } = calendarApi;

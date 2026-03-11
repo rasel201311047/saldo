@@ -1,4 +1,6 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CustomAlert from "@/src/component/customAlart/CustomAlert";
+import { useForgetPasswordMutation } from "@/src/redux/api/Auth/authApi";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -17,6 +19,14 @@ interface FormErrors {
 }
 
 export default function Forgot() {
+  const [forgetemail, { isLoading: loadingforgetemail }] =
+    useForgetPasswordMutation();
+  // alt
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+
   const [form, setForm] = useState({
     email: "",
   });
@@ -25,7 +35,7 @@ export default function Forgot() {
     email: "",
   });
 
-  const handeleForgetPassword = () => {
+  const handeleForgetPassword = async () => {
     let newErrors: Partial<FormErrors> = {};
 
     if (!form.email.trim()) {
@@ -39,12 +49,30 @@ export default function Forgot() {
       email: newErrors.email || "",
     });
 
-    if (!newErrors.email) {
-      console.log("Login success", form);
-      router.push({
-        pathname: "/verify",
-        params: { typeOfvarification: "forget" },
-      });
+    try {
+      const response = await forgetemail({
+        email: form.email,
+      }).unwrap();
+
+      if (response.success) {
+        router.push({
+          pathname: "/verify",
+          params: { typeOfvarification: form.email },
+        });
+      }
+    } catch (error: any) {
+      console.error("Password change error:", error);
+
+      // Handle different error formats
+      const errorMessage =
+        error?.data?.message ||
+        error?.message ||
+        "Failed to change password. Please try again.";
+
+      setAlertVisible(true);
+      setAlertType("error");
+      setAlertTittle("Error");
+      setAlertMessage(errorMessage);
     }
   };
 
@@ -102,13 +130,29 @@ export default function Forgot() {
                   className="  py-4 items-center"
                 >
                   <Text className="text-white font-semibold text-base">
-                    Send
+                    {loadingforgetemail ? "Send..." : "Send"}
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+        <CustomAlert
+          visible={alertVisible}
+          title={alertTittle}
+          message={alertMessage}
+          onConfirm={() => {
+            console.log("Confirmed");
+            setAlertVisible(false);
+          }}
+          // onCancel={() => {
+          //   console.log("Cancelled");
+          //   setAlertVisible(false);
+          // }}
+          type={alertType}
+          confirmText={"OK"}
+          cancelText="Cancel"
+        />
       </SafeAreaView>
     </GradientBackground>
   );

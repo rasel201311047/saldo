@@ -1,6 +1,8 @@
 import { BudgetImg } from "@/assets/budget/budgetimg";
 import GradientBackground from "@/src/component/background/GradientBackground";
 import SetupBudget from "@/src/component/home/SetupBudget";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { setCategory } from "@/src/redux/slices/userSlice";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -57,6 +59,7 @@ const Datecatagory = () => {
   const [activeTab, setActiveTab] = useState<"SPENDINGS" | "EARNINGS">(
     "SPENDINGS",
   );
+  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState<CategoryType | null>(null);
   const [openSetup, setOpenSetup] = useState(false);
 
@@ -84,6 +87,12 @@ const Datecatagory = () => {
 
   const handleSelect = (item: CategoryType) => {
     setSelected(item);
+    dispatch(
+      setCategory({
+        title: item.title,
+        image: item.image,
+      }),
+    );
 
     if (activeTab === "SPENDINGS") {
       router.push("/addspending");
