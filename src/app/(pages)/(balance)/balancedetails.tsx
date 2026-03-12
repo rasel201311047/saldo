@@ -289,7 +289,7 @@ const Balancedetails = () => {
 
           <InfoCard
             label="Currency"
-            value={account?.currency}
+            value={getProfileData?.data?.currency}
             icon="money-bill-wave"
             color="#FF9800"
           />

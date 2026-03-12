@@ -1,7 +1,18 @@
+import SuccessModalAll from "@/src/component/auth/SuccessModalAll";
 import GradientBackground from "@/src/component/background/GradientBackground";
+import CountryPickerModal from "@/src/component/profile/CountryPickerModal";
+import CurrencyPickerModal from "@/src/component/profile/CurrencyModalPicker";
+import LanguagePickerModal from "@/src/component/profile/LanguagePickerModal";
 import PhoneCodeModal from "@/src/component/profile/PhoneCodeModal";
+import { useCountryDataPicker } from "@/src/hook/useCountryDataPicker";
 import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
-import { useGetAllCountriesQuery } from "@/src/redux/phonenumber/countriesApi";
+import { useEditProfileMutation } from "@/src/redux/api/Page/profile/profileApi";
+import { Language } from "@/src/redux/language/languageApi";
+import {
+  Country,
+  useGetAllCountriesQuery,
+} from "@/src/redux/phonenumber/countriesApi";
+import { Currency } from "@/src/type/thepicker";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
@@ -39,10 +50,49 @@ const DEFAULT_PHONE_CODE = "+975";
 const ProfileSetting = () => {
   const { data: getProfileData, isLoading: profileLoading } =
     useGetMyProfileQuery();
+
+  const [updateAccount, { isLoading: accountLoading }] =
+    useEditProfileMutation();
+  console.log("lan", getProfileData?.data?.language);
   const { data: phonecodenumbe = [], isLoading } = useGetAllCountriesQuery();
 
+  // State for professional pickers
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(
+    null,
+  );
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(
+    null,
+  );
+
+  // Modal visibility states
+  const [showCountryModal, setShowCountryModal] = useState(false);
+  const [showCurrencyModal, setShowCurrencyModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [successmodal, setSuccessmodal] = useState(false);
+
+  const {
+    countries: cuntryname,
+    popularCountries,
+    isLoadingCountries,
+    isFetchingCountries,
+    isSearchingCountries,
+    hasMoreCountries,
+    loadMoreCountries,
+    setCountrySearch,
+    countrySearchTerm,
+    currencies,
+    isLoadingCurrencies,
+    setCurrencySearch,
+    currencySearchTerm,
+    languages,
+    isLoadingLanguages,
+    setLanguageSearch,
+    languageSearchTerm,
+  } = useCountryDataPicker();
+
   const [profileImage, setProfileImage] = useState(
-    "https://i.ibb.co/27NB7NcJ/user-12.png",
+    "https://i.ibb.co.com/gbnTNDBv/user.png",
   );
   const [name, setName] = useState("");
 
@@ -58,9 +108,6 @@ const ProfileSetting = () => {
   const [searchText, setSearchText] = useState("");
   const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState<PickerCountry | null>(
-    null,
-  );
 
   /* ================= Format Countries ================= */
   const countries = useMemo<PickerCountry[]>(() => {
@@ -71,6 +118,11 @@ const ProfileSetting = () => {
       flag: c.flags.png,
     }));
   }, [phonecodenumbe]);
+
+  console.log(selectedLanguage);
+  console.log(selectedCountry);
+
+  console.log(selectedLanguage);
 
   /* ================= Populate form with user data ================= */
   useEffect(() => {
@@ -98,25 +150,54 @@ const ProfileSetting = () => {
         if (countryFromData) {
           phoneCode = countryFromData.phoneCode;
           // Remove the phone code from the mobile number if it starts with it
-          if (mobileNumber.startsWith(phoneCode.replace("+", ""))) {
-            phoneNum = mobileNumber.substring(phoneCode.length - 1);
-          }
+          // if (mobileNumber.startsWith(phoneCode.replace("+", ""))) {
+          //   phoneNum = mobileNumber.substring(phoneCode.length - 1);
+          // }
         }
       }
 
       setPhoneNumber(phoneNum);
 
+      // Find and set selected country from professional picker data
+      if (cuntryname.length && userData.country) {
+        const country = cuntryname.find(
+          (c) =>
+            c.countryName?.toLowerCase() === userData.country?.toLowerCase(),
+        );
+        if (country) {
+          setSelectedCountry(country);
+        }
+      }
+
+      // Find and set selected currency
+      if (currencies.length && userData.currency) {
+        const currency = currencies.find((c) => c.code === userData.currency);
+        if (currency) {
+          setSelectedCurrency(currency);
+        }
+      }
+
+      // Find and set selected language
+      if (languages.length && userData.language) {
+        const language = languages.find(
+          (l) => l.name.toLowerCase() === userData.language?.toLowerCase(),
+        );
+        if (language) {
+          setSelectedLanguage(language);
+        }
+      }
+
       // Set form data
       setForm({
         fullName: userData.fullName || "",
-        phone: `${phoneCode}${phoneNum}`,
+        phone: `${phoneNum}`,
         location: userData.country || "",
         country: userData.country || "",
         currency: userData.currency || "",
         language: userData.language || "",
       });
     }
-  }, [getProfileData, countries]);
+  }, [getProfileData, countries, cuntryname, currencies, languages]);
 
   /* ================= Pre-select country by code ================= */
   useEffect(() => {
@@ -133,10 +214,16 @@ const ProfileSetting = () => {
       }
 
       if (country) {
-        setSelectedCountry(country);
+        // Find corresponding country in professional picker data
+        const professionalCountry = cuntryname.find(
+          (c) => c.countryName?.toLowerCase() === country.name.toLowerCase(),
+        );
+        if (professionalCountry) {
+          setSelectedCountry(professionalCountry);
+        }
       }
     }
-  }, [countries, form.country, form.phone, phoneNumber]);
+  }, [countries, form.country, form.phone, phoneNumber, cuntryname]);
 
   const filteredCountries = countries.filter((c) =>
     c.name.toLowerCase().includes(searchText.toLowerCase()),
@@ -148,19 +235,95 @@ const ProfileSetting = () => {
     setPhoneNumber(cleaned);
 
     if (selectedCountry) {
-      setForm({
-        ...form,
-        phone: `${selectedCountry.phoneCode}${cleaned}`,
-      });
+      // Find phone code from countries list based on selected country
+      const phoneCountry = countries.find(
+        (c) =>
+          c.name.toLowerCase() === selectedCountry.countryName?.toLowerCase(),
+      );
+      if (phoneCountry) {
+        setForm({
+          ...form,
+          phone: `${phoneCountry.phoneCode}${cleaned}`,
+        });
+      }
     }
   };
 
+  /* ================= Picker Handlers ================= */
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+    setForm((p) => ({
+      ...p,
+      country: country.countryName || "",
+    }));
+
+    // Find and update phone code based on selected country
+    const phoneCountry = countries.find(
+      (c) => c.name.toLowerCase() === country.countryName?.toLowerCase(),
+    );
+    if (phoneCountry) {
+      setForm((p) => ({
+        ...p,
+        phone: `${phoneCountry.phoneCode}${phoneNumber}`,
+      }));
+    }
+
+    // Auto-select currency based on country
+    const currency = currencies.find((c) => c.code === country.currency);
+    if (currency) {
+      setSelectedCurrency(currency);
+      setForm((p) => ({
+        ...p,
+        currency: currency.code,
+      }));
+    }
+
+    setShowCountryModal(false);
+  };
+
+  const handleCurrencySelect = (currency: Currency) => {
+    setSelectedCurrency(currency);
+    setForm((p) => ({
+      ...p,
+      currency: currency.code,
+    }));
+    setShowCurrencyModal(false);
+  };
+
+  const handleLanguageSelect = (lang: Language) => {
+    setSelectedLanguage(lang);
+    setForm((p) => ({
+      ...p,
+      language: lang.name,
+    }));
+    setShowLanguageModal(false);
+  };
+
+  const handlePhoneCountrySelect = (country: PickerCountry) => {
+    // Find corresponding country in professional picker data
+    const professionalCountry = cuntryname.find(
+      (c) => c.countryName?.toLowerCase() === country.name.toLowerCase(),
+    );
+    if (professionalCountry) {
+      setSelectedCountry(professionalCountry);
+    }
+
+    setForm((p) => ({
+      ...p,
+      phone: `${country.phoneCode}${phoneNumber}`,
+      country: country.name,
+    }));
+    setShowCountryPicker(false);
+  };
+
   /* ================= Loading ================= */
-  if (isLoading || profileLoading || !selectedCountry) {
+  if (isLoading || profileLoading) {
     return (
-      <View className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#c9a35a" />
-      </View>
+      <GradientBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#c9a35a" />
+        </View>
+      </GradientBackground>
     );
   }
 
@@ -181,22 +344,113 @@ const ProfileSetting = () => {
     }
   };
 
-  const handleCountrySelect = (country: PickerCountry) => {
-    setSelectedCountry(country);
-    setForm((p) => ({
-      ...p,
-      phone: `${country.phoneCode}${phoneNumber}`,
-      country: country.name,
-    }));
-    setShowCountryPicker(false);
+  // const handleSave = async () => {
+  //   // Handle save logic here
+  //   console.log("Saving profile:", {
+  //     ...form,
+  //     profileImage,
+  //     selectedCountry: selectedCountry?.countryName,
+  //     selectedCurrency: selectedCurrency?.code,
+  //     selectedLanguage:
+  //       getProfileData?.data?.language || selectedLanguage?.name,
+  //   });
+  // };
+
+  const handleSave = async () => {
+    console.log(
+      form.fullName,
+      form.phone,
+      selectedCountry?.countryName,
+      selectedCurrency?.code,
+      selectedLanguage?.name || getProfileData?.data?.language,
+    );
+    const formData = new FormData();
+
+    formData.append("fullName", form.fullName);
+    formData.append("mobileNumber", form.phone);
+    formData.append(
+      "country",
+      selectedCountry?.countryName || getProfileData?.data?.country,
+    );
+    formData.append(
+      "currency",
+      selectedCurrency?.code || getProfileData?.data?.currency,
+    );
+    formData.append(
+      "language",
+      selectedLanguage?.name || getProfileData?.data?.language,
+    );
+
+    if (profileImage) {
+      formData.append("profilePicture", {
+        uri: profileImage,
+        type: "image/jpeg",
+        name: "profile.jpg",
+      });
+    }
+
+    try {
+      const res = await updateAccount(formData).unwrap();
+      console.log("Profile Updated:", res);
+      setSuccessmodal(true);
+    } catch (error) {
+      console.log("Update Error:", error);
+    }
   };
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving profile:", {
-      ...form,
-      profileImage,
-    });
+  // Render selected display components
+  const renderSelectedCountry = () => {
+    if (!selectedCountry) return null;
+
+    return (
+      <View className="flex-row items-center">
+        <Text className="text-2xl mr-2">{selectedCountry.flagEmoji}</Text>
+        <Text className="text-white text-base" numberOfLines={1}>
+          {selectedCountry.countryName}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderSelectedCurrency = () => {
+    if (!selectedCurrency) return null;
+
+    return (
+      <View className="flex-row items-center">
+        <LinearGradient
+          colors={["#FAD885", "#C49F59", "#8A622A"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ borderRadius: 8 }}
+          className="w-6 h-6 rounded-full items-center justify-center mr-2"
+        >
+          <Text className="text-white text-xs font-bold">
+            {selectedCurrency.symbol || selectedCurrency.code.charAt(0)}
+          </Text>
+        </LinearGradient>
+        <Text className="text-white text-base" numberOfLines={1}>
+          {selectedCurrency.code} - {selectedCurrency.name}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderSelectedLanguage = () => {
+    if (!selectedLanguage) return null;
+
+    return (
+      <View className="flex-row items-center">
+        <View className="w-6 h-6 rounded-full bg-[#D6AA63]/20 items-center justify-center mr-2">
+          <Text className="text-[#D6AA63] text-xs font-bold">
+            {selectedLanguage.nativeName?.charAt(0) ||
+              selectedLanguage.name.charAt(0)}
+          </Text>
+        </View>
+        <Text className="text-white text-base" numberOfLines={1}>
+          {selectedLanguage.name}
+        </Text>
+      </View>
+    );
   };
 
   return (
@@ -258,7 +512,7 @@ const ProfileSetting = () => {
 
           {/* Phone */}
           <View>
-            <Text className="text-[#FFFFFF] text-base font-Inter font-bold mb-2 ">
+            <Text className="text-[#FFFFFF] text-base font-Inter font-bold mb-2">
               Mobile Number
             </Text>
 
@@ -269,13 +523,26 @@ const ProfileSetting = () => {
               >
                 {selectedCountry ? (
                   <>
-                    <Image
-                      source={{ uri: selectedCountry.flag }}
-                      className="w-6 h-4 mr-2"
-                    />
-                    <Text className="font-semibold font-Inter text-white">
-                      {selectedCountry.phoneCode}
-                    </Text>
+                    {(() => {
+                      const phoneCountry = countries.find(
+                        (c) =>
+                          c.name.toLowerCase() ===
+                          selectedCountry.countryName?.toLowerCase(),
+                      );
+                      return phoneCountry ? (
+                        <>
+                          <Image
+                            source={{ uri: phoneCountry.flag }}
+                            className="w-6 h-4 mr-2"
+                          />
+                          <Text className="font-semibold font-Inter text-white">
+                            {phoneCountry.phoneCode}
+                          </Text>
+                        </>
+                      ) : (
+                        <Text className="text-white">+975</Text>
+                      );
+                    })()}
                   </>
                 ) : (
                   <Text className="text-gray-500">Code</Text>
@@ -299,47 +566,58 @@ const ProfileSetting = () => {
             </View>
           </View>
 
-          {/* COUNTRY */}
+          {/* COUNTRY - Professional Picker */}
           <Text className="text-[#FFFFFF] text-base font-Inter font-bold my-2">
             Country
           </Text>
-          <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
-            <TextInput
-              value={form.country}
-              onChangeText={(text) => setForm({ ...form, country: text })}
-              placeholder="Country"
-              placeholderTextColor="#666"
-              className="text-white text-base"
-            />
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowCountryModal(true)}
+            className="flex-row items-center justify-between bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-4 mb-5"
+          >
+            {renderSelectedCountry() || (
+              <Text className="text-white/40 text-base">
+                {getProfileData?.data?.country || "Select your country"}
+              </Text>
+            )}
+            <Ionicons name="chevron-down" size={20} color="#D6AA63" />
+          </TouchableOpacity>
 
-          {/* CURRENCY */}
+          {/* CURRENCY - Professional Picker */}
           <Text className="text-[#FFFFFF] text-base font-Inter font-bold mb-2">
             Currency
           </Text>
-          <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
-            <TextInput
-              value={form.currency}
-              onChangeText={(text) => setForm({ ...form, currency: text })}
-              placeholder="Currency"
-              placeholderTextColor="#666"
-              className="text-white text-base"
-            />
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowCurrencyModal(true)}
+            className="flex-row items-center justify-between bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-4 mb-5"
+          >
+            {renderSelectedCurrency() || (
+              <Text className="text-white/40 text-base">
+                {getProfileData?.data?.currency || "Select your currency"}
+              </Text>
+            )}
+            <Ionicons name="chevron-down" size={20} color="#D6AA63" />
+          </TouchableOpacity>
 
-          {/* LANGUAGE */}
+          {/* LANGUAGE - Professional Picker */}
           <Text className="text-[#FFFFFF] text-base font-Inter font-bold mb-2">
             Language
           </Text>
-          <View className="bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-1 mb-5">
-            <TextInput
-              value={form.language}
-              onChangeText={(text) => setForm({ ...form, language: text })}
-              placeholder="Language"
-              placeholderTextColor="#666"
-              className="text-white text-base"
-            />
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowLanguageModal(true)}
+            className="flex-row items-center justify-between bg-[#1c1c1e] border border-[#c9a35a55] rounded-xl px-4 py-4 mb-5"
+          >
+            {renderSelectedLanguage() || (
+              <Text className="text-white text-base">
+                {getProfileData?.data?.language
+                  ? getProfileData?.data?.language
+                  : "Select your language"}
+              </Text>
+            )}
+            <Ionicons name="chevron-down" size={20} color="#D6AA63" />
+          </TouchableOpacity>
 
           {/* SAVE BUTTON */}
           <TouchableOpacity onPress={handleSave} className="mb-10">
@@ -348,19 +626,60 @@ const ProfileSetting = () => {
               className="py-4 rounded-xl items-center"
               style={{ borderRadius: 20 }}
             >
-              <Text className="text-white font-bold text-lg">Save</Text>
+              <Text className="text-white font-bold text-lg">
+                {accountLoading ? "Save..." : "Save"}
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </ScrollView>
 
-        {/* ================= Country Picker Modal ================= */}
+        {/* ================= Modals ================= */}
         <PhoneCodeModal
           visible={showCountryPicker}
           onClose={() => setShowCountryPicker(false)}
           countries={filteredCountries}
           searchText={searchText}
           onSearchChange={setSearchText}
+          onSelect={handlePhoneCountrySelect}
+        />
+
+        <CountryPickerModal
+          visible={showCountryModal}
+          onClose={() => setShowCountryModal(false)}
+          countries={cuntryname}
+          popularCountries={popularCountries}
           onSelect={handleCountrySelect}
+          onSearch={setCountrySearch}
+          isLoading={isLoadingCountries || isSearchingCountries}
+          hasMore={hasMoreCountries}
+          onLoadMore={loadMoreCountries}
+          searchTerm={countrySearchTerm}
+        />
+
+        <CurrencyPickerModal
+          visible={showCurrencyModal}
+          onClose={() => setShowCurrencyModal(false)}
+          currencies={currencies}
+          onSelect={handleCurrencySelect}
+          onSearch={setCurrencySearch}
+          isLoading={isLoadingCurrencies}
+          searchTerm={currencySearchTerm}
+        />
+
+        <LanguagePickerModal
+          visible={showLanguageModal}
+          onClose={() => setShowLanguageModal(false)}
+          languages={languages}
+          onSelect={handleLanguageSelect}
+          onSearch={setLanguageSearch}
+          isLoading={isLoadingLanguages}
+          searchTerm={languageSearchTerm}
+        />
+
+        <SuccessModalAll
+          visible={successmodal}
+          message=" Successful!"
+          close={() => setSuccessmodal(false)}
         />
       </SafeAreaView>
     </GradientBackground>

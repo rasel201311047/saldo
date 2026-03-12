@@ -1,16 +1,23 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 const NavGoals = () => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
   return (
     <View>
       <View className="flex-row justify-between items-center px-[5%]">
         <View className="  flex-row items-center gap-2">
           <TouchableOpacity onPress={() => router.push("/profile")}>
             <Image
-              source={{ uri: "https://i.ibb.co.com/BVvVXn3h/user-5.png" }}
-              className="w-16 h-16 rounded-full"
+              source={{
+                uri:
+                  getProfileData?.data?.profilePicture ||
+                  "https://i.ibb.co.com/gbnTNDBv/user.png",
+              }}
+              className="w-12 h-12 rounded-full"
             />
           </TouchableOpacity>
           <Text className="font-Inter font-bold text-xl text-white">Goals</Text>

@@ -29,6 +29,14 @@ export const profileApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Balance", "Goals"],
     }),
+
+    getstartdate: builder.query({
+      query: () => ({
+        url: "budgets/get-start-date",
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
+    }),
     // change password
     postChangePassword: builder.mutation({
       query: (data) => ({
@@ -37,6 +45,40 @@ export const profileApi = api.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["Balance", "Goals", "Auth"],
+    }),
+
+    // edit profile
+    editProfile: builder.mutation({
+      query: (formData) => ({
+        url: "profile/",
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: ["Balance", "Goals", "Auth"],
+    }),
+    // about
+    getAbout: builder.query({
+      query: () => ({
+        url: "app-content/about-us",
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
+    }),
+
+    getTerm: builder.query({
+      query: () => ({
+        url: "app-content/terms-and-conditions",
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
+    }),
+
+    getPolicy: builder.query({
+      query: () => ({
+        url: "app-content/privacy-policy",
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
     }),
   }),
 
@@ -48,4 +90,9 @@ export const {
   useGetWeeklyReportQuery,
   usePostStartstateMonthMutation,
   usePostChangePasswordMutation,
+  useEditProfileMutation,
+  useGetstartdateQuery,
+  useGetAboutQuery,
+  useGetPolicyQuery,
+  useGetTermQuery,
 } = profileApi;

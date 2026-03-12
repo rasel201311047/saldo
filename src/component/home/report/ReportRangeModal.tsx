@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetReportDataQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -30,6 +31,35 @@ interface TransformedData {
   expense: number;
 }
 
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
+
 const ReportRangeModal: React.FC<Props> = ({
   visible,
   onClose,
@@ -47,6 +77,8 @@ const ReportRangeModal: React.FC<Props> = ({
     startDate: formattedStartDate,
     endDate: formattedEndDate,
   });
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
 
   // Transform API data to match the component structure
   const transformData = (): TransformedData[] => {
@@ -137,10 +169,13 @@ const ReportRangeModal: React.FC<Props> = ({
   };
 
   const formatCurrency = (amount: number) => {
-    return `$${amount.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+    return ` ${getCurrencySymbol(getProfileData?.data?.currency)} ${amount.toLocaleString(
+      "en-US",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      },
+    )}`;
   };
 
   return (

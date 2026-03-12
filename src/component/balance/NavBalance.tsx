@@ -20,7 +20,7 @@ const NavBalance = () => {
             source={{
               uri:
                 getProfileData?.data?.profilePicture ||
-                "https://i.ibb.co.com/BVvVXn3h/user-5.png",
+                "https://i.ibb.co.com/gbnTNDBv/user.png",
             }}
             className="w-16 h-16 rounded-full"
           />

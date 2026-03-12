@@ -1,6 +1,10 @@
 import { BudgetImg } from "@/assets/budget/budgetimg";
 import { budgeticon } from "@/assets/icons";
-import { useGetBudgeDatawithfilterQuery } from "@/src/redux/api/Page/calendar/calendarApi";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
+import {
+  useDeleteBudgeDataMutation,
+  useGetBudgeDatawithfilterQuery,
+} from "@/src/redux/api/Page/calendar/calendarApi";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
@@ -15,6 +19,7 @@ import {
   View,
 } from "react-native";
 import { SvgXml } from "react-native-svg";
+import CustomAlert from "../customAlart/CustomAlert";
 import AddCategory from "./AddCategory";
 
 interface BudgetModalProps {
@@ -78,11 +83,50 @@ const getCategoryColor = (category: string) => {
 
   return colorMap[category] || "#885255";
 };
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 
 const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
+  const [deleteData, { isLoading: deleteDataLoading }] =
+    useDeleteBudgeDataMutation();
+
   const [catagoryOpen, setCatagoryOpen] = useState(false);
   const [period, setPeriod] = useState<Period>("WEEKLY");
   const [showPeriod, setShowPeriod] = useState(false);
+  const [iddelete, setIdDelete] = useState("");
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTittle, setAlertTittle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
 
   // Fetch budget data based on selected period
   const {
@@ -118,6 +162,24 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
 
   const loading = isLoading || isFetching;
 
+  const handlethedelete = () => {
+    setAlertVisible(true);
+    setAlertTittle("Delete");
+    setAlertMessage("Are You sure ");
+    setAlertType("");
+  };
+
+  const handleDeleted = async () => {
+    console.log(iddelete);
+
+    try {
+      const res = await deleteData(iddelete).unwrap();
+      console.log("Delete success:", res);
+      setAlertVisible(false);
+    } catch (error) {
+      console.log("Delete error:", error);
+    }
+  };
   return (
     <Modal
       visible={open}
@@ -196,10 +258,12 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
                     </View>
                     <View className="flex-row justify-between items-center ">
                       <Text className="text-white text-lg">
-                        ${budgetData?.totalBudget?.toFixed(2) || "0.00"}
+                        {getCurrencySymbol(getProfileData?.data?.currency)}{" "}
+                        {budgetData?.totalBudget?.toFixed(2) || "0.00"}
                       </Text>
                       <Text className="text-white text-lg">
-                        ${budgetData?.totalSpent?.toFixed(2) || "0.00"}
+                        {getCurrencySymbol(getProfileData?.data?.currency)}
+                        {budgetData?.totalSpent?.toFixed(2) || "0.00"}
                       </Text>
                     </View>
                   </View>
@@ -229,52 +293,67 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
               </View>
             ) : budgetData?.budgets && budgetData.budgets.length > 0 ? (
               budgetData.budgets.map((item) => (
-                <View
-                  key={item.id}
-                  className="mb-3 px-[4%] rounded-2xl flex-row items-center bg-[#242333] border border-[#4F4F59] overflow-hidden"
-                >
-                  {/* Progress fill */}
-                  <LinearGradient
-                    colors={[
-                      getCategoryColor(item.category),
-                      `${getCategoryColor(item.category)}CC`,
-                    ]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      top: 0,
-                      bottom: 0,
-                      width: `${item.spendingPercentage}%`,
-                    }}
-                  />
-
-                  {/* Content */}
-                  <View>
-                    <Image
-                      source={getCategoryImage(item.category)}
-                      className="w-8 h-8"
+                <View key={item.id}>
+                  <View className="mb-3 px-[4%] rounded-2xl flex-row items-center bg-[#242333] border border-[#4F4F59] overflow-hidden">
+                    {/* Progress fill */}
+                    <LinearGradient
+                      colors={[
+                        getCategoryColor(item.category),
+                        `${getCategoryColor(item.category)}CC`,
+                      ]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: `${item.spendingPercentage}%`,
+                      }}
                     />
-                  </View>
-                  <View className="p-4 w-[90%]">
-                    <View className="flex-row justify-between items-center mb-1">
-                      <Text className="text-white font-Inter font-semibold">
-                        {item.category}
-                      </Text>
-                      <Text className="text-white font-Inter font-medium">
-                        {item.spendingPercentage}%
-                      </Text>
+
+                    {/* Content */}
+                    <View>
+                      <Image
+                        source={getCategoryImage(item.category)}
+                        className="w-8 h-8"
+                      />
+                    </View>
+                    <View className="p-4 w-[87%]">
+                      <View className="flex-row justify-between items-center mb-1">
+                        <Text className="text-white font-Inter font-semibold">
+                          {item.category}
+                        </Text>
+                        <Text className="text-white font-Inter font-medium">
+                          {item.spendingPercentage}%
+                        </Text>
+                      </View>
+
+                      <View className="flex-row justify-between">
+                        <Text className="text-[#F1F1F2] font-Inter text-sm">
+                          {getCurrencySymbol(getProfileData?.data?.currency)}
+                          {item.budgetValue?.toFixed(2)}
+                        </Text>
+                        <Text className="text-[#F1F1F2] font-Inter text-sm">
+                          {getCurrencySymbol(getProfileData?.data?.currency)}
+                          {item.amountSpent?.toFixed(2)}
+                        </Text>
+                      </View>
                     </View>
 
-                    <View className="flex-row justify-between">
-                      <Text className="text-[#F1F1F2] font-Inter text-sm">
-                        ${item.budgetValue?.toFixed(2)}
-                      </Text>
-                      <Text className="text-[#F1F1F2] font-Inter text-sm">
-                        ${item.amountSpent?.toFixed(2)}
-                      </Text>
-                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handlethedelete();
+                        setIdDelete(item.id);
+                      }}
+                      className="mr-3%"
+                    >
+                      <Entypo
+                        name="dots-three-vertical"
+                        size={24}
+                        color="#fff"
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
               ))
@@ -314,6 +393,21 @@ const BudgetModal: React.FC<BudgetModalProps> = ({ open, setOpen }) => {
         openModal={catagoryOpen}
         routed="modalbudge"
         close={() => setCatagoryOpen(false)}
+      />
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTittle}
+        message={alertMessage}
+        onConfirm={() => {
+          handleDeleted();
+        }}
+        onCancel={() => {
+          console.log("Cancelled");
+          setAlertVisible(false);
+        }}
+        type={"destructive"}
+        confirmText={deleteDataLoading ? "...." : "OK"}
+        cancelText="Cancel"
       />
     </Modal>
   );

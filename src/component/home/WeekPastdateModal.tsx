@@ -1,3 +1,4 @@
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { useGetReportDataQuery } from "@/src/redux/api/Page/calendar/calendarApi";
 import responsive from "@/src/utils/responsive";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,6 +30,34 @@ type Props = {
   startDate: string;
   endDate: string;
 };
+const getCurrencySymbol = (code?: string) => {
+  if (!code) return "";
+
+  const currencySymbols: Record<string, string> = {
+    USD: "$",
+    EUR: "€",
+    GBP: "£",
+    JPY: "¥",
+    AUD: "A$",
+    CAD: "C$",
+    BDT: "৳",
+    INR: "₹",
+    AED: "د.إ",
+
+    RON: "L",
+    HUF: "Ft",
+    BGN: "лв",
+    RSD: "дин",
+    UAH: "₴",
+    MDL: "L",
+
+    CHF: "CHF",
+    PLN: "zł",
+    CZK: "Kč",
+  };
+
+  return currencySymbols[code] || code;
+};
 
 const WeekPastdateModal = ({
   visible,
@@ -41,6 +70,8 @@ const WeekPastdateModal = ({
 }: Props) => {
   const [selectedDay, setSelectedDay] = useState<DayItem | null>(null);
   const [showDayDetails, setShowDayDetails] = useState(false);
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
 
   console.log("week modal data", startDate, endDate);
   const { data: reportData, isLoading: reportLoading } = useGetReportDataQuery({
@@ -205,13 +236,15 @@ const WeekPastdateModal = ({
                     <View className="bg-green-900/30 p-4 rounded-xl flex-1 mr-2">
                       <Text className="text-green-400 text-sm">Earning</Text>
                       <Text className="text-white text-xl font-bold">
-                        ${getDayData(selectedDay).earning.toLocaleString()}
+                        {getCurrencySymbol(getProfileData?.data?.currency)}
+                        {getDayData(selectedDay).earning.toLocaleString()}
                       </Text>
                     </View>
                     <View className="bg-red-900/30 p-4 rounded-xl flex-1 ml-2">
                       <Text className="text-red-400 text-sm">Spending</Text>
                       <Text className="text-white text-xl font-bold">
-                        ${getDayData(selectedDay).spending.toLocaleString()}
+                        {getCurrencySymbol(getProfileData?.data?.currency)}
+                        {getDayData(selectedDay).spending.toLocaleString()}
                       </Text>
                     </View>
                   </View>
@@ -244,7 +277,10 @@ const WeekPastdateModal = ({
                                   : "text-red-400"
                               }
                             >
-                              {transaction.type === "earning" ? "+" : "-"}$
+                              {transaction.type === "earning" ? "+" : "-"}
+                              {getCurrencySymbol(
+                                getProfileData?.data?.currency,
+                              )}
                               {transaction.amount.toLocaleString()}
                             </Text>
                           </View>

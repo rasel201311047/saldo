@@ -184,7 +184,7 @@ const CountryPickerModal: React.FC<CountryPickerModalProps> = ({
             <View
               className="bg-[#0A0A0A] rounded-t-3xl overflow-hidden"
               style={{
-                maxHeight: "90%",
+                height: "90%",
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: -4 },
                 shadowOpacity: 0.3,

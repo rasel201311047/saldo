@@ -76,14 +76,14 @@ const Genaral = () => {
             route: "/weeklyreport",
           },
           {
-            title: "Set month start date",
+            title: "Set Month Start Date",
             icon: calender,
             route: "/startmonth",
           },
-          { title: "Change password", icon: lock, route: "/changepassword" },
+          { title: "Change Password", icon: lock, route: "/changepassword" },
           { title: "About Us", icon: about, route: "/about" },
           { title: "Privacy Policy", icon: privacy, route: "/policy" },
-          { title: "Terms and Conditions", icon: term, route: "/terms" },
+          { title: "Terms & Conditions", icon: term, route: "/terms" },
         ].map((item, i) => (
           <TouchableOpacity
             onPress={() => item.route && router.push(item.route)}

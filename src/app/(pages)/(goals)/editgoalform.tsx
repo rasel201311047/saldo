@@ -4,6 +4,7 @@ import ColorPickerModal from "@/src/component/balance/ColorPickerModal";
 import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import CustomDatePicker from "@/src/component/custompicker/CustomDatePicker";
 import IconSelector from "@/src/component/goals/IconSelector";
+import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import {
   useEditBorrowedformMutation,
   useEditgoalformMutation,
@@ -98,6 +99,8 @@ const dataOfCategory: CategoryType[] = [
 const Editgoalform = () => {
   const params = useLocalSearchParams();
   const { id, category } = params;
+  const { data: getProfileData, isLoading: profileLoading } =
+    useGetMyProfileQuery();
 
   // Ensure id is a string
   const itemId = Array.isArray(id) ? id[0] : id;
@@ -146,9 +149,13 @@ const Editgoalform = () => {
   const [advanceModal, setAdvanceModal] = useState(false);
 
   // Currency States (keeping these for UI but not sending to API)
-  const [currency, setCurrency] = useState("USD");
+  const [currency, setCurrency] = useState(
+    getProfileData?.data?.currency || "",
+  );
   const [showCurrency, setShowCurrency] = useState(false);
-  const [accumulatcurrency, setAccumulatCurrency] = useState("USD");
+  const [accumulatcurrency, setAccumulatCurrency] = useState(
+    getProfileData?.data?.currency || "",
+  );
   const [showAccumulatCurrency, setAccumulatShowCurrency] = useState(false);
 
   // Date States
@@ -881,7 +888,7 @@ const Editgoalform = () => {
                 </View>
 
                 {/* Action Buttons */}
-                <View className="flex-col space-y-3 mb-2">
+                <View className="flex-col gap-4 space-y-3 mb-2">
                   <TouchableOpacity
                     onPress={() => setAdvanceModal(false)}
                     activeOpacity={0.8}

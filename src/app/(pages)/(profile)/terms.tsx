@@ -1,44 +1,36 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
+import { useGetPolicyQuery } from "@/src/redux/api/Page/profile/profileApi";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import RenderHtml from "react-native-render-html";
 import { SafeAreaView } from "react-native-safe-area-context";
 const terms = () => {
+  const { data, isLoading } = useGetPolicyQuery();
+  console.log(data?.data?.content);
+
   const source = {
     html: `
   <p>
-    gravida elit enim. lobortis, ex orci lobortis, Donec orci elit felis, luctus
-    ultrices odio tincidunt cursus elit ex nisi vehicula, Morbi Nunc Morbi venenatis
-    sollicitudin. tortor. dui non quam dui. nibh tortor. sit viverra maximus ipsum
+   ${data?.data?.content || ""}
   </p>
-
-  <p>
-    massa tincidunt massa non, Ut ex lobortis, nulla, sit orci Nam massa viverra
-    venenatis massa placerat In viverra laoreet massa Lorem at elit scelerisque
-    Quisque viverra id ipsum risus quam Lorem id quis ultrices vel placerat dui.
-    elit nec
-  </p>
-
-  <p>
-    lobortis, vehicula, tempor Quisque sed felis, vitae Sed varius dolor volutpat
-    in sed non, massa sit porta nisi ex. porta nulla, turpis efficitur. Nunc dolor
-    dolor id non est. lacus, varius ipsum placerat. elementum dignissim, Vestibulum
-  </p>
-
-  <p>
-    quam efficitur. gravida non. lacus, vehicula, nec id commodo turpis Donec Nam
-    faucibus quis elementum tincidunt tortor. orci adipiscing odio sed sollicitudin.
-    eget quis faucibus diam Cras fringilla Nam Lorem adipiscing vel in Vestibulum
-  </p>
-
-
-
-  
 `,
   };
+  if (isLoading) {
+    <GradientBackground>
+      <View className="flex-1">
+        <ActivityIndicator size="small" color="#D4AF66" />
+      </View>
+    </GradientBackground>;
+  }
   return (
     <GradientBackground>
       <SafeAreaView className="flex-1">

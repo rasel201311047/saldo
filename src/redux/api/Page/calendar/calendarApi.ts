@@ -98,6 +98,14 @@ export const calendarApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Balance", "Goals"],
     }),
+
+    deleteBudgeData: builder.mutation({
+      query: (id: string) => ({
+        url: `budgets/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Balance", "Goals"],
+    }),
     //=================================
     //  income add
     // ================================
@@ -132,7 +140,7 @@ export const {
   useGetSpendingCategoryQuery,
   useGetBudgeDatawithfilterQuery,
   usePostBudgeDataMutation,
-
+  useDeleteBudgeDataMutation,
   usePostIncomeDataMutation,
   usePostspendingDataMutation,
 } = calendarApi;

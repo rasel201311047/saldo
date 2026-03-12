@@ -99,13 +99,13 @@ export const authApi = api.injectEndpoints({
     }),
 
     // =========================profile data
-    getMyProfile: builder.query({
-      query: () => ({
-        url: "auth/me",
-        method: "GET",
-      }),
-      providesTags: ["Auth"],
-    }),
+    // getMyProfile: builder.query({
+    //   query: () => ({
+    //     url: "auth/me",
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["Auth"],
+    // }),
 
     // ============================forget password
     forgetPassword: builder.mutation({
@@ -119,16 +119,6 @@ export const authApi = api.injectEndpoints({
 
     // ===========================reset password
     resetPassword: builder.mutation({
-      query: (data) => ({
-        url: "auth/reset-password",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["Auth"],
-    }),
-
-    // edit profile
-    editProfile: builder.mutation({
       query: (data) => ({
         url: "auth/reset-password",
         method: "POST",

@@ -1,6 +1,5 @@
 import { useGetMyProfileQuery } from "@/src/redux/api/Auth/authApi";
 import { usePostBudgeDataMutation } from "@/src/redux/api/Page/calendar/calendarApi";
-import { Feather } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
@@ -14,7 +13,6 @@ import {
   View,
 } from "react-native";
 import CustomAlert from "../customAlart/CustomAlert";
-import DeleteModal from "./DeleteModal";
 type Period = "Weekly" | "Monthly";
 
 interface SetupBudgetProps {
@@ -146,13 +144,6 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
                 </View>
               </Pressable>
             </View>
-
-            <Pressable
-              onPress={() => setOpendelete(true)}
-              className="bg-[#222232] p-2.5 rounded-lg"
-            >
-              <Feather name="trash-2" size={18} color="#FF4D4F" />
-            </Pressable>
           </View>
 
           {/* ACTIONS */}
@@ -178,10 +169,7 @@ const SetupBudget: React.FC<SetupBudgetProps> = ({
           </View>
         </View>
       </View>
-      <DeleteModal
-        opendelete={opendelete}
-        setOpendelete={() => setOpendelete(false)}
-      />
+
       <CustomAlert
         visible={alertVisible}
         title={alertTittle}

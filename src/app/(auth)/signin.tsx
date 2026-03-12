@@ -5,7 +5,6 @@ import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import { useSigninMutation } from "@/src/redux/api/Auth/authApi";
 import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -132,7 +131,8 @@ const Signin = () => {
 
               {/* Remember + Forgot */}
               <View className="flex-row justify-between items-center mt-4">
-                <Pressable
+                <View />
+                {/* <Pressable
                   onPress={() => setRemember(!remember)}
                   className="flex-row items-center"
                 >
@@ -142,7 +142,7 @@ const Signin = () => {
                     )}
                   </View>
                   <Text className="text-gray-300 text-sm">Remember me</Text>
-                </Pressable>
+                </Pressable> */}
 
                 <TouchableOpacity onPress={() => router.push("/forgot")}>
                   <Text className="text-sm text-yellow-500">

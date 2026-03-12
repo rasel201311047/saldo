@@ -129,7 +129,7 @@ const LanguagePickerModal: React.FC<LanguagePickerModalProps> = ({
             <View
               className="bg-[#0A0A0A] rounded-t-3xl overflow-hidden"
               style={{
-                maxHeight: "80%",
+                height: "80%",
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: -4 },
                 shadowOpacity: 0.3,

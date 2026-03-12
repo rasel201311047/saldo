@@ -1,7 +1,10 @@
 import GradientBackground from "@/src/component/background/GradientBackground";
 import CustomAlert from "@/src/component/customAlart/CustomAlert";
 import CustomDatePicker from "@/src/component/custompicker/CustomDatePicker";
-import { usePostStartstateMonthMutation } from "@/src/redux/api/Page/profile/profileApi";
+import {
+  useGetstartdateQuery,
+  usePostStartstateMonthMutation,
+} from "@/src/redux/api/Page/profile/profileApi";
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -18,10 +21,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Startmonth = () => {
   const [dataselectStartMonth, { isLoading: startdateloadin }] =
     usePostStartstateMonthMutation();
+
+  const { data: startdata, isLoading: startIsloading } = useGetstartdateQuery();
+  console.log(startdata?.data?.monthStartDate);
   function getCurrentDate() {
     const today = new Date();
     return today.toISOString().split("T")[0];
   }
+  function getCurrentMonth() {
+    const now = new Date();
+    return now.toLocaleString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+  }
+
+  console.log(getCurrentMonth());
 
   console.log(getCurrentDate());
   const [showDate, setShowDate] = useState(false);
@@ -157,7 +172,7 @@ const Startmonth = () => {
           </TouchableOpacity>
 
           <Text className="flex-1 ml-3 text-white text-2xl font-bold">
-            Month Start Sate
+            Month Start Date
           </Text>
         </View>
 
@@ -267,7 +282,11 @@ const Startmonth = () => {
                           Selected Date
                         </Text>
                         <Text className="text-white text-xl font-InterBold">
-                          {formatDate(date)}
+                          {startdata?.data?.monthStartDate
+                            ? startdata?.data?.monthStartDate +
+                              " " +
+                              getCurrentMonth()
+                            : formatDate(date)}
                         </Text>
                       </View>
 
