@@ -27,7 +27,7 @@ export const calendarApi = api.injectEndpoints({
     // =================================
     //  Reports show
     // ===============================
-
+    // budgets/transactions-by-range?startDate=${startDate}&endDate=${endDate}
     getReportData: builder.query({
       query: ({
         startDate,
@@ -36,7 +36,7 @@ export const calendarApi = api.injectEndpoints({
         startDate: string;
         endDate: string;
       }) => ({
-        url: `budgets/transactions-by-range?startDate=${startDate}&endDate=${endDate}`,
+        url: `balances/range-summary?startDate=${startDate}&endDate=${endDate}`,
         method: "GET",
       }),
       providesTags: ["Balance", "Goals"],
@@ -125,6 +125,14 @@ export const calendarApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Balance", "Goals"],
     }),
+    // today insert balances
+    getTodayinsertedItems: builder.query({
+      query: (date: string) => ({
+        url: `balances/daily-summary?date=${date}`,
+        method: "GET",
+      }),
+      providesTags: ["Balance", "Goals"],
+    }),
   }),
 
   overrideExisting: false,
@@ -143,4 +151,5 @@ export const {
   useDeleteBudgeDataMutation,
   usePostIncomeDataMutation,
   usePostspendingDataMutation,
+  useGetTodayinsertedItemsQuery,
 } = calendarApi;
