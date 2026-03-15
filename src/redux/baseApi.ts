@@ -7,7 +7,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import * as SecureStore from "expo-secure-store";
 
-const BASE_URL = "http://10.10.20.73:5000/api/";
+const BASE_URL = "https://saldo-finance-app-backend-1.onrender.com/api/";
 // "https://saldo-finance-app-backend-1.onrender.com/api/";
 
 // "http://10.10.20.73:5000/api/";

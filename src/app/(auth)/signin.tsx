@@ -176,7 +176,7 @@ const Signin = () => {
                 <View className="flex-1 h-[1px] bg-[#fff]" />
               </View>
 
-              {/* Google */}
+              {/* Google    login */}
 
               <TouchableOpacity activeOpacity={0.8} className="my-4 ">
                 <LinearGradient
