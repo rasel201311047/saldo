@@ -126,6 +126,15 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Auth"],
     }),
+
+    // ============social login
+    getSocialLogin: builder.query({
+      query: () => ({
+        url: "auth/google",
+        method: "GET",
+      }),
+      providesTags: ["Auth"],
+    }),
   }),
 
   overrideExisting: false,
@@ -140,4 +149,5 @@ export const {
   useForgetPasswordMutation,
   useOtpresendValidationMutation,
   useResetPasswordMutation,
+  useLazyGetSocialLoginQuery,
 } = authApi;

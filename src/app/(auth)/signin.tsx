@@ -2,7 +2,10 @@ import { google } from "@/assets/icons";
 import { Images } from "@/assets/images/image";
 import GradientBackground from "@/src/component/background/GradientBackground";
 import CustomAlert from "@/src/component/customAlart/CustomAlert";
-import { useSigninMutation } from "@/src/redux/api/Auth/authApi";
+import {
+  useLazyGetSocialLoginQuery,
+  useSigninMutation,
+} from "@/src/redux/api/Auth/authApi";
 import responsive from "@/src/utils/responsive";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,6 +14,7 @@ import React, { useState } from "react";
 import {
   Image,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -33,6 +37,8 @@ const Signin = () => {
     password: "",
   });
   const [loginData, { isLoading, isError }] = useSigninMutation();
+  const [triggerSocialLogin, { isLoading: socialLoading }] =
+    useLazyGetSocialLoginQuery();
 
   const handleLogin = async () => {
     try {
@@ -58,6 +64,20 @@ const Signin = () => {
         error?.data?.message || "An error occurred. Please try again.",
       );
       setAlertVisible(true);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await triggerSocialLogin().unwrap();
+
+      const authUrl = res?.data?.authUrl;
+
+      if (authUrl) {
+        Linking.openURL(authUrl);
+      }
+    } catch (error) {
+      console.log("Google login error:", error);
     }
   };
 
@@ -178,7 +198,11 @@ const Signin = () => {
 
               {/* Google    login */}
 
-              <TouchableOpacity activeOpacity={0.8} className="my-4 ">
+              <TouchableOpacity
+                onPress={handleGoogleLogin}
+                activeOpacity={0.8}
+                className="my-4 "
+              >
                 <LinearGradient
                   colors={["#b08b4ab0", "#2626a19c"]}
                   start={{ x: 0, y: 0 }}
