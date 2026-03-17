@@ -120,7 +120,11 @@ const Signin = () => {
               </Text>
               <TextInput
                 value={form.email}
-                onChangeText={(text) => setForm({ ...form, email: text })}
+                onChangeText={(text) => {
+                  // ❌ remove spaces
+                  const cleanText = text.replace(/\s/g, "");
+                  setForm({ ...form, email: cleanText });
+                }}
                 keyboardType="email-address"
                 placeholder="claudiu@gmail.com"
                 placeholderTextColor="#9CA3AF"
